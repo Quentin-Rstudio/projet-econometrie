@@ -70,7 +70,7 @@ base_simple_propre <- base_simple %>%
 base_simple_propre <- base_simple_propre %>%
   select(c_abrv, happy, env1, env2, env3, env4, env5, env6, MOI_EUR_2016, PC_GDP_2016) 
 
-regexec() grep()
+#regexec() grep()
 
 ```
 
@@ -104,6 +104,9 @@ Je le ferais.
 
 reg1 <- lm(data = base_simple_propre, formula = PC_GDP_2016 ~ env2) # je sais pas quoi faire avec ça, mais à approfondir
 
+summary(reg1)
+
+# comment interpréter les résultats d'une régression avec lm : http://www.learnbymarketing.com/tutorials/linear-regression-in-r/
 
 ggplot(data = base_simple_propre, mapping = aes(x = env5, y = PC_GDP_2016)) +
   theme_bw() +
@@ -133,7 +136,7 @@ dbact<-as_tibble(resultat_ACP$var$coord) %>%
 
 dbind<-bind_cols(db,as_tibble(resultat_ACP$ind$coord))
 
-resultat_classif <- HCPC(resultat_ACP, nb.clust = -1)
+resultat_classif <- HCPC(resultat_ACP, nb.clust = 4)
 
 dbind<- dbind %>%
   ungroup() %>%
