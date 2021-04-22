@@ -2,7 +2,11 @@
 title: "Conscience écologique et dépenses publiques en faveur de l'environnement"
 author: "Quentin Merrien et Catherine Berleur"
 date: "13/04/2021"
-output: pdf_document
+output: 
+  github_document : 
+    toc : true
+  pdf_document : 
+    toc : true
 ---
 
 ```{r setup, include=FALSE}
@@ -86,15 +90,14 @@ Je le ferais.
 
   
 
-
+Point d'analyse intéressant : 
+une fois les paramètres économétriques estimés, on peut essayer d'expliquer/interpréter les situations contrefactuelles, c'est-à-dire celles qui s'éloignent le plus de l'estimation. 
 
 
 
 ## Régression linéaire
 
-ça marche pas ça, à voir pourquoi : 
 
-`stargazer(reg1)`
 
 
 
@@ -102,9 +105,10 @@ Je le ferais.
 
 ```{r linear-regression}
 
-reg1 <- lm(data = base_simple_propre, formula = PC_GDP_2016 ~ env2) # je sais pas quoi faire avec ça, mais à approfondir
+reg1 <- lm(data = base_simple_propre, formula = PC_GDP_2016 ~ env1) # je sais pas quoi faire avec ça, mais à approfondir
+reg2 <- lm(data = base_simple_propre, formula = PC_GDP_2016 ~ env6) # je sais pas quoi faire avec ça, mais à approfondir
 
-summary(reg1)
+#summary(reg1)
 
 # comment interpréter les résultats d'une régression avec lm : http://www.learnbymarketing.com/tutorials/linear-regression-in-r/
 
@@ -117,10 +121,23 @@ ggplot(data = base_simple_propre, mapping = aes(x = env5, y = PC_GDP_2016)) +
   scale_color_manual(name = "Les dépenses pour l'environnement sont-elles sensibles à l'opinion publique ?", values =
                        c("black","gray"))+
   guides(color = guide_legend(ncol=2, direction = "horizontal"))
+```
 
+
+```{r table, results='asis'}
+# ça marche, mais c'est chelou un peu
+
+
+stargazer(reg1, reg2, header = FALSE)
 
 
 ```
+
+
+
+`r stargazer(reg1, reg2)`
+
+
 
 ## Including Plots
 
@@ -136,7 +153,7 @@ dbact<-as_tibble(resultat_ACP$var$coord) %>%
 
 dbind<-bind_cols(db,as_tibble(resultat_ACP$ind$coord))
 
-resultat_classif <- HCPC(resultat_ACP, nb.clust = 4)
+resultat_classif <- HCPC(resultat_ACP, nb.clust = 4, graph = FALSE)
 
 dbind<- dbind %>%
   ungroup() %>%
