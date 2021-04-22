@@ -3,9 +3,7 @@ title: "Conscience écologique et dépenses publiques en faveur de l'environneme
 author: "Quentin Merrien et Catherine Berleur"
 date: "13/04/2021"
 output: 
-  github_document : 
-    toc : true
-  pdf_document : 
+  html_document : 
     toc : true
 ---
 
@@ -104,7 +102,6 @@ une fois les paramètres économétriques estimés, on peut essayer d'expliquer/
 
 
 ```{r linear-regression}
-
 reg1 <- lm(data = base_simple_propre, formula = PC_GDP_2016 ~ env1) # je sais pas quoi faire avec ça, mais à approfondir
 reg2 <- lm(data = base_simple_propre, formula = PC_GDP_2016 ~ env6) # je sais pas quoi faire avec ça, mais à approfondir
 
@@ -121,21 +118,26 @@ ggplot(data = base_simple_propre, mapping = aes(x = env5, y = PC_GDP_2016)) +
   scale_color_manual(name = "Les dépenses pour l'environnement sont-elles sensibles à l'opinion publique ?", values =
                        c("black","gray"))+
   guides(color = guide_legend(ncol=2, direction = "horizontal"))
-```
-
-
-```{r table, results='asis'}
-# ça marche, mais c'est chelou un peu
-
-
-stargazer(reg1, reg2, header = FALSE)
 
 
 ```
 
 
+```{r tables}
 
-`r stargazer(reg1, reg2)`
+# ça marche PAS, mais c'est chelou un peu
+
+stargazer(reg1, reg2, header = FALSE, type = 'html', notes.label = "Comments", notes = "Pas très significatif toussa, à creuser")
+
+stargazer(base_simple_propre, header = FALSE, type = "html")
+
+# info sur stargazer : https://www.jakeruss.com/cheatsheets/stargazer/ ou
+```
+
+
+
+
+
 
 
 
