@@ -91,7 +91,7 @@ Je le ferais.
 Point d'analyse intéressant : 
 une fois les paramètres économétriques estimés, on peut essayer d'expliquer/interpréter les situations contrefactuelles, c'est-à-dire celles qui s'éloignent le plus de l'estimation. 
 
-
+Mayda et Rodrik (2005) font une étude économétrique à partir de la WVS, voir p'tet leur méthode. 
 
 ## Régression linéaire
 
