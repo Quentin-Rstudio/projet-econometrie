@@ -93,6 +93,12 @@ une fois les paramètres économétriques estimés, on peut essayer d'expliquer/
 
 Mayda et Rodrik (2005) font une étude économétrique à partir de la WVS, voir p'tet leur méthode. 
 
+Trouver des indicateurs environnementaux supplémentaires : 
+https://www.ecosia.org/search?q=indicators+of+environmental+awareness+data+base&addon=chrome&addonversion=3.3.0&method=topbar
+http://jultika.oulu.fi/files/nbnfioulu-201312142043.pdf
+https://www.oecd.org/env/indicators-modelling-outlooks/data-and-indicators.htm
+
+
 ## Régression linéaire
 
 
