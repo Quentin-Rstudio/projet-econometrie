@@ -1,6 +1,6 @@
 ---
 title: "Conscience écologique et dépenses publiques en faveur de l'environnement"
-author: "Quentin Merrien et Catherine Berleur"
+author: "Quentin Merrien, Catherine Berleur et Françoise Berleur"
 date: "13/04/2021"
 output: 
   html_document : 
@@ -23,7 +23,8 @@ library(stargazer)
 
 ## Données -----
 
-setwd("C:/Users/quent/Desktop/ENS Paris-Saclay/1A/1S2/Econométrie/TDs/Bases de données/Documents")
+# setwd("C:/Users/quent/Desktop/ENS Paris-Saclay/1A/1S2/Econométrie/TDs/Bases de données/Documents")
+setwd("~/Documents/ENS/econometrie/projet_r")
 EVS <- read_dta("ZA7500_v4-0-0.dta")
 dep <-read_xlsx("depenses-env.xlsx")
 
