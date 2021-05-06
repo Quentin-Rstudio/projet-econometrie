@@ -254,3 +254,15 @@ ggplot(data = carte_europe) +
 
 
 ```
+## Références théoriques à utiliser
+
+*Courbe de Kuznets environnementale, Grossman (1993), Krueger (1995)*
+Corrélation entre développement d’une économie mesurée par le PIB/hab et la diminution de la pollution. Optimisme selon lequel l’amélioration des cond° de vie d’une pop° lui permet, après avoir subvenu à ses besoins primaires, d’améliorer la qualité de son mode de vie et de s’orienter vers des pd° moins polluantes.
+
+*Données expérimentales, Anderson et al. (2008)*
+Une inégalité, lorsqu’elle est rendue publique, réduit la contribution à un bien public de tous les participants. C’est l’injustice perçue et non les inégalités en elles-mêmes qui réduisent le consentement à financer des biens publics et par conséquent la croissance.
+
+*Inégalités et politique publiques, Rodrik (1999)*
+Les sociétés inégalitaires auraient plus de mal à mener des réformes nécessaires à la croissance. L’auteur prend l’exemple d’une économie confrontée à un choc externe. Les politiques publiques permettant de répondre aux chocs extérieurs ont des conséquences redistributives. La possibilité de les mettre en œuvre dépend grandement du climat social. S’il est mauvais et s’il s’avère impossible de mettre en place des réformes, l’économie peut être paralysé pendant des années.
+
+
