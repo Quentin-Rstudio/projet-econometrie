@@ -112,7 +112,19 @@ https://www.oecd.org/env/indicators-modelling-outlooks/data-and-indicators.htm
 reg1 <- lm(data = base_simple_propre, formula = PC_GDP_2016 ~ env1) # je sais pas quoi faire avec ça, mais à approfondir
 reg2 <- lm(data = base_simple_propre, formula = PC_GDP_2016 ~ env6) # je sais pas quoi faire avec ça, mais à approfondir
 
-#summary(reg1)
+
+anova(reg1)
+# comparaison de modèles :
+anova(reg1,reg2)
+
+reg3 <- lm(data = base_simple_propre, formula = PC_GDP_2016 ~ env1 + env6 + happy + MOI_EUR_2016)
+
+reg4 <- lm(data = base_simple_propre, formula = PC_GDP_2016 ~ env1 + + env2 + env3 + env4 + env5 + env6 + happy + MOI_EUR_2016)
+
+summary(reg4)
+summary(reg3)
+residuals(reg1)
+predict(reg1)
 
 # comment interpréter les résultats d'une régression avec lm : http://www.learnbymarketing.com/tutorials/linear-regression-in-r/
 
