@@ -73,7 +73,14 @@ base_simple_propre <- base_simple %>%
 base_simple_propre <- base_simple_propre %>%
   select(c_abrv, happy, env1, env2, env3, env4, env5, env6, MOI_EUR_2016, PC_GDP_2016) 
 
-coef_gini <- read_xlsx("coefficient_gini_UE.xlsx", sheet = 3, skip = 7)
+coef_gini <- read_xlsx("coefficient_gini_UE.xlsx", sheet = 3, skip = 7) %>%
+  select(TIME, "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019")
+
+educ_sup <- read_xlsx("education_sup_UE.xlsx", sheet = 3, skip = 11) %>%
+  select(TIME, "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019")
+
+rev_med <- read_xls("revenu_median_UE.xls", skip = 10)
+
 
 #regexec() grep()
 
@@ -100,6 +107,23 @@ Trouver des indicateurs environnementaux supplémentaires :
 https://www.ecosia.org/search?q=indicators+of+environmental+awareness+data+base&addon=chrome&addonversion=3.3.0&method=topbar
 http://jultika.oulu.fi/files/nbnfioulu-201312142043.pdf
 https://www.oecd.org/env/indicators-modelling-outlooks/data-and-indicators.htm
+
+
+### I.	Mise en perspective introductive dans le contexte économique et social. 
+
+### II.	Formulation d’un problème économétrique. 
+
+### III.	Présentation des bases de données et statistiques descriptives. 
+
+### IV.	Proposition et justification de différents modèles linéaires. 
+
+### V.	Comparaison des coefficients et de la significativité des modèles. 
+
+### VI.	Interprétation et proposition de pistes de réflexion complémentaires (limites blabla).
+
+### VII.	Conclusion. 
+
+
 
 
 ## Régression linéaire
