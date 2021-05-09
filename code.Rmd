@@ -23,55 +23,49 @@ library(stargazer)
 
 ## Données -----
 
-# setwd("C:/Users/quent/Desktop/ENS Paris-Saclay/1A/1S2/Econométrie/TDs/Bases de données/Documents")
-setwd("~/Documents/ENS/econometrie/projet_r")
+setwd("C:/Users/quent/Desktop/ENS Paris-Saclay/1A/1S2/Econométrie/TDs/Bases de données/Documents")
+# setwd("~/Documents/ENS/econometrie/projet_r")
 EVS <- read_dta("ZA7500_v4-0-0.dta")
 dep <-read_xlsx("depenses-env.xlsx")
 
 db <-EVS %>% 
   select(caseno, year, country, c_abrv, v7, v199, v200, v201, v202, v203, v204) %>%
-  mutate(happy = as.numeric(case_when(v7 %in% c("1", "2") ~ "1", 
-                                   v7 %in% c("3", "4") ~ "0",
-                                   v7 %in% c("8", "9") ~ "NA")), 
-         env1 = as.numeric(case_when(v199 %in% c("1","2") ~ "1", 
-                          v199 %in% c("3", "4", "5") ~ "0",
+  mutate(env1 = as.numeric(case_when(v199 %in% c("4","5") ~ "0", 
+                          v199 %in% c("1", "2", "3") ~ "1",
                           v199 %in% c("8", "9") ~ "NA")), 
-         env2 = as.numeric(case_when(v200 %in% c("1","2") ~ "1", 
-                          v200 %in% c("3", "4", "5") ~"0",
+         env2 = as.numeric(case_when(v200 %in% c("1","2") ~ "0", 
+                          v200 %in% c("3", "4", "5") ~"1",
                           v200 %in% c("8", "9") ~ "NA")), 
-         env3 = as.numeric(case_when(v201 %in% c("1","2") ~ "1", 
-                          v201 %in% c("3", "4", "5") ~"0",
+         env3 = as.numeric(case_when(v201 %in% c("1","2") ~ "0", 
+                          v201 %in% c("3", "4", "5") ~"1",
                           v201 %in% c("8", "9") ~ "NA")), 
-         env4 = as.numeric(case_when(v202 %in% c("1","2") ~ "1", 
-                          v202 %in% c("3", "4", "5") ~"0",
+         env4 = as.numeric(case_when(v202 %in% c("1","2") ~ "0", 
+                          v202 %in% c("3", "4", "5") ~"1",
                           v202 %in% c("8", "9") ~ "NA")), 
-         env5 = as.numeric(case_when(v203 %in% c("1","2") ~ "1", 
-                          v203 %in% c("3", "4", "5") ~"0",
+         env5 = as.numeric(case_when(v203 %in% c("1","2") ~ "0", 
+                          v203 %in% c("3", "4", "5") ~"1",
                           v203 %in% c("8", "9") ~ "NA")), 
          env6 = as.numeric(case_when(v204 %in% c("1") ~ "1", 
                           v204 %in% c("2") ~"0",
                           v204 %in% c("8", "9") ~ "NA")))%>%
   group_by(country, c_abrv) %>%
   summarize(
-    #effectif = n_distinct(caseno),
-            happy = mean(happy == 1, na.rm = T), 
-            env1 = mean(env1 == 1, na.rm = T), 
-            env2 = mean(env2 == 1, na.rm = T), 
-            env3 = mean(env3 == 1, na.rm = T), 
-            env4 = mean(env4 == 1, na.rm = T), 
-            env5 = mean(env5 == 1, na.rm = T), 
-            env6 = mean(env6 == 1, na.rm = T))
+            effectif = n_distinct(caseno),
+            perc_env = 100*mean(mean(env1 == 1, na.rm = T), mean(env2 == 1, na.rm = T), mean(env3 == 1, na.rm = T), env4 = 100*mean(env4 == 1, na.rm = T), env5 = 100*mean(env5 == 1, na.rm = T)), 
+            soutien_pol_env = 100*mean(env6 == 1, na.rm = T))
 
-db$Pays <- db$c_abrv
+names(db)[names(db)=="c_abrv"] <- "Pays"
+names(db)[names(db)=="country"] <- "code"
+
 
 base_simple <- db %>%
   full_join(dep, by = "Pays")
 
 base_simple_propre <- base_simple %>%
-  filter(Pays != "NA", happy != "NA")
+  filter(Pays != "NA")
 
 base_simple_propre <- base_simple_propre %>%
-  select(c_abrv, happy, env1, env2, env3, env4, env5, env6, MOI_EUR_2016, PC_GDP_2016) 
+  select(Pays, env1, env2, env3, env4, env5, env6, MOI_EUR_2016, PC_GDP_2016) 
 
 coef_gini <- read_xlsx("coefficient_gini_UE.xlsx", sheet = 3, skip = 7) %>%
   select(TIME, "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019")
@@ -87,6 +81,18 @@ eai_data <- read_excel("EAI-data.xlsx")
 eai_data <- eai_data %>%
   filter(EAI != "NA")
 
+code_pays <- read_csv("all.csv")
+
+sensi_data <- db %>%
+  full_join(eai_data, by = "code") %>%
+  filter(EAI != "NA", env1 != "env1") %>%
+  summarize(code = first(code), 
+            Pays = first(Pays), 
+            sensi_env = )
+
+
+
+  
 #regexec() grep()
 
 ```
