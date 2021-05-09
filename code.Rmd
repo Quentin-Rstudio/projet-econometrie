@@ -73,6 +73,8 @@ base_simple_propre <- base_simple %>%
 base_simple_propre <- base_simple_propre %>%
   select(c_abrv, happy, env1, env2, env3, env4, env5, env6, MOI_EUR_2016, PC_GDP_2016) 
 
+coef_gini <- read_xlsx("coefficient_gini_UE.xlsx", sheet = 3, skip = 7)
+
 #regexec() grep()
 
 ```
