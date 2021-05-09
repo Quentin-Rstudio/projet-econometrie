@@ -26,9 +26,9 @@ library(stargazer)
 setwd("C:/Users/quent/Desktop/ENS Paris-Saclay/1A/1S2/Econométrie/TDs/Bases de données/Documents")
 # setwd("~/Documents/ENS/econometrie/projet_r")
 EVS <- read_dta("ZA7500_v4-0-0.dta")
-dep <-read_xlsx("depenses-env.xlsx")
+depenses <-read_xlsx("depenses-env.xlsx")
 
-db <-EVS %>% 
+EVS_env <-EVS %>% 
   select(caseno, year, country, c_abrv, v7, v199, v200, v201, v202, v203, v204) %>%
   mutate(env1 = as.numeric(case_when(v199 %in% c("4","5") ~ "0", 
                           v199 %in% c("1", "2", "3") ~ "1",
@@ -54,28 +54,15 @@ db <-EVS %>%
             perc_env = 100*mean(mean(env1 == 1, na.rm = T), mean(env2 == 1, na.rm = T), mean(env3 == 1, na.rm = T), env4 = 100*mean(env4 == 1, na.rm = T), env5 = 100*mean(env5 == 1, na.rm = T)), 
             soutien_pol_env = 100*mean(env6 == 1, na.rm = T))
 
-names(db)[names(db)=="c_abrv"] <- "Pays"
-names(db)[names(db)=="country"] <- "code"
+names(EVS_env)[names(EVS_env)=="c_abrv"] <- "Pays" 
+names(EVS_env)[names(EVS_env)=="country"] <- "code"
 
 
-base_simple <- db %>%
-  full_join(dep, by = "Pays")
+EVS_et_depenses <- EVS_env %>%
+  full_join(depenses, by = "Pays")%>%
+  filter(Pays != "NA") %>%
+  select(Pays, perc_env, soutien_pol_env, MOI_EUR_2016, PC_GDP_2016) 
 
-base_simple_propre <- base_simple %>%
-  filter(Pays != "NA")
-
-base_simple_propre <- base_simple_propre %>%
-  select(Pays, env1, env2, env3, env4, env5, env6, MOI_EUR_2016, PC_GDP_2016) 
-
-coef_gini <- read_xlsx("coefficient_gini_UE.xlsx", sheet = 3, skip = 7) %>%
-  select(TIME, "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019")
-
-educ_sup <- read_xlsx("education_sup_UE.xlsx", sheet = 3, skip = 11) %>%
-  select(TIME, "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019")
-
-rev_med <- read_xls("revenu_median_UE.xls", skip = 10)
-
-epi2020results <- read.csv("epi2020results.csv")
 
 eai_data <- read_excel("EAI-data.xlsx")
 eai_data <- eai_data %>%
@@ -83,13 +70,30 @@ eai_data <- eai_data %>%
 
 code_pays <- read_csv("all.csv")
 
-sensi_data <- db %>%
+env_et_depenses <- EVS_et_depenses %>%
   full_join(eai_data, by = "code") %>%
-  filter(EAI != "NA", env1 != "env1") %>%
-  summarize(code = first(code), 
+  left_join(code_pays, by = c("Pays" = "alpha-2")) %>%
+  filter(EAI != "NA", perc_env != "NA", PC_GDP_2016 != "NA") %>%
+  group_by(Pays) %>%
+  summarize(Nom_pays = first(name), 
+            code = first(code), 
             Pays = first(Pays), 
-            sensi_env = )
+            sensi_env = (perc_env + soutien_pol_env + EAI)/3, 
+            perc_env = first(perc_env), 
+            soutien_pol_env = first(soutien_pol_env), 
+            conn_env = first(EAI), 
+            depenses_brutes_env = first(MOI_EUR_2016), 
+            part_depenses_env = first(PC_GDP_2016))
 
+
+gini <- read_excel("GINI_2017.xlsx")
+
+educ_sup <- read_xlsx("education_sup_UE.xlsx", sheet = 3, skip = 11) %>%
+  select(TIME, "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019")
+
+rev_med <- read_xls("revenu_median_UE.xls", skip = 10)
+
+epi2020results <- read.csv("epi2020results.csv")
 
 
   
