@@ -81,6 +81,11 @@ educ_sup <- read_xlsx("education_sup_UE.xlsx", sheet = 3, skip = 11) %>%
 
 rev_med <- read_xls("revenu_median_UE.xls", skip = 10)
 
+epi2020results <- read.csv("epi2020results.csv")
+
+eai_data <- read_excel("EAI-data.xlsx")
+eai_data <- eai_data %>%
+  filter(EAI != "NA")
 
 #regexec() grep()
 
