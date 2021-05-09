@@ -113,6 +113,10 @@ https://www.oecd.org/env/indicators-modelling-outlooks/data-and-indicators.htm
 
 ### II.	Formulation d’un problème économétrique. 
 
+Le premier enjeu se situe dans le choix des variables explicatives. 
+
+
+
 ### III.	Présentation des bases de données et statistiques descriptives. 
 
 ### IV.	Proposition et justification de différents modèles linéaires. 
