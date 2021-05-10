@@ -16,129 +16,42 @@ library(FactoMineR)
 library(ggrepel)
 library(readxl)
 library(stargazer)
+library(questionr)
 
 ## Données -----
 
 #setwd("C:/Users/quent/Desktop/ENS Paris-Saclay/1A/1S2/Econométrie/TDs/Bases de données/Documents")
 setwd("~/Documents/ENS/econometrie/projet_r")
-EVS <- read_dta("ZA7500_v4-0-0.dta")
-depenses <-read_xlsx("depenses-env.xlsx")
 
-EVS_env <-EVS %>% 
-  select(caseno, year, country, c_abrv, v7, v199, v200, v201, v202, v203, v204) %>%
-  mutate(env1 = as.numeric(case_when(v199 %in% c("4","5") ~ "0", 
-                          v199 %in% c("1", "2", "3") ~ "1",
-                          v199 %in% c("8", "9") ~ "NA")), 
-         env2 = as.numeric(case_when(v200 %in% c("1","2") ~ "0", 
-                          v200 %in% c("3", "4", "5") ~"1",
-                          v200 %in% c("8", "9") ~ "NA")), 
-         env3 = as.numeric(case_when(v201 %in% c("1","2") ~ "0", 
-                          v201 %in% c("3", "4", "5") ~"1",
-                          v201 %in% c("8", "9") ~ "NA")), 
-         env4 = as.numeric(case_when(v202 %in% c("1","2") ~ "0", 
-                          v202 %in% c("3", "4", "5") ~"1",
-                          v202 %in% c("8", "9") ~ "NA")), 
-         env5 = as.numeric(case_when(v203 %in% c("1","2") ~ "0", 
-                          v203 %in% c("3", "4", "5") ~"1",
-                          v203 %in% c("8", "9") ~ "NA")), 
-         env6 = as.numeric(case_when(v204 %in% c("1") ~ "1", 
-                          v204 %in% c("2") ~"0",
-                          v204 %in% c("8", "9") ~ "NA")))%>%
-  group_by(country, c_abrv) %>%
-  summarize(
-            effectif = n_distinct(caseno),
-            perc_env = 100*mean(mean(env1 == 1, na.rm = T), mean(env2 == 1, na.rm = T), mean(env3 == 1, na.rm = T), env4 = 100*mean(env4 == 1, na.rm = T), env5 = 100*mean(env5 == 1, na.rm = T)), 
-            soutien_pol_env = 100*mean(env6 == 1, na.rm = T))
+base_complete <- read.csv("base_complete.csv") %>%
+ select(-X)
 
-names(EVS_env)[names(EVS_env)=="c_abrv"] <- "Pays" 
-names(EVS_env)[names(EVS_env)=="country"] <- "code"
-
-
-EVS_et_depenses <- EVS_env %>%
-  full_join(depenses, by = "Pays")%>%
-  filter(Pays != "NA") %>%
-  select(Pays, perc_env, soutien_pol_env, MOI_EUR_2016, PC_GDP_2016) 
-
-
-eai_data <- read_excel("EAI-data.xlsx")
-eai_data <- eai_data %>%
-  filter(EAI != "NA")
-
-code_pays <- read_csv("all.csv")
-
-env_et_depenses <- EVS_et_depenses %>%
-  full_join(eai_data, by = "code") %>%
-  left_join(code_pays, by = c("Pays" = "alpha-2")) %>%
-  filter(EAI != "NA", perc_env != "NA", PC_GDP_2016 != "NA") %>%
-  group_by(Pays) %>%
-  summarize(Nom_pays = first(name), 
-            code = first(code), 
-            Pays = first(Pays), 
-            sensi_env = (perc_env + soutien_pol_env + EAI)/3, 
-            perc_env = first(perc_env), 
-            soutien_pol_env = first(soutien_pol_env), 
-            conn_env = first(EAI), 
-            depenses_brutes_env = first(MOI_EUR_2016), 
-            part_depenses_env = first(PC_GDP_2016))
-
-
-gini <- read_excel("GINI_2017.xlsx")
-
-educ_sup <- read_xlsx("education_sup_UE.xlsx", sheet = 3, skip = 11) %>%
-  select(TIME, "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019")
-
-rev_med <- read_xls("revenu_median_UE.xls", skip = 10)
-
-epi2020results <- read.csv("epi2020results.csv")
-
-
-  
-#regexec() grep()
-
+base_exploration <- base_complete %>%
+  select(-code2)
 ```
 
-## Analyse univariée de variables quantitatives
+### Analyse univariée 
 
-Nous procédons à une première analyse des variables quantitatives présentes dans notre jeu de données. Pour ce faire, on établit plusieurs indicateurs classiques de statistiques descriptives, en mettant l'accent sur les variables qui nous semblent les plus importantes :
+Nous procédons à une première analyse des variables présentes dans notre jeu de données. Pour ce faire, il s'agit de dresser un tableau des principaux indicateurs présents  :
 
 ```` {r, results = "asis" }
 
-env_et_depenses <- as.data.frame(env_et_depenses)
+stargazer(base_exploration, type = 'html', title = "Principaux indicateurs des variables" )
 
-env_et_depenses2 <- env_et_depenses %>%
-  select("Pays", "Nom_pays", "sensi_env", "perc_env", "soutien_pol_env", "conn_env", "depenses_brutes_env", "part_depenses_env") 
-stargazer(env_et_depenses2), type = 'html')
-
-#summary(data$quality)
-#var(data$quality)
-#sd(data$quality)
-
-#summary(data$alcohol)
-#var(data$alcohol)
-#sd(data$alcohol)
-
-#summary(data$density)
-#var(data$density)
-#sd(data$density)
-
-#summary(data$total_sulfur_dioxide)
-#var(data$total_sulfur_dioxide)
-#sd(data$total_sulfur_dioxide)
 ````
 
-La principale variable qui nous intéresse dans un premier temps est celle de la qualité des vins, puisqu'elle est au centre de notre problématique. On utilise des méthodes de représentation graphique sur R afin d'étudier les principales caractéristiques de cette variable. 
+### Analyse bivariée et analyse en composantes principales
 
-Distribution des vins du jeu selon leur qualité :
+Il s'agit désormais d'étudier les liens entre nos différentes variables explicatives.
+
 ```` {r}
-#ggplot(data) + geom_histogram(aes(x=quality), bins = 30, color = "palevioletred")
 
-````
+graph1 <- ggplot(base_exploration, mapping = aes(x=sensi_env, y = perc_env)) + geom_point()
 
-La distribution de la variable "qualité" dépend de la façon dont les données ont été récoltées. En choisissant la médiane des évaluations des participants comme note finale, cela conduit à une distribution plus resserrée des données. La variance de la variable "qualité" rend compte de cette faible dispersion : `#r var(data$quality)`. Cette méthode de recueil peut présenter plusieurs limites, tel que nous le verrons dans une partie suivante.
+graph2 <- ggplot(base_exploration) + geom_label(aes (x = sensi_env, y = perc_env, label = Nom_pays), color = "darkgreen", size = 3, alpha = 0.3)
 
-Il s'agit désormais de conduire une analyse bivariée afin de disposer de premiers éléments sur le lien entre la variable "qualité" et les autres variables présentes dans ce jeu de données. 
 
-### Analyse bivariée : le lien entre la qualité est les autres variables
+```
 
 En raison du grand nombre de variables, nous n'effectuons pas une analyse bivariée entre la variable "qualité" et toutes les autres variables. il s'agit simplement d'explorer les données pour les principales variables que nous identifions ex ante comme importantes en raison des connaissances scientifiques sur le sujet. Par exemple, il est communément admis que les sulfates et le dioxide de soufre sont en partie responsables de maux de tête liés à une consommation non modérée de vin. 
 
@@ -146,13 +59,7 @@ On étudie alors les moyennes et écart-type par niveau de qualité de vins de c
 
 ```` {r}
 
-#tab <- data %>%
- # group_by(quality) %>%
-  #summarize(moy_alc = mean(alcohol), moy_dens = mean(density), moy_sulf = mean(sulphates), 
-   #         ec_alc = sd(alcohol), ec_dens = sd(density), ec_sulf = sd(sulphates)) %>%
-  #ungroup()
 
-#print(tab)
 ```
 Ces indicateurs nous permettent de dégager certaines tendances et d'invalider certaines hypothèses préalables. Par exemple, alors que nous avions imaginé que la densité d'un vin pouvait jouer un rôle prépondérant dans la qualité d'un vin, les moyennes et écart-type de la densité des vins sont assez proches d'une variable à l'autre. La moyenne des sulfates présents dans les vins augmente elle de façon linéaire avec la qualité du vin, contrairement à nos idées pré-conçues, avec des écarts-types sensiblement proches. 
 
@@ -160,7 +67,9 @@ La représentation graphique facilite l'interprétation de ces indicateurs :
 
 ```{r}
 
-#ggplot(data) + geom_point(aes (x = sulphates, y = quality), color = "darkgreen", size = 3, alpha = 0.3)
+graph3 <- ggplot(base_exploration, aes (x = perc_env, y = sensi_env)) + 
+  geom_point(color = "darkgreen", size = 3, alpha = 0.3) +
+  geom_smooth (method = "lm", size = 1, lty = 1, se = 2  )
 
 #ggplot(data) + geom_smooth(aes (x = sulphates, y = quality), color = "darkgreen") 
 
