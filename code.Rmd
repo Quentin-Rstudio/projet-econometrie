@@ -88,8 +88,8 @@ env_et_depenses <- EVS_et_depenses %>%
 
 gini <- read_excel("GINI_2017.xlsx")
 
-# educ_sup <- read_xlsx("education_sup_UE.xlsx", sheet = 3, skip = 11) %>%
-  # select(TIME, "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019")
+educ_sup <- read_xlsx("education_sup_UE.xlsx", sheet = 3, skip = 11) %>%
+   select(TIME, "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019")
 # Traiter les données à la main sur excel. On garde ça ? 
 
 # rev_med <- read_xls("revenu_median_UE.xls", skip = 10) 
@@ -223,6 +223,33 @@ stargazer(gini_epi_plus, header = FALSE, type = "html")
 ```
 
 
+```{r}
+
+europe <- st_read("Europe/europe.shp")
+
+codes <- read.csv("all.csv") %>%
+  filter(region == "Europe")%>%
+  select(name, alpha.2) %>%
+  mutate (NAME = name,
+          c_abrv = alpha.2)
+
+carte_europe <- europe %>%
+  full_join(codes, by = "NAME")
+
+carte_europe <- carte_europe %>%
+  full_join(gini_epi_plus, by = c("c_abrv"= "Pays"))
+  # filter(sensi_env != "NA")
+
+ggplot(data = carte_europe) +
+  geom_sf(aes(fill = sensi_env)) +
+  ggtitle("Figure VI - Sensibilité environnementale en Europe") +
+  coord_sf(datum = NA)
+
+
+
+
+
+```
 
 
 
