@@ -121,4 +121,6 @@ print(report(base_exploration))
 
 aov(data = base_exploration, formula = part_depenses_env ~ sensi_env + GINI_2017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new) %>%
   report()
+
+r2(reg1)
 ````
