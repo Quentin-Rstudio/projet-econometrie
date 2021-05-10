@@ -1,14 +1,26 @@
 ---
-title: "Conscience écologique et dépenses publiques en faveur de l'environnement"
-author: "Quentin Merrien, Catherine Berleur et Françoise Berleur"
+title: "Sensibilité environnementale et dépenses pour l'environnement"
+author: "Quentin Merrien et Catherine Berleur"
 date: "13/04/2021"
-output: 
-  html_document : 
-    toc : true
+output:
+  pdf_document:
+    toc: yes
+    toc_depth : 3
+    latex_engine: xelatex
+  html_document:
+    toc: yes
 ---
+
+<style>
+body {
+text-align: justify}
+</style>
+
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+options(encoding = "UTF-8")
 
 ## Packages ----
 
@@ -18,115 +30,17 @@ library(sf)
 library(haven)
 library(FactoMineR)
 library(ggrepel)
-library(readxl)
 library(stargazer)
 
 ## Données -----
 
 setwd("C:/Users/quent/Desktop/ENS Paris-Saclay/1A/1S2/Econométrie/TDs/Bases de données/Documents/projet-econometrie")
 # setwd("~/Documents/ENS/econometrie/projet_r")
-EVS <- read_dta("ZA7500_v4-0-0.dta")
-depenses <-read_xlsx("depenses-env.xlsx")
 
-EVS_env <-EVS %>% 
-  select(caseno, year, country, c_abrv, v7, v199, v200, v201, v202, v203, v204) %>%
-  mutate(env1 = as.numeric(case_when(v199 %in% c("4","5") ~ "0", 
-                          v199 %in% c("1", "2", "3") ~ "1",
-                          v199 %in% c("8", "9") ~ "NA")), 
-         env2 = as.numeric(case_when(v200 %in% c("1","2") ~ "0", 
-                          v200 %in% c("3", "4", "5") ~"1",
-                          v200 %in% c("8", "9") ~ "NA")), 
-         env3 = as.numeric(case_when(v201 %in% c("1","2") ~ "0", 
-                          v201 %in% c("3", "4", "5") ~"1",
-                          v201 %in% c("8", "9") ~ "NA")), 
-         env4 = as.numeric(case_when(v202 %in% c("1","2") ~ "0", 
-                          v202 %in% c("3", "4", "5") ~"1",
-                          v202 %in% c("8", "9") ~ "NA")), 
-         env5 = as.numeric(case_when(v203 %in% c("1","2") ~ "0", 
-                          v203 %in% c("3", "4", "5") ~"1",
-                          v203 %in% c("8", "9") ~ "NA")), 
-         env6 = as.numeric(case_when(v204 %in% c("1") ~ "1", 
-                          v204 %in% c("2") ~"0",
-                          v204 %in% c("8", "9") ~ "NA")))%>%
-  group_by(country, c_abrv) %>%
-  summarize(
-            effectif = n_distinct(caseno),
-            perc_env = 100*mean(mean(env1 == 1, na.rm = T), mean(env2 == 1, na.rm = T), mean(env3 == 1, na.rm = T), env4 = 100*mean(env4 == 1, na.rm = T), env5 = 100*mean(env5 == 1, na.rm = T)), 
-            soutien_pol_env = 100*mean(env6 == 1, na.rm = T))
-
-names(EVS_env)[names(EVS_env)=="c_abrv"] <- "Pays" 
-names(EVS_env)[names(EVS_env)=="country"] <- "code"
-
-
-EVS_et_depenses <- EVS_env %>%
-  full_join(depenses, by = "Pays")%>%
-  filter(Pays != "NA") %>%
-  select(Pays, perc_env, soutien_pol_env, MOI_EUR_2016, PC_GDP_2016) 
-
-
-eai_data <- read_excel("EAI-data.xlsx") %>%
-  filter(EAI != "NA")
-
-code_pays <- read_csv("all.csv")
-
-env_et_depenses <- EVS_et_depenses %>%
-  full_join(eai_data, by = "code") %>%
-  full_join(code_pays, by = c("Pays" = "alpha-2")) %>%
-  filter(EAI != "NA", perc_env != "NA", PC_GDP_2016 != "NA") %>%
-  group_by(Pays) %>%
-  summarize(Nom_pays = first(name), 
-            code2 = first(code),
-            code = first(`alpha-3`), 
-            Pays = first(Pays), 
-            sensi_env = (perc_env + soutien_pol_env + EAI)/3, 
-            perc_env = first(perc_env), 
-            soutien_pol_env = first(soutien_pol_env), 
-            conn_env = first(EAI), 
-            depenses_brutes_env = first(MOI_EUR_2016), 
-            part_depenses_env = first(PC_GDP_2016))
-
-
-gini <- read_excel("GINI_2017.xlsx") %>%
-  filter(EDUC_SUP_2017 != 'NA')
-
-epi2020results <- read.csv("epi2020results.csv") %>%
-  select(code, EPI.new)
-
-gini_et_plus <- env_et_depenses %>%
-  left_join(gini, by = "code") %>%
-  select(-Country)
-
-base_complete <- gini_et_plus %>%
-  left_join(epi2020results, by = c("code2" = "code")) %>%
-  mutate(code2 = as.character(code2)) %>%
-  select(Pays, code, code2, everything())
-
-write.csv(base_complete, "base_complete.csv")
-
+base_complete <- read.csv("base_complete.csv") %>%
+ select(-X) %>%
+ mutate(code2 = as.character(code2))
 ```
-
-Pour rappel : 
-v7 : Tout bien considéré, diriez-vous que vous êtes...  (p.3 de ZA7500_q_fr.pdf)
-         1 – Très heureux
-         2 – Assez heureux
-         3 – Pas très heureux
-         4 – Pas heureux du tout
-
-à finir.
-Je le ferais. 
-
-  
-
-Point d'analyse intéressant : 
-une fois les paramètres économétriques estimés, on peut essayer d'expliquer/interpréter les situations contrefactuelles, c'est-à-dire celles qui s'éloignent le plus de l'estimation. 
-
-Mayda et Rodrik (2005) font une étude économétrique à partir de la WVS, voir p'tet leur méthode. 
-
-Trouver des indicateurs environnementaux supplémentaires : 
-https://www.ecosia.org/search?q=indicators+of+environmental+awareness+data+base&addon=chrome&addonversion=3.3.0&method=topbar
-http://jultika.oulu.fi/files/nbnfioulu-201312142043.pdf
-https://www.oecd.org/env/indicators-modelling-outlooks/data-and-indicators.htm
-
 
 ### I.	Mise en perspective introductive dans le contexte économique et social. 
 
@@ -134,23 +48,73 @@ Le 9 mai dernier, des marches pour le climat eurent lieu dans toute la France, a
 
 Notre sujet de recherche vise à contribuer à cette vaste question, en se focalisant sur le lien entre ce que l’on a appelé sensibilité environnementale et les dépenses publiques de protection de l’environnement. Les difficultés de mesure statistique concernant les mobilisations environnementales nous ont en effet poussé à choisir comme proxy la sensibilité environnementale.
 
-Cette contribution s’inscrit dans lignée de la sociologie de l’action publique. En particulier, l’article fondateur de Felstiner & alli (1981) sur l’émergence des problèmes publics peut servir de cadre analytique. Les auteurs y définissent trois conditions d’apparition d’un problème public : naming, blaming, claiming. L’étape du naming conduit à une transformation de l’ordre symbolique, et impose une nouvelle manière de voir les choses : la sensibilité publique envers certaines questions participe à l’établissement de mise à l’agenda de problèmes publics. Ainsi, une sensibilité environnementale plus importante conduirait à un cadrage différent des problèmes environnementaux, et serait nécessaire aux autres conditions de l’émergence de l’action environnementale et écologique comme problème public. 
+Cette contribution s’inscrit dans lignée de la sociologie de l’action publique. En particulier, l’article fondateur de Felstiner & alli (1981) sur l’émergence des problèmes publics peut servir de cadre analytique. Les auteurs y définissent trois conditions d’apparition d’un problème public : *naming, blaming, claiming*. L’étape du *naming* conduit à une transformation de l’ordre symbolique, et impose une nouvelle manière de voir les choses : la sensibilité publique envers certaines questions participe à l’établissement de mise à l’agenda de problèmes publics. Ainsi, une sensibilité environnementale plus importante conduirait à un cadrage différent des problèmes environnementaux, et serait nécessaire aux autres conditions de l’émergence de l’action environnementale et écologique comme problème public. 
 
 
 ### II.	Formulation d’un problème économétrique. 
 
 Le premier enjeu de notre démarche économétrique se situe dans le choix des variables expliquées et explicatives. Pour étudier l’effet de la sensibilité environnementale sur les dépenses de protection de l’environnement, la variable dépendante retenue est la *NEEP* (dépenses nationales pour la protection de l’environnement) dans l’UE et ses États membres. Cette mesure, définie par Eurostat, permet d’apprécier les ressources que consacrent les unités résidents à la protection de l’environnement naturel au cours d’une période donnée. Elles sont calculées comme étant la somme des dépenses courantes consacrées aux activités de protection de l’environnement et des investissements destinés aux activités de protection de l’environnement, y compris les transferts nets vers le reste du monde.
 
-Il s’agit ensuite de définir ce qu’est la sensibilité environnementale afin de construire un jeu de variables à même de la refléter. Dès lors, on retiendra l’acception suivante : la sensibilité environnementale correspond à l’importance attachée aux problèmes environnementaux et aux enjeux écologiques. Dès lors, elle comprend la perception de la gravité des problèmes environnementaux, le degré de connaissance des problèmes environnementaux, et le soutien aux dépenses gouvernementales pour la protection de l'environnement [Thiery-Seror, 1996]^[Thiery-Seror, P. (1996). La solidarité à travers les produits: l’achat-geste écologique. Actes du XIIème Congrès de l’AFM, Poitiers, 22-23 mai. ] La difficulté réside alors en la traduction de ces éléments en une variable économétrique. Pour construire cette première variable explicative, nous avons croisé plusieurs bases de données :  l’Environmental Awareness Index (EAI)^[http://jultika.oulu.fi/files/nbnfioulu-201312142043.pdf] et l’European Values Study (EVS) de 2017. L’*EAI* dispose en effet de variables permettant d’apprécier la sensibilisation des citoyens aux questions écologiques, que l’on peut assimiler au degré de connaissance des problèmes environnementaux. L’EVS permet elle de couvrir les deux autres dimensions de la sensibilité environnementale. Les variables *env1* à *env5* rendent compte de la perception des problèmes environnementaux des personnes sondées. La variable *env6* témoigne du soutien aux mesures gouvernementales pour la défense de l’environnement. Afin de construire une variable explicative agrégée pour la sensibilité environnementale (*sensi_env*), on pondère les variables des ces trois facteurs par 1/3.
-Les autres variables explicatives, que l’on pourra appeler variables de contrôle, sont au nombre de 4. Il paraît raisonnable de penser que les dépenses environnementales d’un pays sont liées à son niveau de développement économique, conformément à la thèse avancée par R. Inglehart dans **La Révolution silencieuse** (1977). Pour exprimer l’influence du niveau de développement économique d’un pays sur sa NEEP, nous avons retenu le revenu médian (*rev_med*) établi par Eurostat dans l’enquête EU-SILC.
-Il est aussi possible de considérer que les inégalités intra-pays influencent ces dépenses. D’une part, une inégalité, lorsqu’elle est rendue publique, réduit la contribution à un bien public de tous les participants [Anderson et al., 2008]. Puisqu’il est possible de considérer l’environnement comme un bien public (non-rival et non-exclusif), il apparaît pertinent de prendre en compte les inégalités dans notre modèle économétrique. De plus, les sociétés inégalitaires auraient plus de mal à mener les réformes nécessaires pour surmonter un choc externe [Rodrik, 1999]. Nous avons donc retenu le coefficient de Gini (indicateur synthétique de mesure des inégalités et de la redistribution très utilisé au niveau international) comme variable explicative.
-Les deux dernières variables de contrôle sont l’Environmental Performance Index (*EPI*) qui permet d’évaluer la performance environnementale d’un pays ainsi que le pourcentage de personnes de 15 à 64 disposant d’un diplôme d’enseignement supérieur pour rendre compte du niveau d’éducation. 
-
-
+Il s’agit ensuite de définir ce qu’est la sensibilité environnementale afin de construire un jeu de variables à même de la refléter. Dès lors, on retiendra l’acception suivante : la sensibilité environnementale correspond à l’importance attachée aux problèmes environnementaux et aux enjeux écologiques. Dès lors, elle comprend la perception de la gravité des problèmes environnementaux, le degré de connaissance des problèmes environnementaux, et le soutien aux dépenses gouvernementales pour la protection de l'environnement [Thiery-Seror, 1996]^[Thiery-Seror, P. (1996). La solidarité à travers les produits: l’achat-geste écologique. Actes du XIIème Congrès de l’AFM, Poitiers, 22-23 mai. ] La difficulté réside alors en la traduction de ces éléments en une variable économétrique. Pour construire cette première variable explicative, nous avons croisé plusieurs bases de données :  l’Environmental Awareness Index (EAI)^[http://jultika.oulu.fi/files/nbnfioulu-201312142043.pdf] et l’European Values Study (EVS) de 2017. L’*Environmental Awareness Index* est en effet une variable permettant d’apprécier la sensibilisation des citoyens aux questions écologiques, que l’on peut assimiler au degré de connaissance des problèmes environnementaux, et que l'on appelera **conn_env** . L’EVS permet elle de couvrir les deux autres dimensions de la sensibilité environnementale. La variable **perc_env** rend compte de la perception des problèmes environnementaux des personnes sondées, tandis que la variable **soutien_pol_env** témoigne du soutien aux mesures gouvernementales pour la défense de l’environnement. Afin de construire une variable explicative agrégée pour la sensibilité environnementale (*sensi_env*), on pondère les variables des ces trois facteurs par 1/3.
+Les autres variables explicatives, que l’on pourra appeler variables de contrôle, sont au nombre de 4. Il paraît raisonnable de penser que les dépenses environnementales d’un pays sont liées à son niveau de développement économique, conformément à la thèse avancée par R. Inglehart dans **La Révolution silencieuse** (1977), qui considère qu'à partir d'un certain niveau de développement économique, des valeurs post-matérialistes (et notamment écologiques) ont plus de chance de se diffuser au sein de la société. Pour exprimer l’influence du niveau de développement économique d’un pays sur sa NEEP, nous avons retenu le revenu médian (*rev_med*) établi par Eurostat dans l’enquête EU-SILC. 
+Il est aussi possible de considérer que les inégalités intra-pays influencent ces dépenses. D’une part, une inégalité, lorsqu’elle est rendue publique, réduit la contribution à un bien public de tous les participants [Anderson et al., 2008]. Puisqu’il est possible de considérer l’environnement comme un bien public (non-rival et non-exclusif), il apparaît pertinent de prendre en compte les inégalités dans notre modèle économétrique. De plus, les sociétés inégalitaires auraient plus de mal à mener les réformes nécessaires pour surmonter un choc externe [Rodrik, 1999]. Nous avons donc retenu le coefficient de Gini du revenu en euros par ménage (indicateur synthétique de mesure des inégalités et de la redistribution très utilisé au niveau international) comme variable explicative.
+Les deux dernières variables de contrôle sont l’Environmental Performance Index (*EPI*) qui permet d’évaluer de manière synthétique la performance environnementale d’un pays ainsi que le pourcentage de personnes de 15 à 64 disposant d’un diplôme d’enseignement supérieur pour rendre compte du niveau d’éducation. 
 
 ### III.	Présentation des bases de données et statistiques descriptives. 
 
+Ainsi, nous avons créé une base de données à partir de plusieurs sources différentes. Le processus complet de création de la base est disponible dans le fichier .R "création base de données". 
+Pour l'indicateur de sensibilité environnementale, les données viennent de l'*European Values Survey*, un sondage mené à l'échelle européenne, pour avoir un état des lieux des valeurs des européens. Nous avons extrait de ces données 6 variables sur 56491 observations, et que nous avons résumé en moyenne par pays. Nous avons pris pour la variable **perc_env** la moyenne des indicateurs associés aux questions suivantes : 
+- Je donnerais une partie de mes revenus si j'étais sûr que l'argent soit utilisé pour éviter la pollution de l'environnement. 
+- C'est juste trop difficile pour les gens comme moi de vraiment pour l'environnement. 
+- Ca ne sert à rien de faire ce que je peux pour l'environnement si les autres ne font pas la même chose. 
+- Beaucoup des affirmations sur les menaces environnementales sont exagérées. 
+La première des questions allant dans un sens opposé aux suivantes, nous avons inversé l'indicateur pour celle-ci, par rapport aux autres. 
+Pour la variable **soutien_pol_env**, nous avons pris la moyenne par pays de la réponse "On devrait donner la priorité à la protection de l'environnement, même si cela ralentit la croissance économique et si certains perdent leur emploi" donnée plutôt que "On devrait donner la priorité à la croissance économique et à la création d'emplois, même si l'environnement en souffre d'une manière ou d'une autre". 
+Pour la variable **conn_env**, nous avons pris l'indicateur de conscience environnementale développé par Eevi Kokkinen dans son mémoire de master, "Measuring environmental awareness in the world". Celui-ci est construit à partir de questionnaires, afin d'estimer la connaissance et les compétences en matière environnementale et écologique des personnées sondées. 
+
 ### IV.	Proposition et justification de différents modèles linéaires. 
+
+```{r linear-regression}
+
+ggplot(data = base_complete, mapping = aes(x = sensi_env, y = part_depenses_env)) +
+  theme_bw() +
+  geom_point()+
+  geom_smooth(method = lm) + 
+  labs(x = "Sensibilité moyenne à l'écologie (sensi_env)", y = "Dépenses environnementales en part de PIB")
+
+
+reg1               <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env)
+reg2               <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + REV_MED_EURO_2017 + EPI.new)
+reg3               <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + EPI.new + REV_MED_EURO_2017 +
+                           EDUC_SUP_2017 + GINI_2017)
+reg4               <- lm(data = base_complete, formula = part_depenses_env ~ perc_env + soutien_pol_env + conn_env)
+
+
+anova(reg1)
+# comparaison de modèles :
+anova(reg1,reg2)
+
+summary(reg4)
+summary(reg3)
+residuals(reg1)
+predict(reg1)
+
+# comment interpréter les résultats d'une régression avec lm : http://www.learnbymarketing.com/tutorials/linear-regression-in-r/
+
+
+
+```
+
+
+```{r tables, results='asis'}
+
+stargazer(reg1, reg2, reg3, header = FALSE)
+
+stargazer(base_complete, header = FALSE)
+
+# info sur stargazer : https://www.jakeruss.com/cheatsheets/stargazer/ ou
+```
+
 
 ### V.	Comparaison des coefficients et de la significativité des modèles. 
 
@@ -165,82 +129,29 @@ L’International Social Survey Programme conduit une enquête par questionnaire
 
 
 
-## Régression linéaire
-
-
-
-
-
-
-
-```{r linear-regression}
-reg1 <- lm(data = gini_epi_plus, formula = part_depenses_env ~ sensi_env) # je sais pas quoi faire avec ça, mais à approfondir
-reg2 <- lm(data = gini_epi_plus, formula = part_depenses_env ~ soutien_pol_env) # je sais pas quoi faire avec ça, mais à approfondir
-
-
-anova(reg1)
-# comparaison de modèles :
-anova(reg1,reg2)
-
-reg3 <- lm(data = gini_epi_plus, formula = part_depenses_env ~ sensi_env + GINI_2017 + EPI.new)
-
-# reg4 <- lm(data = gini_epi_plus, formula = part_depenses_env ~ env1 + + env2 + env3 + env4 + env5 + env6 + happy + MOI_EUR_2016)
-
-# summary(reg4)
-summary(reg3)
-residuals(reg1)
-predict(reg1)
-
-# comment interpréter les résultats d'une régression avec lm : http://www.learnbymarketing.com/tutorials/linear-regression-in-r/
-
-ggplot(data = gini_epi_plus, mapping = aes(x = sensi_env, y = part_depenses_env)) +
-  theme_bw() +
-  geom_jitter()+
-  geom_smooth(method = lm) + # j'viens de découvrir : pour une droite linéaire, faut mettre method = lm, sinon, loess est pas mal 
-  labs(x = "Sensibilité moyenne à l'écologie (sensi_env)", y = "Dépenses environnementales en part de PIB") +
-  theme(legend.position = "bottom") +
-  scale_color_manual(name = "Les dépenses pour l'environnement sont-elles sensibles à l'opinion publique ?", values =
-                       c("black","gray"))+
-  guides(color = guide_legend(ncol=2, direction = "horizontal"))
-
-
-```
-
-
-```{r tables, results='asis'}
-
-# ça marche PAS, mais c'est chelou un peu
-
-stargazer(reg1, reg2, header = FALSE, type = 'html', notes.label = "Comments", notes = "Pas très significatif toussa, à creuser")
-
-stargazer(gini_epi_plus, header = FALSE, type = "html")
-
-# info sur stargazer : https://www.jakeruss.com/cheatsheets/stargazer/ ou
-```
-
 
 ```{r}
 
-europe <- st_read("Europe/europe.shp")
+europe             <- st_read("Europe/europe.shp", quiet = T)
 
-codes <- read.csv("all.csv") %>%
+codes              <- read.csv("all.csv") %>%
   filter(region == "Europe")%>%
   select(name, alpha.2) %>%
   mutate (NAME = name,
           c_abrv = alpha.2)
 
-carte_europe <- europe %>%
+carte_europe       <- europe %>%
   full_join(codes, by = "NAME")
 
-carte_europe <- carte_europe %>%
-  full_join(gini_epi_plus, by = c("c_abrv"= "Pays"))
+carte_europe       <- carte_europe %>%
+  full_join(base_complete, by = c("c_abrv"= "Pays"))
   # filter(sensi_env != "NA")
 
 ggplot(data = carte_europe) +
   geom_sf(aes(fill = sensi_env)) +
   ggtitle("Figure VI - Sensibilité environnementale en Europe") +
-  coord_sf(datum = NA)
-
+  coord_sf(datum = NA) + 
+  scale_fill_gradientn(colours = c("white", "darkolivegreen1", "yellowgreen","forestgreen", "darkgreen"))
 
 
 
@@ -251,42 +162,40 @@ ggplot(data = carte_europe) +
 
 
 
-
-## Including Plots
 
 
 ```{r ACP-classification}
 
 ## Données ACP et Classification
 
-# resultat_ACP <- PCA(gini[, 3:9])
+# resultat_ACP     <- PCA(gini[, 3:9])
 # 
-# dbact<-as_tibble(resultat_ACP$var$coord) %>% 
+# dbact            <-as_tibble(resultat_ACP$var$coord) %>% 
 #   mutate(names=c(rownames(resultat_ACP$var$coord)))
 # 
-# dbind<-bind_cols(db,as_tibble(resultat_ACP$ind$coord))
+# dbind            <-bind_cols(db,as_tibble(resultat_ACP$ind$coord))
 # 
 # resultat_classif <- HCPC(resultat_ACP, nb.clust = 4, graph = FALSE)
 # 
-# dbind<- dbind %>%
+# dbind            <- dbind %>%
 #   ungroup() %>%
 #   mutate(groupe = resultat_classif$data.clust$clust)
 # 
-# europe <- st_read("Europe/europe.shp")
+# europe           <- st_read("Europe/europe.shp")
 # 
-# codes <- read.csv("all.csv") %>%
+# codes            <- read.csv("all.csv") %>%
 #   filter(region == "Europe")%>%
 #   select(name, alpha.2) %>%
 #   mutate (NAME = name, 
 #           c_abrv = alpha.2)
 #   
-# carte_europe <- europe %>%
+# carte_europe     <- europe %>%
 #   full_join(codes, by = "NAME")
 # 
-# carte_europe <- carte_europe %>%
+# carte_europe     <- carte_europe %>%
 #   full_join(dbind, by = "c_abrv")
 # 
-# test <-  as.data.frame(carte_europe) %>%
+# test             <-  as.data.frame(carte_europe) %>%
 #   select(-geometry)
 
 
@@ -346,7 +255,7 @@ ggplot(data = carte_europe) +
 
 
 ```
-## Références théoriques à utiliser
+### Références théoriques à utiliser
 
 *Courbe de Kuznets environnementale, Grossman (1993), Krueger (1995)*
 Corrélation entre développement d’une économie mesurée par le PIB/hab et la diminution de la pollution. Optimisme selon lequel l’amélioration des cond° de vie d’une pop° lui permet, après avoir subvenu à ses besoins primaires, d’améliorer la qualité de son mode de vie et de s’orienter vers des pd° moins polluantes.
@@ -356,5 +265,10 @@ Une inégalité, lorsqu’elle est rendue publique, réduit la contribution à u
 
 *Inégalités et politique publiques, Rodrik (1999)*
 Les sociétés inégalitaires auraient plus de mal à mener des réformes nécessaires à la croissance. L’auteur prend l’exemple d’une économie confrontée à un choc externe. Les politiques publiques permettant de répondre aux chocs extérieurs ont des conséquences redistributives. La possibilité de les mettre en œuvre dépend grandement du climat social. S’il est mauvais et s’il s’avère impossible de mettre en place des réformes, l’économie peut être paralysé pendant des années.
+
+Point d'analyse intéressant : 
+une fois les paramètres économétriques estimés, on peut essayer d'expliquer/interpréter les situations contrefactuelles, c'est-à-dire celles qui s'éloignent le plus de l'estimation. 
+
+Mayda et Rodrik (2005) font une étude économétrique à partir de la WVS, voir p'tet leur méthode. 
 
 
