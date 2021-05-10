@@ -8,6 +8,7 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 ## Packages ----
 
+library(dplyr)
 library(tidyverse)
 library(ggforce)
 library(sf)
@@ -17,7 +18,11 @@ library(ggrepel)
 library(readxl)
 library(stargazer)
 library(questionr)
-library(car)
+#install.packages("remotes")
+#remotes::install_github("easystats/easystats")
+library("easystats")
+#install.packages("ggraph")
+library(ggraph)
 
 ## Données -----
 
@@ -88,8 +93,22 @@ graph5 <- ggplot(base_exploration, aes (x = soutien_pol_env, y = perc_env)) +
 
 reg1 <- lm(data = base_exploration, formula = part_depenses_env ~ sensi_env + GINI_2017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new)
 
-hccm(reg1)
-vcov(reg1)
+
 #ggplot(data) + geom_smooth(aes (x = sulphates, y = quality), color = "darkgreen") 
 
+resultats_cor <- correlation(base_exploration)
+print(resultats_cor)
+
+summary(resultats_cor, redundant = TRUE)
+
+library(dplyr)
+library(see)
+
+graph_cor <- resultats_cor %>%
+  summary(redundant = TRUE) %>%
+  plot()
+
+graph_cor2 <- base_exploration %>%
+  correlation(partial = TRUE) %>%
+  plot()
 ````
