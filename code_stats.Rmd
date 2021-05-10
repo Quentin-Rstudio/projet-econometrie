@@ -123,4 +123,6 @@ aov(data = base_exploration, formula = part_depenses_env ~ sensi_env + GINI_2017
   report()
 
 r2(reg1)
+
+
 ````
