@@ -104,11 +104,21 @@ summary(resultats_cor, redundant = TRUE)
 library(dplyr)
 library(see)
 
-graph_cor <- resultats_cor %>%
+graph_cor <- resultats_cor %>% # à potentiellement remplacer par graph_cor3
   summary(redundant = TRUE) %>%
   plot()
 
 graph_cor2 <- base_exploration %>%
   correlation(partial = TRUE) %>%
-  plot()
+  plot(main = "Modèle graphique gaussien des corrélations partiales entre les variables")
+
+graph_cor3 <- resultats_cor %>%
+  summary(redundant = TRUE) %>%
+  plot(show_values = TRUE, show_p = TRUE, show_legend = TRUE)
+
+report(base_exploration)
+print(report(base_exploration))
+
+aov(data = base_exploration, formula = part_depenses_env ~ sensi_env + GINI_2017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new) %>%
+  report()
 ````
