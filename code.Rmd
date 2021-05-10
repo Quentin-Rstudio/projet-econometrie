@@ -23,7 +23,7 @@ library(stargazer)
 
 ## Données -----
 
-setwd("C:/Users/quent/Desktop/ENS Paris-Saclay/1A/1S2/Econométrie/TDs/Bases de données/Documents")
+setwd("C:/Users/quent/Desktop/ENS Paris-Saclay/1A/1S2/Econométrie/TDs/Bases de données/Documents/projet-econometrie")
 # setwd("~/Documents/ENS/econometrie/projet_r")
 EVS <- read_dta("ZA7500_v4-0-0.dta")
 depenses <-read_xlsx("depenses-env.xlsx")
@@ -64,19 +64,19 @@ EVS_et_depenses <- EVS_env %>%
   select(Pays, perc_env, soutien_pol_env, MOI_EUR_2016, PC_GDP_2016) 
 
 
-eai_data <- read_excel("EAI-data.xlsx")
-eai_data <- eai_data %>%
+eai_data <- read_excel("EAI-data.xlsx") %>%
   filter(EAI != "NA")
 
 code_pays <- read_csv("all.csv")
 
 env_et_depenses <- EVS_et_depenses %>%
   full_join(eai_data, by = "code") %>%
-  left_join(code_pays, by = c("Pays" = "alpha-2")) %>%
+  full_join(code_pays, by = c("Pays" = "alpha-2")) %>%
   filter(EAI != "NA", perc_env != "NA", PC_GDP_2016 != "NA") %>%
   group_by(Pays) %>%
   summarize(Nom_pays = first(name), 
-            code = first(code), 
+            code2 = first(code),
+            code = first(`alpha-3`), 
             Pays = first(Pays), 
             sensi_env = (perc_env + soutien_pol_env + EAI)/3, 
             perc_env = first(perc_env), 
@@ -88,14 +88,22 @@ env_et_depenses <- EVS_et_depenses %>%
 
 gini <- read_excel("GINI_2017.xlsx")
 
-educ_sup <- read_xlsx("education_sup_UE.xlsx", sheet = 3, skip = 11) %>%
-  select(TIME, "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019")
+# educ_sup <- read_xlsx("education_sup_UE.xlsx", sheet = 3, skip = 11) %>%
+  # select(TIME, "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019")
+# Traiter les données à la main sur excel. On garde ça ? 
 
-rev_med <- read_xls("revenu_median_UE.xls", skip = 10)
+# rev_med <- read_xls("revenu_median_UE.xls", skip = 10) 
+# prendre le revenu médian en euro classique, ou en standard de pouvoir d'achat ? 
 
-epi2020results <- read.csv("epi2020results.csv")
+epi2020results <- read.csv("epi2020results.csv") %>%
+  select(code, EPI.new)
 
+gini_et_plus <- env_et_depenses %>%
+  left_join(gini, by = "code") %>%
+  select(-Country)
 
+gini_epi_plus <- gini_et_plus %>%
+  left_join(epi2020results, by = c("code2" = "code"))
   
 #regexec() grep()
 
@@ -126,9 +134,21 @@ https://www.oecd.org/env/indicators-modelling-outlooks/data-and-indicators.htm
 
 ### I.	Mise en perspective introductive dans le contexte économique et social. 
 
+Le 9 mai dernier, des marches pour le climat eurent lieu dans toute la France, afin d’infléchir la loi « Climat et résilience » qui vient d’être vôtée par les députés. Ces mobilisations en faveur du climat ont-elles une influence sur la politique écologique et environnementale des gouvernements ?
+
+Notre sujet de recherche vise à contribuer à cette vaste question, en se focalisant sur le lien entre ce que l’on a appelé sensibilité environnementale et les dépenses publiques de protection de l’environnement. Les difficultés de mesure statistique concernant les mobilisations environnementales nous ont en effet poussé à choisir comme proxy la sensibilité environnementale.
+
+Cette contribution s’inscrit dans lignée de la sociologie de l’action publique. En particulier, l’article fondateur de Felstiner & alli (1981) sur l’émergence des problèmes publics peut servir de cadre analytique. Les auteurs y définissent trois conditions d’apparition d’un problème public : naming, blaming, claiming. L’étape du naming conduit à une transformation de l’ordre symbolique, et impose une nouvelle manière de voir les choses : la sensibilité publique envers certaines questions participe à l’établissement de mise à l’agenda de problèmes publics. Ainsi, une sensibilité environnementale plus importante conduirait à un cadrage différent des problèmes environnementaux, et serait nécessaire aux autres conditions de l’émergence de l’action environnementale et écologique comme problème public. 
+
+
 ### II.	Formulation d’un problème économétrique. 
 
-Le premier enjeu se situe dans le choix des variables explicatives. 
+Le premier enjeu de notre démarche économétrique se situe dans le choix des variables expliquées et explicatives. Pour étudier l’effet de la sensibilité environnementale sur les dépenses de protection de l’environnement, la variable dépendante retenue est la *NEEP* (dépenses nationales pour la protection de l’environnement) dans l’UE et ses États membres. Cette mesure, définie par Eurostat, permet d’apprécier les ressources que consacrent les unités résidents à la protection de l’environnement naturel au cours d’une période donnée. Elles sont calculées comme étant la somme des dépenses courantes consacrées aux activités de protection de l’environnement et des investissements destinés aux activités de protection de l’environnement, y compris les transferts nets vers le reste du monde.
+
+Il s’agit ensuite de définir ce qu’est la sensibilité environnementale afin de construire un jeu de variables à même de la refléter. Dès lors, on retiendra l’acception suivante : la sensibilité environnementale correspond à l’importance attachée aux problèmes environnementaux et aux enjeux écologiques. Dès lors, elle comprend la perception de la gravité des problèmes environnementaux, le degré de connaissance des problèmes environnementaux, et le soutien aux dépenses gouvernementales pour la protection de l'environnement [Thiery-Seror, 1996]^[Thiery-Seror, P. (1996). La solidarité à travers les produits: l’achat-geste écologique. Actes du XIIème Congrès de l’AFM, Poitiers, 22-23 mai. ] La difficulté réside alors en la traduction de ces éléments en une variable économétrique. Pour construire cette première variable explicative, nous avons croisé plusieurs bases de données :  l’Environmental Awareness Index (EAI)^[http://jultika.oulu.fi/files/nbnfioulu-201312142043.pdf] et l’European Values Study (EVS) de 2017. L’*EAI* dispose en effet de variables permettant d’apprécier la sensibilisation des citoyens aux questions écologiques, que l’on peut assimiler au degré de connaissance des problèmes environnementaux. L’EVS permet elle de couvrir les deux autres dimensions de la sensibilité environnementale. Les variables *env1* à *env5* rendent compte de la perception des problèmes environnementaux des personnes sondées. La variable *env6* témoigne du soutien aux mesures gouvernementales pour la défense de l’environnement. Afin de construire une variable explicative agrégée pour la sensibilité environnementale (*sensi_env*), on pondère les variables des ces trois facteurs par 1/3.
+Les autres variables explicatives, que l’on pourra appeler variables de contrôle, sont au nombre de 4. Il paraît raisonnable de penser que les dépenses environnementales d’un pays sont liées à son niveau de développement économique, conformément à la thèse avancée par R. Inglehart dans **La Révolution silencieuse** (1977). Pour exprimer l’influence du niveau de développement économique d’un pays sur sa NEEP, nous avons retenu le revenu médian (*rev_med*) établi par Eurostat dans l’enquête EU-SILC.
+Il est aussi possible de considérer que les inégalités intra-pays influencent ces dépenses. D’une part, une inégalité, lorsqu’elle est rendue publique, réduit la contribution à un bien public de tous les participants [Anderson et al., 2008]. Puisqu’il est possible de considérer l’environnement comme un bien public (non-rival et non-exclusif), il apparaît pertinent de prendre en compte les inégalités dans notre modèle économétrique. De plus, les sociétés inégalitaires auraient plus de mal à mener les réformes nécessaires pour surmonter un choc externe [Rodrik, 1999]. Nous avons donc retenu le coefficient de Gini (indicateur synthétique de mesure des inégalités et de la redistribution très utilisé au niveau international) comme variable explicative.
+Les deux dernières variables de contrôle sont l’Environmental Performance Index (*EPI*) qui permet d’évaluer la performance environnementale d’un pays ainsi que le pourcentage de personnes de 15 à 64 disposant d’un diplôme d’enseignement supérieur pour rendre compte du niveau d’éducation. 
 
 
 
@@ -139,6 +159,10 @@ Le premier enjeu se situe dans le choix des variables explicatives.
 ### V.	Comparaison des coefficients et de la significativité des modèles. 
 
 ### VI.	Interprétation et proposition de pistes de réflexion complémentaires (limites blabla).
+
+Limite : le questionnaire EVS ne propose pas beaucoup de questions relatives à l’environnement, et celles-ci sont formuléees de manière non neutre, ce qui peut induire un biais dans les questions. Parler de deux des problèmes (environnement v. emploi et “m’en balec”)
+L’International Social Survey Programme conduit une enquête par questionnaire parmi les 42 pays membres du programme, sur le thème de l’environnement. Le questionnaire final est disponible ici^[http://w.issp.org/fileadmin/user_upload/Module_development/Module_2020/Final_Source_Questionnaire/ISSP2020_final_sourcequestionnaire_corrected.pdf] mais les résultats ne sont pas encore publiés. Au vu des questions posées par le questionnaire, introduire des variables qui en proviennent permettrait de limiter les biais relatifs à la formulation des questions (cf. la question 6 : how concerned are you about environmental issues?) et d’affiner l’analyse. 
+
 
 ### VII.	Conclusion. 
 
@@ -154,30 +178,30 @@ Le premier enjeu se situe dans le choix des variables explicatives.
 
 
 ```{r linear-regression}
-reg1 <- lm(data = base_simple_propre, formula = PC_GDP_2016 ~ env1) # je sais pas quoi faire avec ça, mais à approfondir
-reg2 <- lm(data = base_simple_propre, formula = PC_GDP_2016 ~ env6) # je sais pas quoi faire avec ça, mais à approfondir
+reg1 <- lm(data = gini_epi_plus, formula = part_depenses_env ~ sensi_env) # je sais pas quoi faire avec ça, mais à approfondir
+reg2 <- lm(data = gini_epi_plus, formula = part_depenses_env ~ soutien_pol_env) # je sais pas quoi faire avec ça, mais à approfondir
 
 
 anova(reg1)
 # comparaison de modèles :
 anova(reg1,reg2)
 
-reg3 <- lm(data = base_simple_propre, formula = PC_GDP_2016 ~ env1 + env6 + happy + MOI_EUR_2016)
+reg3 <- lm(data = gini_epi_plus, formula = part_depenses_env ~ sensi_env + GINI_2017 + EPI.new)
 
-reg4 <- lm(data = base_simple_propre, formula = PC_GDP_2016 ~ env1 + + env2 + env3 + env4 + env5 + env6 + happy + MOI_EUR_2016)
+# reg4 <- lm(data = gini_epi_plus, formula = part_depenses_env ~ env1 + + env2 + env3 + env4 + env5 + env6 + happy + MOI_EUR_2016)
 
-summary(reg4)
+# summary(reg4)
 summary(reg3)
 residuals(reg1)
 predict(reg1)
 
 # comment interpréter les résultats d'une régression avec lm : http://www.learnbymarketing.com/tutorials/linear-regression-in-r/
 
-ggplot(data = base_simple_propre, mapping = aes(x = env5, y = PC_GDP_2016)) +
+ggplot(data = gini_epi_plus, mapping = aes(x = sensi_env, y = part_depenses_env)) +
   theme_bw() +
   geom_jitter()+
   geom_smooth(method = lm) + # j'viens de découvrir : pour une droite linéaire, faut mettre method = lm, sinon, loess est pas mal 
-  labs(x = "Sensibilité moyenne à l'écologie (env1)", y = "Dépenses environnementales en part de PIB") +
+  labs(x = "Sensibilité moyenne à l'écologie (sensi_env)", y = "Dépenses environnementales en part de PIB") +
   theme(legend.position = "bottom") +
   scale_color_manual(name = "Les dépenses pour l'environnement sont-elles sensibles à l'opinion publique ?", values =
                        c("black","gray"))+
@@ -187,13 +211,13 @@ ggplot(data = base_simple_propre, mapping = aes(x = env5, y = PC_GDP_2016)) +
 ```
 
 
-```{r tables}
+```{r tables, results='asis'}
 
 # ça marche PAS, mais c'est chelou un peu
 
 stargazer(reg1, reg2, header = FALSE, type = 'html', notes.label = "Comments", notes = "Pas très significatif toussa, à creuser")
 
-stargazer(base_simple_propre, header = FALSE, type = "html")
+stargazer(gini_epi_plus, header = FALSE, type = "html")
 
 # info sur stargazer : https://www.jakeruss.com/cheatsheets/stargazer/ ou
 ```
@@ -212,87 +236,87 @@ stargazer(base_simple_propre, header = FALSE, type = "html")
 
 ## Données ACP et Classification
 
-resultat_ACP <- PCA(db[, 3:9])
-
-dbact<-as_tibble(resultat_ACP$var$coord) %>% 
-  mutate(names=c(rownames(resultat_ACP$var$coord)))
-
-dbind<-bind_cols(db,as_tibble(resultat_ACP$ind$coord))
-
-resultat_classif <- HCPC(resultat_ACP, nb.clust = 4, graph = FALSE)
-
-dbind<- dbind %>%
-  ungroup() %>%
-  mutate(groupe = resultat_classif$data.clust$clust)
-
-europe <- st_read("Europe/europe.shp")
-
-codes <- read.csv("all.csv") %>%
-  filter(region == "Europe")%>%
-  select(name, alpha.2) %>%
-  mutate (NAME = name, 
-          c_abrv = alpha.2)
-  
-carte_europe <- europe %>%
-  full_join(codes, by = "NAME")
-
-carte_europe <- carte_europe %>%
-  full_join(dbind, by = "c_abrv")
-
-test <-  as.data.frame(carte_europe) %>%
-  select(-geometry)
+# resultat_ACP <- PCA(gini[, 3:9])
+# 
+# dbact<-as_tibble(resultat_ACP$var$coord) %>% 
+#   mutate(names=c(rownames(resultat_ACP$var$coord)))
+# 
+# dbind<-bind_cols(db,as_tibble(resultat_ACP$ind$coord))
+# 
+# resultat_classif <- HCPC(resultat_ACP, nb.clust = 4, graph = FALSE)
+# 
+# dbind<- dbind %>%
+#   ungroup() %>%
+#   mutate(groupe = resultat_classif$data.clust$clust)
+# 
+# europe <- st_read("Europe/europe.shp")
+# 
+# codes <- read.csv("all.csv") %>%
+#   filter(region == "Europe")%>%
+#   select(name, alpha.2) %>%
+#   mutate (NAME = name, 
+#           c_abrv = alpha.2)
+#   
+# carte_europe <- europe %>%
+#   full_join(codes, by = "NAME")
+# 
+# carte_europe <- carte_europe %>%
+#   full_join(dbind, by = "c_abrv")
+# 
+# test <-  as.data.frame(carte_europe) %>%
+#   select(-geometry)
 
 
 ## Graphiques ----
 
-barplot(resultat_ACP$eig[,2],main="Figure I - Part expliquée par chaque axe dans la variance totale",
-        names.arg=1:nrow(resultat_ACP$eig),col= rainbow (15))
-
-ggplot(dbact,aes(x=Dim.1,y= Dim.2,label=names))+
-  geom_point()+
-  theme(legend.title=element_blank(),
-        panel.background =element_rect(fill="white")) +
-  geom_text(size=4,show.legend = FALSE)+
-  geom_hline(yintercept=0,linetype="dashed",colour="grey")+
-  geom_vline(xintercept = 0,linetype="dashed",colour="grey")+
-  ggtitle("Espace des variables de l'ACP avec les axes 1 et 3") +
-  xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
-  ylab(paste("Axe 2 :",round(resultat_ACP$eig[2,2],0),"%")) +
-  geom_circle( aes(x0 = 0, y0 = 0, r = 1), inherit.aes = F) + 
-  scale_x_continuous(limits = c(-1, 1)) +
-  scale_y_continuous(limits = c(-1, 1)) +
-  coord_fixed() +
-  geom_segment(aes(x = 0, y = 0, xend = Dim.1, yend = Dim.2), arrow = arrow())
-
-ggplot(data=dbind,aes(x=Dim.1,y=Dim.2))+
-  ggtitle("Titre")+
-  geom_point()+
-  geom_text_repel(aes(label = c_abrv),size=3)+
-  geom_hline(yintercept=0,linetype="dashed")+
-  geom_vline(xintercept = 0,linetype="dashed")+
-  theme(plot.title=element_text(hjust=0.5),legend.position=c(.95,.2),
-        panel.background =element_rect(fill="white"),legend.title=element_blank())+
-  xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
-  ylab(paste("Axe 2 :",round(resultat_ACP$eig[2,2],0),"%"))
-
-ggplot(data=dbind,aes(x=Dim.1,y=Dim.2))+
-  ggtitle("Titre")+
-  geom_point(aes(color=groupe))+
-  geom_text_repel(aes(color=groupe,label=c_abrv),
-                  size=3, max.overlaps = 20, max.iter = 1000)+
-  geom_hline(yintercept=0,linetype="dashed")+
-  geom_vline(xintercept = 0,linetype="dashed")+
-  theme(plot.title=element_text(hjust=0.5),
-        panel.background =element_rect(fill="white"))+
-  xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
-  ylab(paste("Axe 2 :",round(resultat_ACP$eig[2,2],0),"%"))+ 
-  guides(color = F)
-
-ggplot(data = carte_europe) +
-  geom_sf(aes(fill = groupe)) + 
-  guides(fill = F) +
-  ggtitle("Figure VI - Carte des pays classifiés selon les opinions agrégées sur l'environnement") +
-  coord_sf(datum = NA)
+# barplot(resultat_ACP$eig[,2],main="Figure I - Part expliquée par chaque axe dans la variance totale",
+#         names.arg=1:nrow(resultat_ACP$eig),col= rainbow (15))
+# 
+# ggplot(dbact,aes(x=Dim.1,y= Dim.2,label=names))+
+#   geom_point()+
+#   theme(legend.title=element_blank(),
+#         panel.background =element_rect(fill="white")) +
+#   geom_text(size=4,show.legend = FALSE)+
+#   geom_hline(yintercept=0,linetype="dashed",colour="grey")+
+#   geom_vline(xintercept = 0,linetype="dashed",colour="grey")+
+#   ggtitle("Espace des variables de l'ACP avec les axes 1 et 3") +
+#   xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
+#   ylab(paste("Axe 2 :",round(resultat_ACP$eig[2,2],0),"%")) +
+#   geom_circle( aes(x0 = 0, y0 = 0, r = 1), inherit.aes = F) + 
+#   scale_x_continuous(limits = c(-1, 1)) +
+#   scale_y_continuous(limits = c(-1, 1)) +
+#   coord_fixed() +
+#   geom_segment(aes(x = 0, y = 0, xend = Dim.1, yend = Dim.2), arrow = arrow())
+# 
+# ggplot(data=dbind,aes(x=Dim.1,y=Dim.2))+
+#   ggtitle("Titre")+
+#   geom_point()+
+#   geom_text_repel(aes(label = c_abrv),size=3)+
+#   geom_hline(yintercept=0,linetype="dashed")+
+#   geom_vline(xintercept = 0,linetype="dashed")+
+#   theme(plot.title=element_text(hjust=0.5),legend.position=c(.95,.2),
+#         panel.background =element_rect(fill="white"),legend.title=element_blank())+
+#   xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
+#   ylab(paste("Axe 2 :",round(resultat_ACP$eig[2,2],0),"%"))
+# 
+# ggplot(data=dbind,aes(x=Dim.1,y=Dim.2))+
+#   ggtitle("Titre")+
+#   geom_point(aes(color=groupe))+
+#   geom_text_repel(aes(color=groupe,label=c_abrv),
+#                   size=3, max.overlaps = 20, max.iter = 1000)+
+#   geom_hline(yintercept=0,linetype="dashed")+
+#   geom_vline(xintercept = 0,linetype="dashed")+
+#   theme(plot.title=element_text(hjust=0.5),
+#         panel.background =element_rect(fill="white"))+
+#   xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
+#   ylab(paste("Axe 2 :",round(resultat_ACP$eig[2,2],0),"%"))+ 
+#   guides(color = F)
+# 
+# ggplot(data = carte_europe) +
+#   geom_sf(aes(fill = groupe)) + 
+#   guides(fill = F) +
+#   ggtitle("Figure VI - Carte des pays classifiés selon les opinions agrégées sur l'environnement") +
+#   coord_sf(datum = NA)
 
 
 
