@@ -17,6 +17,7 @@ library(ggrepel)
 library(readxl)
 library(stargazer)
 library(questionr)
+library(car)
 
 ## Données -----
 
@@ -67,10 +68,28 @@ La représentation graphique facilite l'interprétation de ces indicateurs :
 
 ```{r}
 
-graph3 <- ggplot(base_exploration, aes (x = perc_env, y = sensi_env)) + 
+graph3 <- ggplot(base_exploration, aes (x = conn_env, y = perc_env)) + 
   geom_point(color = "darkgreen", size = 3, alpha = 0.3) +
   geom_smooth (method = "lm", size = 1, lty = 1, se = 2  )
 
+cor3 <- cor(base_exploration$conn_env, base_exploration$perc_env, method= "spearman")
+  
+
+graph4 <- ggplot(base_exploration, aes (x = conn_env, y = soutien_pol_env)) + 
+  geom_point(color = "darkgreen", size = 3, alpha = 0.3) +
+  geom_smooth (method = "lm", size = 1, lty = 1, se = 2  )
+
+cor4 <- cor(base_exploration$conn_env, base_exploration$soutien_pol_env)
+
+graph5 <- ggplot(base_exploration, aes (x = soutien_pol_env, y = perc_env)) + 
+  geom_point(color = "darkgreen", size = 3, alpha = 0.3) +
+  geom_smooth (method = "lm", size = 1, lty = 1, se = 2  )
+
+
+reg1 <- lm(data = base_exploration, formula = part_depenses_env ~ sensi_env + GINI_2017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new)
+
+hccm(reg1)
+vcov(reg1)
 #ggplot(data) + geom_smooth(aes (x = sulphates, y = quality), color = "darkgreen") 
 
 ````
