@@ -86,14 +86,8 @@ env_et_depenses <- EVS_et_depenses %>%
             part_depenses_env = first(PC_GDP_2016))
 
 
-gini <- read_excel("GINI_2017.xlsx")
-
-educ_sup <- read_xlsx("education_sup_UE.xlsx", sheet = 3, skip = 11) %>%
-   select(TIME, "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019")
-# Traiter les données à la main sur excel. On garde ça ? 
-
-# rev_med <- read_xls("revenu_median_UE.xls", skip = 10) 
-# prendre le revenu médian en euro classique, ou en standard de pouvoir d'achat ? 
+gini <- read_excel("GINI_2017.xlsx") %>%
+  filter(EDUC_SUP_2017 != 'NA')
 
 epi2020results <- read.csv("epi2020results.csv") %>%
   select(code, EPI.new)
@@ -102,10 +96,12 @@ gini_et_plus <- env_et_depenses %>%
   left_join(gini, by = "code") %>%
   select(-Country)
 
-gini_epi_plus <- gini_et_plus %>%
-  left_join(epi2020results, by = c("code2" = "code"))
-  
-#regexec() grep()
+base_complete <- gini_et_plus %>%
+  left_join(epi2020results, by = c("code2" = "code")) %>%
+  mutate(code2 = as.character(code2)) %>%
+  select(Pays, code, code2, everything())
+
+write.csv(base_complete, "base_complete.csv")
 
 ```
 
