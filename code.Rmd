@@ -89,7 +89,7 @@ Pour construire cette première variable explicative, nous avons croisé plusieu
 
 Les autres variables explicatives, que l'on pourra appeler variables de contrôle, sont au nombre de 4.
 Il paraît raisonnable de penser que les dépenses environnementales d'un pays sont liées à son niveau de développement économique, conformément à la thèse avancée par R.
-Inglehart dans **La Révolution silencieuse** (1977), qui considère qu'à partir d'un certain niveau de développement économique, des valeurs post-matérialistes (et notamment écologiques) ont plus de chance de se diffuser au sein de la société.
+Inglehart dans *La Révolution silencieuse* (1977), qui considère qu'à partir d'un certain niveau de développement économique, des valeurs post-matérialistes (et notamment écologiques) ont plus de chance de se diffuser au sein de la société.
 Pour exprimer l'influence du niveau de développement économique d'un pays sur sa NEEP, nous avons retenu le revenu médian (*rev_med*) établi par Eurostat dans l'enquête EU-SILC.
 Il est aussi possible de considérer que les inégalités intra-pays influencent ces dépenses.
 D'une part, une inégalité, lorsqu'elle est rendue publique, réduit la contribution à un bien public de tous les participants [Anderson et al., 2008].
@@ -137,6 +137,7 @@ Pour ce faire, nous mobilisons à la fois des éléments de statistiques descrip
 Afin d'observer les relations entre variables de manière synthétique, on peut réaliser une ACP, dont les résultats sont disponibles en **annexe 7**.
 
 Le premier graphique représente la contribution des différents axes à la variance totale, et on voit que le premier axe contribue à la moitié de la variance totale, soulignant qu'il existe des facteurs à l'oeuvre rendant le nuage de points non aléatoire. Les deuxièmes et troisièmes axes ont une valeur propre supérieure à 1, sachant que l'analyse est normée. En comparant les cercles de variables pour les espaces des axes 1 et 2, et 1 et 3, le cercle des axes 1 et 3 semble plus intéressant, puisque trois directions se distinguent clairement : 
+
 -   La première correspond à l'indice de gini. Celui-ci est dans la direction opposée à beaucoup de variable différentes, en particulier le niveau d'éducation supérieure, et les variables relatives à la sensibilité environnementale. 
 -   La deuxième correspond au montant des dépenses pour l'environnement, et correspond à la principale variable participant à la création de l'axe 3. 
 -   La troisième rassemble toutes les variables restantes, c'est-à-dire la sensibilité environnementale (et ses composantes), l'indice de performance environnementale, le revenu médian, le niveau d'éducation supérieure, et les dépenses environnementales en points de PIB. Ainsi, on devrait observer une corrélation positive entre toutes ces variables, ainsi qu'une corrélation négative de toutes ces variables avec l'indice de gini. 
@@ -174,6 +175,7 @@ Le faible nombre d'observations a limité nos possibilités d'analyse, mais nous
 
 Tout d'abord, nous avons régressé nos variables dépendantes (part du PIB dédié aux dépenses environnementales, et montant des dépenses environnementales) selon nos variables explicatives centrales (l'indice de sensibilité environnementale, ainsi que ses composantes). 
 Nous comparons pour cela plusieurs régressions linéaires : 
+
 -   reg1, dont la formule est simplement "part_depenses_env ~ sensi_env", 
 -   reg1bis, dont la formule est "part_depenses_env ~ conn_env + perc_env + soutien_pol_env", permettant d'identifier le rôle différent des trois composantes de l'indice construit, 
 -   reg1ter, dont la formule est "depenses_brutes_env ~ sensi_env", pour voir quelle mesure des dépenses environnementales semble la plus appropriée,  
@@ -192,35 +194,12 @@ stargazer(reg1, reg1bis, reg1ter, reg1quater, title = "Modèles simples sans var
 
 ```
 
-On observe ainsi dans le tableau résumant ces quatre modèles que seul le modèle (2) possède un tant soit peu de significativité. D'une part, c'est le seul à posséder une significativité totale correcte, puisque le $R^{2}$ correspondant est égal à 0.381, c'est-à-dire que les variables expliquent $38.1%$ de la variance totale de la variable dépendante, ici, la part du PIB des dépenses environnementales. Les autres modèles ont un $R^{2}$ au mieux trois fois plus faible, une différence encore plus flagrante si l'on considère le $R^{2}$ ajusté, qui prend en compte le nombre de variables, permettrant donc de comparer les modèles alors qu'ils ont un nombre différent de variables. 
+On observe ainsi dans le tableau résumant ces quatre modèles que seul le modèle (2) (reg1bis) possède un tant soit peu de significativité. D'une part, c'est le seul à posséder une significativité totale correcte, puisque le $R^{2}$ correspondant est égal à 0.381, c'est-à-dire que les variables expliquent 38.1% de la variance totale de la variable dépendante, ici, la part du PIB des dépenses environnementales. Les autres modèles ont un $R^{2}$ au mieux trois fois plus faible, une différence encore plus flagrante si l'on considère le $R^{2}$ ajusté, qui prend en compte le nombre de variables, permettrant donc de comparer les modèles alors qu'ils ont un nombre différent de variables. 
 
-<<<<<<< Updated upstream
-### 4 premières régressions linéaires
-
-1ère démarche : tester des modèles linéraires simples en dépenses et en part du PIB avec l'indicateur de sensibilité 
-
-```{r linear-regression}
-
-
-
-
-```
-
-
-
-```{r linear-regression}
-
-graph_reg <- ggplot(data = base_complete, mapping = aes(x = sensi_env, y = part_depenses_env)) +
-  theme_bw() +
-  geom_point()+
-  geom_smooth(method = lm) + 
-  labs(x = "Sensibilité moyenne à l'écologie (sensi_env)", y = "Dépenses environnementales en part de PIB")
-
-print(graph_reg)
-=======
 En approfondissant l'analyse des résultats obtenus, on observe que seule une variable au sein du modèle (2) est significative : **conn_env**, avec une *p-value* inférieure à 0.01. On se propose donc de se focaliser en partie sur cette variable, en l'isolant dans des modèles différents : 
-- reg2, dont la formule est "part_depenses_env ~ conn_env", 
-- reg2bis, dont la formule est "depenses_brutes_env ~ conn_env". 
+
+-   reg2, dont la formule est "part_depenses_env ~ conn_env", 
+-   reg2bis, dont la formule est "depenses_brutes_env ~ conn_env". 
 
 ```{r}
 reg2    <- lm(data = base_complete, formula = part_depenses_env ~ conn_env)
@@ -232,121 +211,111 @@ reg2bis <- lm(data=base_complete, formula = depenses_brutes_env ~ conn_env)
 stargazer(reg2, reg2bis, title = "Modèles sans variables de contrôle, avec une variable repérée comme significative.", header = F, column.labels = c("reg2", "reg2bis"))
 ```
 
-Pour le modèle reg2, la significativité globale augmente (le  $R^{2}$ ajusté est plus élevé), ce qui est logique puisque l'on vient de ponctionner le modèle de variables non significatives (perc_env et soutien_pol_env)
+Pour le modèle reg2, la significativité globale augmente (le $R^{2}$ ajusté est plus élevé), ce qui est logique puisque nous venons de ponctionner le modèle de variables non significatives (perc_env et soutien_pol_env). On peut donc partir de ce modèle simple et ajouter des variables de contrôle. Etant donné le faible nombre d'observations, et la valeur de l'exercice, nous proposons aussi un certain nombre de modèles reposant sur **sensi_env**, afin d'analyser les modèles linéaires obtenus. N'ayant pas à l'esprit de variable de contrôle ayant *a priori* une influence plus grande que les autres, nous décidons de tester les modèles suivants, intégrant toutes les variables de contrôle : 
+
+-   reg3, avec la formule "part_depenses_env = sensi_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017", 
+-   reg4, avec la formule "part_depenses_env ~ conn_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017",
+-   reg3bis, avec la formule "depenses_brutes_env ~ sensi_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017", 
+-   reg4bis, avec la formule "depenses_brutes_env ~ conn_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017". 
+
+
+```{r}
+reg3   <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
+reg3bis <- lm(data=base_complete, formula = depenses_brutes_env ~ sensi_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
+reg4   <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
+reg4bis <- lm(data=base_complete, formula = depenses_brutes_env ~ conn_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
+
+```
+ 
+```{r, results='asis'}
+
+stargazer(reg3,reg4,reg3bis,reg4bis, header = F, title = "Modèles avec variables de contrôle, pour sensi.env et conn.env.", column.labels =  c("reg3", "reg4", "reg3bis", "reg4bis"))
+
+```
+
+Ce tableau nous montre que c'est pas ouf. 
+
+Là j'pensais parler un peu des modèles reg3, reg4, reg3bis, reg4bis. Ensuite, rajouter des modèles avec R2 plus élevé qui ne sont pas mis, puis faire des graphiques avec compare_models et check_model pour les meilleurs modèles. 
 
 ```{r linear-regression}
->>>>>>> Stashed changes
 
-# 1ère regression : juste sensi (2 définitions)
-
-reg1               <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env)
-summary(reg1)
-
-reg1bis <- lm(data=base_complete, formula = part_depenses_env ~ conn_env + perc_env + soutien_pol_env)
-
-reg5 <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + GINI_2017 + EPI.new)
-
-
-
-summary(reg1bis) # R2 adj : 0,26 + conn_env : p-value < 0.01
-confint(reg1bis) # permet d'afficher l'intervalle de confiance
-summary.aov(reg1bis) #table des variances (test d'analyse sur la variance)
-
-check_model(reg1bis) #Visual check of model various assumptions (normality of residuals, normality of random effects, linear relationship, homogeneity of variance, multicollinearity).
-plot(reg1bis) #a peu pres comme check model mais en moche -> choisir entre les deux
-
-check_heteroscedasticity(reg1bis) # problème d'hétéroscédasticité -> on ne peut plus appliquer les tests statistiques post-estimation (matrice des variances - covariances est biaisée)
-
-
-resid_reg1bis <- resid(reg1bis)
-plot(resid_reg1bis)
-
-model_performance(reg1bis)
-
-compare_performance(reg1, reg1bis)
-
-plot(compare_performance(reg1,reg1bis,reg5), rank = TRUE) #comparaison graphique des différents modèles
-
-test_performance(reg1,reg1bis)
-
-reg2               <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + REV_MED_EURO_2017 + EPI.new)
-
-summary(reg2) #R2 adj : 0,05
-
-reg3               <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + EPI.new + REV_MED_EURO_2017 +
-                           EDUC_SUP_2017 + GINI_2017)
-
-summary(reg3) # R2 adj : 0,06
-
-reg4 <- lm(data = base_complete, formula = depenses_brutes_env ~ sensi_env + GINI_2017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new)
-
-summary(reg4) # R2 adj : 0,28
-
-
-summary(reg5) # R2 ajd : 0,25
-
-reg5bis <- lm(data = base_complete, formula = depenses_brutes_env ~ conn_env + soutien_pol_env + GINI_2017 + EPI.new)
-summary(reg5bis)
-
-check_model(reg5)
-
-reg6 <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + GINI_2017 +  EDUC_SUP_2017 + EPI.new)
-
-summary(reg6) #R 2 adj : 0,23
-
-reg6bis <- lm(data = base_complete, formula = depenses_brutes_env ~ conn_env + soutien_pol_env + GINI_2017 +  EDUC_SUP_2017 + EPI.new)
-
-summary(reg6bis)
-
-
-model_performance(reg5)
-print(test_performance(reg1,reg5))
-
-reg7             <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + perc_env + soutien_pol_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
-
-summary(reg7) # R2 adj : 0,11 
-
-reg8             <- lm(data = base_complete, formula = part_depenses_env ~ conn_env)
-
-summary(reg8) # R2 ah : 0,29
-
-# comparaison de modèles :
-anova(reg1,reg1bis)
-
-summary(reg4)
-summary(reg3)
-residuals(reg1)
-predict(reg1)
-
-# analysis of variance model 
-aov(data = base_complete, formula = part_depenses_env ~ sensi_env + GINI_2017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new) %>%
-  report()
-
-
-
-r2(reg1)
-
-#Le modèle suppose que la régression est linéaire, les termes d’erreurs ont même variance, ils sont indépendants et issus d’une loi normale.
-#Avant d’interpréter les résultats il est indispensable de vérifier ces hypotheses.
-
-
-
-# comment interpréter les résultats d'une régression avec lm : http://www.learnbymarketing.com/tutorials/linear-regression-in-r/
+# confint(reg1bis) # permet d'afficher l'intervalle de confiance
+# summary.aov(reg1bis) #table des variances (test d'analyse sur la variance)
+# 
+# check_model(reg1bis) #Visual check of model various assumptions (normality of residuals, normality of random effects, linear relationship, homogeneity of variance, multicollinearity).
+# 
+# check_heteroscedasticity(reg1bis) # problème d'hétéroscédasticité -> on ne peut plus appliquer les tests statistiques post-estimation (matrice des variances - covariances est biaisée)
+# 
+# compare_performance(reg1, reg1bis)
+# 
+# plot(compare_performance(reg1,reg1bis,reg5), rank = TRUE) #comparaison graphique des différents modèles
+# 
+# # test_performance(reg1,reg1bis)    # pas compris ce que c'était.
+# 
+# reg3               <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
+# 
+# summary(reg3) # R2 adj : 0,06
+# 
+# reg4 <- lm(data = base_complete, formula = depenses_brutes_env ~ sensi_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
+# 
+# summary(reg4) # R2 adj : 0,28
+# 
+# reg5 <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + GINI_2017 + EPI.new)
+# 
+# summary(reg5) # R2 ajd : 0,25
+# 
+# reg5bis <- lm(data = base_complete, formula = depenses_brutes_env ~ conn_env + soutien_pol_env + GINI_2017 + EPI.new)
+# summary(reg5bis)
+# 
+# check_model(reg5)
+# 
+# reg6 <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + GINI_2017 +  EDUC_SUP_2017 + EPI.new)
+# 
+# summary(reg6) #R 2 adj : 0,23
+# 
+# reg6bis <- lm(data = base_complete, formula = depenses_brutes_env ~ conn_env + soutien_pol_env + GINI_2017 +  EDUC_SUP_2017 + EPI.new)
+# 
+# summary(reg6bis)
+# 
+# 
+# model_performance(reg5)
+# print(test_performance(reg1,reg5))
+# 
+# reg7             <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + perc_env + soutien_pol_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
+# 
+# summary(reg7) # R2 adj : 0,11 
+# 
+# 
+# # comparaison de modèles :
+# anova(reg1,reg1bis)
+# 
+# summary(reg4)
+# summary(reg3)
+# residuals(reg1)
+# predict(reg1)
+# 
+# # analysis of variance model 
+# aov(data = base_complete, formula = part_depenses_env ~ sensi_env + GINI_2017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new) %>%
+#   report()
+# 
+# 
+# 
+# r2(reg1)
+# 
+# #Le modèle suppose que la régression est linéaire, les termes d’erreurs ont même variance, ils sont indépendants et issus d’une loi normale.
+# #Avant d’interpréter les résultats il est indispensable de vérifier ces hypotheses.
+# 
+# 
+# 
+# # comment interpréter les résultats d'une régression avec lm : http://www.learnbymarketing.com/tutorials/linear-regression-in-r/
 
 
 
 ```
 
-```{r tables, results='asis'}
+\newpage
 
-stargazer(reg1, reg2, reg3, header = FALSE)
-
-# info sur stargazer : https://www.jakeruss.com/cheatsheets/stargazer/ ou
-```
-
-## V. Comparaison des coefficients et de la significativité des modèles.
-
-## VI. Interprétation et proposition de pistes de réflexion complémentaires (limites blabla).
+## V. Interprétation des modèles retenus et proposition de pistes de réflexion complémentaires (limites blabla).
 
 Limite : le questionnaire EVS ne propose pas beaucoup de questions relatives à l'environnement, et celles-ci sont formuléees de manière non neutre, ce qui peut induire un biais dans les questions.
 Parler de deux des problèmes (environnement v. emploi et "m'en balec") L'International Social Survey Programme conduit une enquête par questionnaire parmi les 42 pays membres du programme, sur le thème de l'environnement.
