@@ -132,7 +132,22 @@ Les variables de contrôle **EDUC_SUP_2017** et **REV_MED_EURO_2017** proviennen
 L'exploration des données préalablement à la réalisation de regréssions linéaires est primordiale.
 Pour ce faire, nous mobilisons à la fois des éléments de statistiques descriptives et l'analyse en composantes principales.
 
-### Analyse univariée
+### 1. Analyse en composantes principales (ACP).
+
+Afin d'observer les relations entre variables de manière synthétique, on peut réaliser une ACP, dont les résultats sont disponibles en **annexe 7**.
+
+Le premier graphique représente la contribution des différents axes à la variance totale, et on voit que le premier axe contribue à la moitié de la variance totale, soulignant qu'il existe des facteurs à l'oeuvre rendant le nuage de points non aléatoire. Les deuxièmes et troisièmes axes ont une valeur propre supérieure à 1, sachant que l'analyse est normée. En comparant les cercles de variables pour les espaces des axes 1 et 2, et 1 et 3, le cercle des axes 1 et 3 semble plus intéressant, puisque trois directions se distinguent clairement : 
+-   La première correspond à l'indice de gini. Celui-ci est dans la direction opposée à beaucoup de variable différentes, en particulier le niveau d'éducation supérieure, et les variables relatives à la sensibilité environnementale. 
+-   La deuxième correspond au montant des dépenses pour l'environnement, et correspond à la principale variable participant à la création de l'axe 3. 
+-   La troisième rassemble toutes les variables restantes, c'est-à-dire la sensibilité environnementale (et ses composantes), l'indice de performance environnementale, le revenu médian, le niveau d'éducation supérieure, et les dépenses environnementales en points de PIB. Ainsi, on devrait observer une corrélation positive entre toutes ces variables, ainsi qu'une corrélation négative de toutes ces variables avec l'indice de gini. 
+
+Le graphique des individus représente les pays sur l'espace des variables, ainsi que la sensibilité environnementale et le pourcentage du PIB dédié aux dépenses environnementales. En regardant les pays les plus à l'extrême, on voit que la Suède est située la plus à droite, et a l'indice de sensibilité environnementale le plus élevé, tandis que les pays les plus à droite ont un cercle plus petit, c'est-à-dire des dépenses environnementales en points de PIB plus faibles, comme la Roumanie. 
+
+Ainsi, plus de la moitié des variables sont corrélées positivement entre elles, et s'opposent à l'indice gini, tandis que le montant des dépenses environnementales se distingue, et que la part des dépenses environnementales dans le PIB et le revenu médian sont corrélées positivement, mais faiblement. 
+
+
+
+### 2. Analyse univariée.
 
 Nous procédons à une première analyse des variables présentes dans notre jeu de données.
 Pour ce faire, il s'agit de dresser un tableau des principaux indicateurs statistiques (**Annexe1**).
@@ -140,7 +155,7 @@ Pour ce faire, il s'agit de dresser un tableau des principaux indicateurs statis
 La visualisation des données grâce aux graphiques facilite grandement l'analyse.
 Les **annexes 2 et 3** retranscrivent les disparités importantes entre les pays européens en terme de dépenses pour la protection de l'environnement brutes, ces disparités semblant moins importantes une fois la NEEP rapportée en points de PIB.
 
-### Analyse bivariée.
+### 3. Analyse bivariée.
 
 Il s'agit désormais d'étudier les liens entre nos différentes variables explicatives.
 Dans un premier temps, on s'intéresse aux trois variables qui ont permis de construire notre indicateur de sensibilité environnementale **sensi_env** : **conn_env**, **perc_env** et **soutien_pol_env**.
@@ -152,18 +167,34 @@ On s'intéresse ensuite aux corrélations entre toutes les variables.
 Pour ce faire, nous dressons la matrice des corrélations entre les différentes variables (**Annexe 5**).
 Une représentation graphique de ces coefficients facilite leur interprétation (**Annexe 6**).
 
-### Analyse en composantes principales (ACP).
-
-Afin d'observer les relations entre variables de manière synthétique, on peut réaliser une ACP, dont les résultats sont disponibles en **annexe 7**.
-
-Le premier graphique représente la contribution des différents axes à la variance totale, et on voit que le premier axe contribue à la moitié de la variance totale, soulignant qu'il existe des facteurs à l'oeuvre rendant le nuage de points non aléatoire. Les deuxièmes et troisièmes axes ont une valeur propre supérieure à 1, sachant que l'analyse est normée. En comparant les cercles de variables pour les espaces des axes 1 et 2, et 1 et 3
-
-
-
-
 
 ## IV. Proposition et justification de différents modèles linéaires.
 
+Le faible nombre d'observations a limité nos possibilités d'analyse, mais nous avons tenté de réaliser des modèles avec un minimum de significativité, dans une démarche d'apprentissage, plutôt que d'administration de la preuve. 
+
+Tout d'abord, nous avons régressé nos variables dépendantes (part du PIB dédié aux dépenses environnementales, et montant des dépenses environnementales) selon nos variables explicatives centrales (l'indice de sensibilité environnementale, ainsi que ses composantes). 
+Nous comparons pour cela plusieurs régressions linéaires : 
+-   reg1, dont la formule est simplement "part_depenses_env ~ sensi_env", 
+-   reg1bis, dont la formule est "part_depenses_env ~ conn_env + perc_env + soutien_pol_env", permettant d'identifier le rôle différent des trois composantes de l'indice construit, 
+-   reg1ter, dont la formule est "depenses_brutes_env ~ sensi_env", pour voir quelle mesure des dépenses environnementales semble la plus appropriée,  
+- reg1quater, dont la formule est "depenses_brutes_env ~ conn_env + perc_env + soutien_pol_env". 
+
+```{r}
+reg1    <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env)
+reg1bis <- lm(data=base_complete, formula = part_depenses_env ~ conn_env + perc_env + soutien_pol_env)
+reg1ter <- lm(data = base_complete, formula = depenses_brutes_env ~ sensi_env)
+reg1quater <- lm(data = base_complete, formula = depenses_brutes_env ~ conn_env + perc_env + soutien_pol_env)
+
+```
+ 
+```{r, results='asis'}
+stargazer(reg1, reg1bis, reg1ter, reg1quater, title = "Modèles simples sans variables de contrôle.", header = F, column.labels =  c("reg1", "reg1bis", "reg1ter", "reg1quater"))
+
+```
+
+On observe ainsi dans le tableau résumant ces quatre modèles que seul le modèle (2) possède un tant soit peu de significativité. D'une part, c'est le seul à posséder une significativité totale correcte, puisque le $R^{2}$ correspondant est égal à 0.381, c'est-à-dire que les variables expliquent $38.1%$ de la variance totale de la variable dépendante, ici, la part du PIB des dépenses environnementales. Les autres modèles ont un $R^{2}$ au mieux trois fois plus faible, une différence encore plus flagrante si l'on considère le $R^{2}$ ajusté, qui prend en compte le nombre de variables, permettrant donc de comparer les modèles alors qu'ils ont un nombre différent de variables. 
+
+<<<<<<< Updated upstream
 ### 4 premières régressions linéaires
 
 1ère démarche : tester des modèles linéraires simples en dépenses et en part du PIB avec l'indicateur de sensibilité 
@@ -186,6 +217,25 @@ graph_reg <- ggplot(data = base_complete, mapping = aes(x = sensi_env, y = part_
   labs(x = "Sensibilité moyenne à l'écologie (sensi_env)", y = "Dépenses environnementales en part de PIB")
 
 print(graph_reg)
+=======
+En approfondissant l'analyse des résultats obtenus, on observe que seule une variable au sein du modèle (2) est significative : **conn_env**, avec une *p-value* inférieure à 0.01. On se propose donc de se focaliser en partie sur cette variable, en l'isolant dans des modèles différents : 
+- reg2, dont la formule est "part_depenses_env ~ conn_env", 
+- reg2bis, dont la formule est "depenses_brutes_env ~ conn_env". 
+
+```{r}
+reg2    <- lm(data = base_complete, formula = part_depenses_env ~ conn_env)
+reg2bis <- lm(data=base_complete, formula = depenses_brutes_env ~ conn_env)
+
+```
+ 
+```{r, results='asis'}
+stargazer(reg2, reg2bis, title = "Modèles sans variables de contrôle, avec une variable repérée comme significative.", header = F, column.labels = c("reg2", "reg2bis"))
+```
+
+Pour le modèle reg2, la significativité globale augmente (le  $R^{2}$ ajusté est plus élevé), ce qui est logique puisque l'on vient de ponctionner le modèle de variables non significatives (perc_env et soutien_pol_env)
+
+```{r linear-regression}
+>>>>>>> Stashed changes
 
 # 1ère regression : juste sensi (2 définitions)
 
@@ -290,8 +340,6 @@ r2(reg1)
 ```{r tables, results='asis'}
 
 stargazer(reg1, reg2, reg3, header = FALSE)
-
-stargazer(base_complete, header = FALSE)
 
 # info sur stargazer : https://www.jakeruss.com/cheatsheets/stargazer/ ou
 ```
