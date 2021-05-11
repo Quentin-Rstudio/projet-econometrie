@@ -24,6 +24,7 @@ library(sf)
 library(haven)
 library(FactoMineR)
 library(ggrepel)
+library(knitr)
 library(stargazer)
 library(questionr)
 #install.packages("remotes")
@@ -145,10 +146,9 @@ print(graph5)
 
 ## Annexe 5
 
-```{r, results='asis'}
-resultats_cor <- correlation(base_complete)
+```{r}
 
-stargazer(cor(resultats_cor), summary = F)
+kable(cor(base_complete), title = "Matrice des corrélations")
 
 
 ```
