@@ -1,13 +1,23 @@
 ---
 title: "Annexe"
-output: html_document
+author: "Quentin Merrien et Catherine Berleur"
+date: "13/04/2021"
+output:
+  pdf_document:
+    toc: yes
+    toc_depth : 3
+    latex_engine: xelatex
+  html_document:
+    toc: yes
+editor_options: 
+  markdown: 
+    wrap: sentence
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 ## Packages ----
-
 library(tidyverse)
 library(ggforce)
 library(sf)
@@ -25,37 +35,35 @@ library("easystats")
 library(ggraph)
 library(dplyr)
 library(see)
+ # install.packages("ggcorrplot")                      # Install corrplot package
+library(ggcorrplot)
 
 ## Données -----
 
-#setwd("C:/Users/quent/Desktop/ENS Paris-Saclay/1A/1S2/Econométrie/TDs/Bases de données/Documents")
-setwd("~/Documents/ENS/econometrie/projet_r")
+setwd("C:/Users/quent/Desktop/ENS Paris-Saclay/1A/1S2/Econométrie/TDs/Bases de données/Documents/projet-econometrie")
+# setwd("~/Documents/ENS/econometrie/projet_r")
 
-base_complete <- read.csv("base_complete.csv")
-  
-base_exploration <- base_complete %>%
-  select(-code2)
-
-base_complete <- read.csv("base_complete.csv") %>%
- select(-X) %>%
- mutate(code2 = as.character(code2))
+base_complete <- read_csv("base_complete.csv") %>%
+   mutate(code2 = as.character(code2))
 
 ```
 
 ## Annexe 1 
 
 ```` {r, results = "asis" }
-stargazer(base_exploration, type = 'html', title = "Principaux indicateurs des variables" )
+
+stargazer(as.data.frame(base_complete), title = "Principaux indicateurs des variables", header = F )
+
 ```
 
 ## Annexe 2
 
 ```{r}
-graph1 <- ggplot(data = base_exploration, 
-                 mapping = aes(y=Nom_pays, 
+graph1 <- ggplot(data = base_complete, 
+                 mapping = aes(y= reorder(Nom_pays, depenses_brutes_env), 
                                x = depenses_brutes_env,
                                fill = depenses_brutes_env)) +
-  geom_col()
+          geom_col()
 
 graph1 <- graph1 + labs(title = "Les dépenses nationales pour la protection de l'environnement",
          y = "Pays", 
@@ -70,8 +78,8 @@ print(graph1)
 ## Annexe 3
 
 ```` {r}
-graph2 <- ggplot(data = base_exploration, 
-                 mapping = aes(y=Nom_pays, 
+graph2 <- ggplot(data = base_complete, 
+                 mapping = aes(y=reorder(Nom_pays, part_depenses_env), 
                                x = part_depenses_env,
                                fill = part_depenses_env)) +
   geom_col()
@@ -89,9 +97,9 @@ print(graph2)
 ## Annexe 4
 
 ```{r}
-graph3 <- ggplot(base_exploration, aes (x = conn_env, y = perc_env)) + 
-  geom_point(color = "darkgreen", size = 3, alpha = 0.3) +
-  geom_smooth (method = "lm", size = 1, lty = 1, se = 2  )
+graph3 <- ggplot(base_complete, aes (x = conn_env, y = perc_env)) + 
+  geom_point(color = "darkgreen", size = 3 ) +
+  geom_smooth (method = "lm", size = 1, lty = 1, se = 2, color = "black")
 
 graph3 <- graph3 + labs(title = "Lien entre la connaissance des problèmes environnementaux et leur perception",
                         y = "Perception environnementale",
@@ -105,9 +113,9 @@ print(graph3)
 
 ```{r}
 
-graph4 <- ggplot(base_exploration, aes (x = conn_env, y = soutien_pol_env)) + 
-  geom_point(color = "darkgreen", size = 3, alpha = 0.3) +
-  geom_smooth (method = "lm", size = 1, lty = 1, se = 2  )
+graph4 <- ggplot(base_complete, aes (x = conn_env, y = soutien_pol_env)) + 
+  geom_point(color = "darkgreen", size = 3 ) +
+  geom_smooth (method = "lm", size = 1, lty = 1, se = 2, color = "black")
 
 graph4 <- graph4 + labs(title = "Lien entre la connaissance des problèmes environnementaux et le soutien aux politiques environnementales",
                         y = "Soutien aux mesures de protection de l'environnement",
@@ -117,12 +125,12 @@ graph4 <- graph4 + labs(title = "Lien entre la connaissance des problèmes envir
 
 print(graph4)
 
-````
+```
 
 ```{r}
-graph5 <- ggplot(base_exploration, aes (x = perc_env, y = soutien_pol_env)) + 
-  geom_point(color = "darkgreen", size = 3, alpha = 0.3) +
-  geom_smooth (method = "lm", size = 1, lty = 1, se = 2  )
+graph5 <- ggplot(base_complete, aes (x = perc_env, y = soutien_pol_env)) + 
+  geom_point(color = "darkgreen", size = 3 ) +
+  geom_smooth (method = "lm", size = 1, lty = 1, se = 2, color = "black")
 
 graph5 <- graph5 + labs(title = "Lien entre le soutien aux politiques environnementales et la perception des problèmes environnementaux",
                         y = "Soutien aux mesures de protection de l'environnement",
@@ -137,20 +145,82 @@ print(graph5)
 
 ## Annexe 5
 
-```{r}
-resultats_cor <- correlation(base_exploration)
+```{r, results='asis'}
+resultats_cor <- correlation(base_complete)
 
-resultats_cor <- summary(resultats_cor, redundant = TRUE)
-print(resultats_cor)
+stargazer(cor(resultats_cor), summary = F)
+
 
 ```
 
 ## Annexe 6
 
-PARTIE QUI POSE PROBLÈME À INSÉRER
+```{r}
+
+ggcorrplot(cor(base_complete[,5:14]), title = "Représentation graphique \nde la matrice des corrélations", legend.title= "Corrélation", lab = T, lab_col = "black", colors = c("gray8", "white", "forestgreen"))
+
+
+
+
+```
+
 
 
 ## Annexe 7
+
+```{r}
+
+
+ resultat_ACP     <- PCA(base_complete[, 5:14], graph= F)
+
+dbact            <-as_tibble(resultat_ACP$var$coord) %>%
+  mutate(names=c(rownames(resultat_ACP$var$coord)))
+
+dbind            <-bind_cols(base_complete,as_tibble(resultat_ACP$ind$coord))
+
+# resultat_classif <- HCPC(resultat_ACP, nb.clust = 4, graph = FALSE)
+
+# dbind            <- dbind %>%
+#   ungroup() %>%
+#   mutate(groupe = resultat_classif$data.clust$clust)
+
+
+barplot(resultat_ACP$eig[,2],main="Figure I - Part expliquée par chaque axe dans la variance totale",
+      names.arg=1:nrow(resultat_ACP$eig),col= rainbow (15))
+
+ggplot(dbact,aes(x=Dim.1,y= Dim.2,label=names))+
+  geom_point()+
+  theme(legend.title=element_blank(),
+        panel.background =element_rect(fill="white")) +
+  geom_text_repel(size=4,show.legend = FALSE)+
+  geom_hline(yintercept=0,linetype="dashed",colour="grey")+
+  geom_vline(xintercept = 0,linetype="dashed",colour="grey")+
+  ggtitle("Espace des variables de l'ACP avec les axes 1 et 2") +
+  xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
+  ylab(paste("Axe 2 :",round(resultat_ACP$eig[2,2],0),"%")) +
+  geom_circle( aes(x0 = 0, y0 = 0, r = 1), inherit.aes = F) +
+  scale_x_continuous(limits = c(-1, 1)) +
+  scale_y_continuous(limits = c(-1, 1)) +
+  coord_fixed() +
+  geom_segment(aes(x = 0, y = 0, xend = Dim.1, yend = Dim.2), arrow = arrow())
+
+ggplot(data=dbind,aes(x=Dim.1,y=Dim.2, color = sensi_env, size = part_depenses_env))+
+  ggtitle("Espace des pays dans l'ACP des variables")+
+  geom_point()+
+  geom_text_repel(aes(label = code),size=3)+
+  geom_hline(yintercept=0,linetype="dashed")+
+  geom_vline(xintercept = 0,linetype="dashed")+
+  theme(plot.title=element_text(hjust=0.5),legend.position=c(1,.3),
+        panel.background =element_rect(fill="white"),legend.title=element_blank())+
+  labs(caption = "Plus un pays est en bleu clair, plus il est sensibilisé à l'environnement, \nplus le cercle est gros, plus ses dépenses pour l'environnement en points de PIB sont élevées.") +
+  xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
+  ylab(paste("Axe 2 :",round(resultat_ACP$eig[2,2],0),"%"))
+
+
+
+```
+
+
 
 ## Annexe 8
 
@@ -165,11 +235,3 @@ PARTIE QUI POSE PROBLÈME À INSÉRER
 ## Annexe 13
 
 
-
-## Including Plots
-
-
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```

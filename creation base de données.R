@@ -86,4 +86,4 @@ base_complete <- gini_et_plus %>%
   mutate(code2 = as.character(code2)) %>%
   select(Pays, code, code2, everything())
 
-write.csv(base_complete, "base_complete.csv")
+write_csv(base_complete, "base_complete.csv")

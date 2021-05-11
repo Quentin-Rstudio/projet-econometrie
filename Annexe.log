@@ -1,9 +1,9 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2021.5.10)  11 MAY 2021 13:02
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2021.5.10)  11 MAY 2021 14:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**code.tex
-(./code.tex
+**Annexe.tex
+(./Annexe.tex
 LaTeX2e <2020-10-01> patch level 4
 L3 programming layer <2021-05-07> (c:/Users/quent/AppData/Roaming/TinyTeX/texmf
 -dist/tex/latex/base/article.cls
@@ -426,12 +426,12 @@ Package graphics Info: Driver file: xetex.def on input line 105.
 )
 \Gin@req@height=\dimen163
 \Gin@req@width=\dimen164
-) (./code.aux
+) (./Annexe.aux
 
 LaTeX Warning: Label `' multiply defined.
 
 )
-\openout1 = `code.aux'.
+\openout1 = `Annexe.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 71.
 LaTeX Font Info:    ... okay on input line 71.
@@ -738,9 +738,9 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 71.
 LaTeX Info: Redefining \pageref on input line 71.
 LaTeX Info: Redefining \nameref on input line 71.
-(./code.out) (./code.out)
+(./Annexe.out) (./Annexe.out)
 \@outlinefile=\write3
-\openout3 = `code.out'.
+\openout3 = `Annexe.out'.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: xetex
@@ -799,7 +799,7 @@ LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
 (Font)              scaled to size 7.99915pt on input line 73.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
 (Font)              scaled to size 5.99936pt on input line 73.
-(./code.toc
+(./Annexe.toc
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
 (Font)              scaled to size 7.0pt on input line 1.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
@@ -818,101 +818,70 @@ LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
 (Font)              scaled to size 4.99947pt on input line 1.
 )
 \tf@toc=\write4
-\openout4 = `code.toc'.
+\openout4 = `Annexe.toc'.
 
+
+Overfull \hbox (37.7851pt too wide) in paragraph at lines 84--101
+ [][] 
+ []
+
+File: Annexe_files/figure-latex/unnamed-chunk-2-1.pdf Graphic file (type pdf)
+<use Annexe_files/figure-latex/unnamed-chunk-2-1.pdf>
 [1
 
-] [2]
-File: code_files/figure-latex/linear-regression-1.pdf Graphic file (type pdf)
-<use code_files/figure-latex/linear-regression-1.pdf>
-File: code_files/figure-latex/linear-regression-2.pdf Graphic file (type pdf)
-<use code_files/figure-latex/linear-regression-2.pdf>
-File: code_files/figure-latex/linear-regression-3.pdf Graphic file (type pdf)
-<use code_files/figure-latex/linear-regression-3.pdf>
-
-Underfull \hbox (badness 10000) in paragraph at lines 267--270
-[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 267--270
-[]
- []
-
+]
+File: Annexe_files/figure-latex/unnamed-chunk-3-1.pdf Graphic file (type pdf)
+<use Annexe_files/figure-latex/unnamed-chunk-3-1.pdf>
+[2]
+File: Annexe_files/figure-latex/unnamed-chunk-4-1.pdf Graphic file (type pdf)
+<use Annexe_files/figure-latex/unnamed-chunk-4-1.pdf>
 [3]
-Overfull \vbox (25.86337pt too high) has occurred while \output is active []
+File: Annexe_files/figure-latex/unnamed-chunk-5-1.pdf Graphic file (type pdf)
+<use Annexe_files/figure-latex/unnamed-chunk-5-1.pdf>
+[4]
+File: Annexe_files/figure-latex/unnamed-chunk-6-1.pdf Graphic file (type pdf)
+<use Annexe_files/figure-latex/unnamed-chunk-6-1.pdf>
+[5]
+Overfull \hbox (495.65518pt too wide) in paragraph at lines 132--149
+ [][] 
+ []
 
-[4] [5] [6]
-Overfull \hbox (191.74498pt too wide) in paragraph at lines 388--388
-[]\TU/lmtt/m/n/10 ## The ANOVA (formula: part_depenses_env ~ sensi_env + GINI_2
-017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new) suggests that:[] 
+File: Annexe_files/figure-latex/unnamed-chunk-8-1.pdf Graphic file (type pdf)
+<use Annexe_files/figure-latex/unnamed-chunk-8-1.pdf>
+[6]
+File: Annexe_files/figure-latex/unnamed-chunk-9-1.pdf Graphic file (type pdf)
+<use Annexe_files/figure-latex/unnamed-chunk-9-1.pdf>
+File: Annexe_files/figure-latex/unnamed-chunk-9-2.pdf Graphic file (type pdf)
+<use Annexe_files/figure-latex/unnamed-chunk-9-2.pdf>
+File: Annexe_files/figure-latex/unnamed-chunk-9-3.pdf Graphic file (type pdf)
+<use Annexe_files/figure-latex/unnamed-chunk-9-3.pdf>
+
+Underfull \hbox (badness 10000) in paragraph at lines 159--162
+[]
  []
 
 
-Overfull \hbox (322.99498pt too wide) in paragraph at lines 388--388
-[]\TU/lmtt/m/n/10 ##   - The main effect of sensi_env is statistically not sign
-ificant and large (F(1, 14) = 2.32, p = 0.150; Eta2 (partial) = 0.14, 90% CI [0
-.00, 0.42])[] 
+Underfull \hbox (badness 10000) in paragraph at lines 159--162
+[]
  []
 
+[7]
+Overfull \vbox (23.60738pt too high) has occurred while \output is active []
 
-Overfull \hbox (322.99498pt too wide) in paragraph at lines 388--388
-[]\TU/lmtt/m/n/10 ##   - The main effect of GINI_2017 is statistically not sign
-ificant and large (F(1, 14) = 2.98, p = 0.106; Eta2 (partial) = 0.18, 90% CI [0
-.00, 0.46])[] 
- []
-
-
-Overfull \hbox (391.24498pt too wide) in paragraph at lines 388--388
-[]\TU/lmtt/m/n/10 ##   - The main effect of EDUC_SUP_2017 is statistically not 
-significant and very small (F(1, 14) = 0.13, p = 0.725; Eta2 (partial) = 9.09e-
-03, 90% CI [0.00, 0.20])[] 
- []
-
-
-Overfull \hbox (364.99498pt too wide) in paragraph at lines 388--388
-[]\TU/lmtt/m/n/10 ##   - The main effect of REV_MED_EURO_2017 is statistically 
-not significant and small (F(1, 14) = 0.30, p = 0.594; Eta2 (partial) = 0.02, 9
-0% CI [0.00, 0.25])[] 
- []
-
-
-Overfull \hbox (312.49498pt too wide) in paragraph at lines 388--388
-[]\TU/lmtt/m/n/10 ##   - The main effect of EPI.new is statistically not signif
-icant and small (F(1, 14) = 0.65, p = 0.433; Eta2 (partial) = 0.04, 90% CI [0.0
-0, 0.30])[] 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 464--464
-[][][][]$[][][][] [] [] [] [] [] [][][][] [] [][][] [] [][][][][][][][][] [] []
-[][][] [] [][][][][][] [] [][][][][][] [] [][][][][][][][][][][] [] [][][][][][
-] [] [][][][] [] [][][][][] [] [][][][][][] [] [][][][][][][][][][][][][] [] []
-[][][][][][][] []
- []
-
-File: code_files/figure-latex/unnamed-chunk-1-1.pdf Graphic file (type pdf)
-<use code_files/figure-latex/unnamed-chunk-1-1.pdf>
-[7] [8]
-Underfull \hbox (badness 2334) in paragraph at lines 476--480
-[]\TU/lmr/m/n/10 Point d’analyse intéressant : une fois les paramètres économét
-riques estimés, on peut essayer
- []
-
-[9] (./code.aux)
+[8] [9] (./Annexe.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package rerunfilecheck Info: File `code.out' has not changed.
-(rerunfilecheck)             Checksum: E77689CC94EB3F7F73A2DF92C76E5222;2630.
+Package rerunfilecheck Info: File `Annexe.out' has not changed.
+(rerunfilecheck)             Checksum: 5B392C706499FB649D00394CF8B7D7B1;1160.
  ) 
 Here is how much of TeX's memory you used:
- 15450 strings out of 478774
- 281796 string characters out of 5862712
- 754492 words of memory out of 5000000
- 35263 multiletter control sequences out of 15000+600000
- 407393 words of font info for 67 fonts, out of 8000000 for 9000
+ 15477 strings out of 478774
+ 283010 string characters out of 5862712
+ 748808 words of memory out of 5000000
+ 35295 multiletter control sequences out of 15000+600000
+ 407353 words of font info for 62 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 85i,10n,121p,569b,465s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 85i,9n,121p,300b,327s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on code.pdf (9 pages).
+Output written on Annexe.pdf (9 pages).
