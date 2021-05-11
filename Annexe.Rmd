@@ -200,6 +200,9 @@ dbind            <-bind_cols(base_complete,as_tibble(resultat_ACP$ind$coord))
 barplot(resultat_ACP$eig[,2],main="Figure I - Part expliquée par chaque axe dans la variance totale",
       names.arg=1:nrow(resultat_ACP$eig),col= rainbow (15))
 
+kable(resultat_ACP$eig, caption = "Tableau des valeurs propres et \nvariances des composantes principales")
+
+
 ggplot(dbact,aes(x=Dim.1,y= Dim.2,label=names))+
   geom_point()+
   theme(legend.title=element_blank(),
@@ -222,12 +225,39 @@ ggplot(data=dbind,aes(x=Dim.1,y=Dim.2, color = sensi_env, size = part_depenses_e
   geom_text_repel(aes(label = code),size=3)+
   geom_hline(yintercept=0,linetype="dashed")+
   geom_vline(xintercept = 0,linetype="dashed")+
-  theme(plot.title=element_text(hjust=0.5),legend.position=c(1,.3),
+  theme(plot.title=element_text(hjust=0.5),legend.position=c(0.1,.8),
         panel.background =element_rect(fill="white"),legend.title=element_blank())+
   labs(caption = "Plus un pays est en bleu clair, plus il est sensibilisé à l'environnement, \nplus le cercle est gros, plus ses dépenses pour l'environnement en points de PIB sont élevées.") +
   xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
   ylab(paste("Axe 2 :",round(resultat_ACP$eig[2,2],0),"%"))
 
+ggplot(dbact,aes(x=Dim.1,y= Dim.3,label=names))+
+  geom_point()+
+  theme(legend.title=element_blank(),
+        panel.background =element_rect(fill="white")) +
+  geom_text_repel(size=4,show.legend = FALSE)+
+  geom_hline(yintercept=0,linetype="dashed",colour="grey")+
+  geom_vline(xintercept = 0,linetype="dashed",colour="grey")+
+  ggtitle("Espace des variables de l'ACP avec les axes 1 et 3") +
+  xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
+  ylab(paste("Axe 3 :",round(resultat_ACP$eig[3,2],0),"%")) +
+  geom_circle( aes(x0 = 0, y0 = 0, r = 1), inherit.aes = F) +
+  scale_x_continuous(limits = c(-1, 1)) +
+  scale_y_continuous(limits = c(-1, 1)) +
+  coord_fixed() +
+  geom_segment(aes(x = 0, y = 0, xend = Dim.1, yend = Dim.3), arrow = arrow())
+
+ggplot(data=dbind,aes(x=Dim.1,y=Dim.3, color = sensi_env, size = part_depenses_env))+
+  ggtitle("Espace des pays dans l'ACP des variables")+
+  geom_point()+
+  geom_text_repel(aes(label = code),size=3)+
+  geom_hline(yintercept=0,linetype="dashed")+
+  geom_vline(xintercept = 0,linetype="dashed")+
+  theme(plot.title=element_text(hjust=0.5),legend.position=c(0.1,.8),
+        panel.background =element_rect(fill="white"),legend.title=element_blank())+
+  labs(caption = "Plus un pays est en bleu clair, plus il est sensibilisé à l'environnement, \nplus le cercle est gros, plus ses dépenses pour l'environnement en points de PIB sont élevées.") +
+  xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
+  ylab(paste("Axe 3 :",round(resultat_ACP$eig[3,2],0),"%"))
 
 
 ```

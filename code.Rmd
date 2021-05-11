@@ -79,11 +79,7 @@ Il s'agit ensuite de définir ce qu'est la sensibilité environnementale afin de
 Dès lors, on retiendra l'acception suivante : la sensibilité environnementale correspond à l'importance attachée aux problèmes environnementaux et aux enjeux écologiques.
 
 Elle comprend donc la perception de la gravité des problèmes environnementaux, le degré de connaissance des problèmes environnementaux, et le soutien aux dépenses gouvernementales pour la protection de l'environnement [Thiery-Seror, 1996][^1] La difficulté réside alors en la traduction de ces éléments en une variable économétrique.
-Pour construire cette première variable explicative, nous avons croisé plusieurs bases de données : l'Environmental Awareness Index (EAI)[^2] et l'European Values Study (EVS) de 2017
-. L'*Environmental Awareness Index* est en effet une variable permettant d'apprécier la sensibilisation des citoyens aux questions écologiques, que l'on peut assimiler au degré de connaissance des problèmes environnementaux, et que l'on appelera **conn_env**. L'EVS permet elle de couvrir les deux autres dimensions de la sensibilité environnementale
-. La variable **perc_env** rend compte de la perception des problèmes environnementaux des personnes sondées, tandis que la variable **soutien_pol_env** témoigne du soutien aux mesures gouvernementales pour la défense de l'environnement
-. Afin de construire une variable explicative agrégée pour la sensibilité environnementale (*sensi_env*), on pondère les variables des ces trois facteurs par 1/3
-.
+Pour construire cette première variable explicative, nous avons croisé plusieurs bases de données : l'Environmental Awareness Index (EAI)[^2] et l'European Values Study (EVS) de 2017. L'*Environmental Awareness Index* est en effet une variable permettant d'apprécier la sensibilisation des citoyens aux questions écologiques, que l'on peut assimiler au degré de connaissance des problèmes environnementaux, et que l'on appelera **conn_env**. L'EVS permet elle de couvrir les deux autres dimensions de la sensibilité environnementale. La variable **perc_env** rend compte de la perception des problèmes environnementaux des personnes sondées, tandis que la variable **soutien_pol_env** témoigne du soutien aux mesures gouvernementales pour la défense de l'environnement. Afin de construire une variable explicative agrégée pour la sensibilité environnementale (*sensi_env*), on pondère les variables des ces trois facteurs par 1/3.
 
 [^1]: Thiery-Seror, P. (1996).
     La solidarité à travers les produits: l'achat-geste écologique.
@@ -119,11 +115,11 @@ Nous avons pris pour la variable **perc_env** la moyenne des indicateurs associ�
 
 La première des questions allant dans un sens opposé aux suivantes, nous avons inversé l'indicateur pour celle-ci par rapport aux autres.
 
-Pour la variable **soutien_pol_env**, nous avons pris la moyenne par pays de la réponse
+Pour la variable **soutien_pol_env**, nous avons pris la moyenne par pays de la réponse : 
 
-> "On devrait donner la priorité à la protection de l'environnement, même si cela ralentit la croissance économique et si certains perdent leur emploi"
+> "On devrait donner la priorité à la protection de l'environnement, même si cela ralentit la croissance économique et si certains perdent leur emploi", 
 
-donnée plutôt que
+donnée plutôt que : 
 
 > "On devrait donner la priorité à la croissance économique et à la création d'emplois, même si l'environnement en souffre d'une manière ou d'une autre".
 
@@ -158,6 +154,14 @@ Une représentation graphique de ces coefficients facilite leur interprétation 
 
 ### Analyse en composantes principales (ACP).
 
+Afin d'observer les relations entre variables de manière synthétique, on peut réaliser une ACP, dont les résultats sont disponibles en **annexe 7**.
+
+Le premier graphique représente la contribution des différents axes à la variance totale, et on voit que le premier axe contribue à la moitié de la variance totale, soulignant qu'il existe des facteurs à l'oeuvre rendant le nuage de points non aléatoire. Les deuxièmes et troisièmes axes ont une valeur propre supérieure à 1, sachant que l'analyse est normée. En comparant les cercles de variables pour les espaces des axes 1 et 2, et 1 et 3
+
+
+
+
+
 ## IV. Proposition et justification de différents modèles linéaires.
 
 ```{r linear-regression}
@@ -176,6 +180,10 @@ reg1               <- lm(data = base_complete, formula = part_depenses_env ~ sen
 summary(reg1)
 
 reg1bis <- lm(data=base_complete, formula = part_depenses_env ~ conn_env + perc_env + soutien_pol_env)
+
+reg5 <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + GINI_2017 + EPI.new)
+
+
 
 summary(reg1bis) # R2 adj : 0,26 + conn_env : p-value < 0.01
 confint(reg1bis) # permet d'afficher l'intervalle de confiance
@@ -211,7 +219,6 @@ reg4 <- lm(data = base_complete, formula = depenses_brutes_env ~ sensi_env + GIN
 
 summary(reg4) 
 
-reg5 <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + GINI_2017 + EPI.new)
 
 summary(reg5) # R2 ajd : 0,25
 check_model(reg5)
@@ -300,97 +307,7 @@ ggplot(data = carte_europe) +
 
 ```
 
-```{r ACP-classification}
 
-## Données ACP et Classification
-
-# resultat_ACP     <- PCA(gini[, 3:9])
-# 
-# dbact            <-as_tibble(resultat_ACP$var$coord) %>% 
-#   mutate(names=c(rownames(resultat_ACP$var$coord)))
-# 
-# dbind            <-bind_cols(db,as_tibble(resultat_ACP$ind$coord))
-# 
-# resultat_classif <- HCPC(resultat_ACP, nb.clust = 4, graph = FALSE)
-# 
-# dbind            <- dbind %>%
-#   ungroup() %>%
-#   mutate(groupe = resultat_classif$data.clust$clust)
-# 
-# europe           <- st_read("Europe/europe.shp")
-# 
-# codes            <- read.csv("all.csv") %>%
-#   filter(region == "Europe")%>%
-#   select(name, alpha.2) %>%
-#   mutate (NAME = name, 
-#           c_abrv = alpha.2)
-#   
-# carte_europe     <- europe %>%
-#   full_join(codes, by = "NAME")
-# 
-# carte_europe     <- carte_europe %>%
-#   full_join(dbind, by = "c_abrv")
-# 
-# test             <-  as.data.frame(carte_europe) %>%
-#   select(-geometry)
-
-
-## Graphiques ----
-
-#graph_acp1 <- barplot(resultat_ACP$eig[,2],main="Figure I - Part expliquée par chaque axe dans la variance totale",
- #       names.arg=1:nrow(resultat_ACP$eig),col= rainbow (15))
-# 
-# ggplot(dbact,aes(x=Dim.1,y= Dim.2,label=names))+
-#   geom_point()+
-#   theme(legend.title=element_blank(),
-#         panel.background =element_rect(fill="white")) +
-#   geom_text(size=4,show.legend = FALSE)+
-#   geom_hline(yintercept=0,linetype="dashed",colour="grey")+
-#   geom_vline(xintercept = 0,linetype="dashed",colour="grey")+
-#   ggtitle("Espace des variables de l'ACP avec les axes 1 et 3") +
-#   xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
-#   ylab(paste("Axe 2 :",round(resultat_ACP$eig[2,2],0),"%")) +
-#   geom_circle( aes(x0 = 0, y0 = 0, r = 1), inherit.aes = F) + 
-#   scale_x_continuous(limits = c(-1, 1)) +
-#   scale_y_continuous(limits = c(-1, 1)) +
-#   coord_fixed() +
-#   geom_segment(aes(x = 0, y = 0, xend = Dim.1, yend = Dim.2), arrow = arrow())
-# 
-# ggplot(data=dbind,aes(x=Dim.1,y=Dim.2))+
-#   ggtitle("Titre")+
-#   geom_point()+
-#   geom_text_repel(aes(label = c_abrv),size=3)+
-#   geom_hline(yintercept=0,linetype="dashed")+
-#   geom_vline(xintercept = 0,linetype="dashed")+
-#   theme(plot.title=element_text(hjust=0.5),legend.position=c(.95,.2),
-#         panel.background =element_rect(fill="white"),legend.title=element_blank())+
-#   xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
-#   ylab(paste("Axe 2 :",round(resultat_ACP$eig[2,2],0),"%"))
-# 
-# ggplot(data=dbind,aes(x=Dim.1,y=Dim.2))+
-#   ggtitle("Titre")+
-#   geom_point(aes(color=groupe))+
-#   geom_text_repel(aes(color=groupe,label=c_abrv),
-#                   size=3, max.overlaps = 20, max.iter = 1000)+
-#   geom_hline(yintercept=0,linetype="dashed")+
-#   geom_vline(xintercept = 0,linetype="dashed")+
-#   theme(plot.title=element_text(hjust=0.5),
-#         panel.background =element_rect(fill="white"))+
-#   xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
-#   ylab(paste("Axe 2 :",round(resultat_ACP$eig[2,2],0),"%"))+ 
-#   guides(color = F)
-# 
-# ggplot(data = carte_europe) +
-#   geom_sf(aes(fill = groupe)) + 
-#   guides(fill = F) +
-#   ggtitle("Figure VI - Carte des pays classifiés selon les opinions agrégées sur l'environnement") +
-#   coord_sf(datum = NA)
-
-
-
-
-
-```
 
 Point d'analyse intéressant : une fois les paramètres économétriques estimés, on peut essayer d'expliquer/interpréter les situations contrefactuelles, c'est-à-dire celles qui s'éloignent le plus de l'estimation.
 
