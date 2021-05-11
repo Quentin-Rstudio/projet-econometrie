@@ -23,6 +23,8 @@ library(questionr)
 library("easystats")
 #install.packages("ggraph")
 library(ggraph)
+library(dplyr)
+library(see)
 
 ## Données -----
 
@@ -91,7 +93,7 @@ graph5 <- ggplot(base_exploration, aes (x = soutien_pol_env, y = perc_env)) +
   geom_smooth (method = "lm", size = 1, lty = 1, se = 2  )
 
 
-reg1 <- lm(data = base_exploration, formula = part_depenses_env ~ sensi_env + GINI_2017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new)
+reg5 <- lm(data = base_exploration, formula = part_depenses_env ~ sensi_env + GINI_2017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new)
 
 
 #ggplot(data) + geom_smooth(aes (x = sulphates, y = quality), color = "darkgreen") 
@@ -100,9 +102,6 @@ resultats_cor <- correlation(base_exploration)
 print(resultats_cor)
 
 summary(resultats_cor, redundant = TRUE)
-
-library(dplyr)
-library(see)
 
 graph_cor <- resultats_cor %>% # à potentiellement remplacer par graph_cor3
   summary(redundant = TRUE) %>%
@@ -118,11 +117,6 @@ graph_cor3 <- resultats_cor %>%
 
 report(base_exploration)
 print(report(base_exploration))
-
-aov(data = base_exploration, formula = part_depenses_env ~ sensi_env + GINI_2017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new) %>%
-  report()
-
-r2(reg1)
 
 
 ````
