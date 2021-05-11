@@ -31,8 +31,9 @@ library(see)
 #setwd("C:/Users/quent/Desktop/ENS Paris-Saclay/1A/1S2/Econométrie/TDs/Bases de données/Documents")
 setwd("~/Documents/ENS/econometrie/projet_r")
 
+
 base_complete <- read.csv("base_complete.csv") %>%
- select(-X)
+ select(-X) 
 
 base_exploration <- base_complete %>%
   select(-code2)
@@ -79,73 +80,84 @@ print(graph2)
 
 ### Analyse bivariée et analyse en composantes principales
 
-Il s'agit désormais d'étudier les liens entre nos différentes variables explicatives.
-
-```` {r}
-
-#graph3 <- ggplot(base_exploration, mapping = aes(x=sensi_env, y = perc_env)) + geom_point()
-
-graph4 <- ggplot(base_exploration) + geom_label(aes (x = sensi_env, y = perc_env, label = Nom_pays), color = "darkgreen", size = 3, alpha = 0.3)
-
-
-```
-
-En raison du grand nombre de variables, nous n'effectuons pas une analyse bivariée entre la variable "qualité" et toutes les autres variables. il s'agit simplement d'explorer les données pour les principales variables que nous identifions ex ante comme importantes en raison des connaissances scientifiques sur le sujet. Par exemple, il est communément admis que les sulfates et le dioxide de soufre sont en partie responsables de maux de tête liés à une consommation non modérée de vin. 
-
-On étudie alors les moyennes et écart-type par niveau de qualité de vins de certaines variables que nous avons identifiées comme primordiales. 
-
-```` {r}
-
-
-```
-Ces indicateurs nous permettent de dégager certaines tendances et d'invalider certaines hypothèses préalables. Par exemple, alors que nous avions imaginé que la densité d'un vin pouvait jouer un rôle prépondérant dans la qualité d'un vin, les moyennes et écart-type de la densité des vins sont assez proches d'une variable à l'autre. La moyenne des sulfates présents dans les vins augmente elle de façon linéaire avec la qualité du vin, contrairement à nos idées pré-conçues, avec des écarts-types sensiblement proches. 
-
-La représentation graphique facilite l'interprétation de ces indicateurs :
-
 ```{r}
-
-graph3 <- ggplot(base_exploration, aes (x = conn_env, y = perc_env)) + 
-  geom_point(color = "darkgreen", size = 3, alpha = 0.3) +
-  geom_smooth (method = "lm", size = 1, lty = 1, se = 2  )
-
-cor3 <- cor(base_exploration$conn_env, base_exploration$perc_env, method= "pearson")
-
-graph4 <- ggplot(base_exploration, aes (x = conn_env, y = soutien_pol_env)) + 
-  geom_point(color = "darkgreen", size = 3, alpha = 0.3) +
-  geom_smooth (method = "lm", size = 1, lty = 1, se = 2  )
-
-cor4 <- cor(base_exploration$conn_env, base_exploration$soutien_pol_env)
-
-graph5 <- ggplot(base_exploration, aes (x = soutien_pol_env, y = perc_env)) + 
-  geom_point(color = "darkgreen", size = 3, alpha = 0.3) +
-  geom_smooth (method = "lm", size = 1, lty = 1, se = 2  )
-
-cor5 <- cor(base_exploration$soutien_pol_env, base_exploration$perc_env)
-
-reg5 <- lm(data = base_exploration, formula = part_depenses_env ~ sensi_env + GINI_2017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new)
-
-
-#ggplot(data) + geom_smooth(aes (x = sulphates, y = quality), color = "darkgreen") 
-
 resultats_cor <- correlation(base_exploration)
+
+resultats_cor <- summary(resultats_cor, redundant = TRUE)
 print(resultats_cor)
 
-summary(resultats_cor, redundant = TRUE)
+```
 
-graph_cor <- resultats_cor %>% # à potentiellement remplacer par graph_cor3
-  summary(redundant = TRUE) %>%
-  plot()
+```{r ACP-classification}
 
-graph_cor2 <- base_exploration %>%
-  correlation(partial = TRUE) %>%
-  plot(main = "Modèle graphique gaussien des corrélations partiales entre les variables")
+## Données ACP et Classification
 
-graph_cor3 <- resultats_cor %>%
-  summary(redundant = TRUE) %>%
-  plot(show_values = TRUE, show_p = TRUE, show_legend = TRUE)
+resultat_ACP  <- PCA(base_complete[, 5:13])
 
-report(base_exploration)
-print(report(base_exploration))
+dbact  <-as_tibble(resultat_ACP$var$coord) %>% 
+  mutate(names=c(rownames(resultat_ACP$var$coord)))
+
+dbind <- bind_cols(base_complete,as_tibble(resultat_ACP$ind$coord))
+
+resultat_classif <- HCPC(resultat_ACP, nb.clust = 4, graph = FALSE)
+
+dbind            <- dbind %>%
+  ungroup() %>%
+  mutate(groupe = resultat_classif$data.clust$clust)
+
+## Graphiques ----
+
+barplot(resultat_ACP$eig[,2],main="Figure I - Part expliquée par chaque axe dans la variance totale",
+         names.arg=1:nrow(resultat_ACP$eig),col= rainbow (15))
+# 
+# ggplot(dbact,aes(x=Dim.1,y= Dim.2,label=names))+
+#   geom_point()+
+#   theme(legend.title=element_blank(),
+#         panel.background =element_rect(fill="white")) +
+#   geom_text(size=4,show.legend = FALSE)+
+#   geom_hline(yintercept=0,linetype="dashed",colour="grey")+
+#   geom_vline(xintercept = 0,linetype="dashed",colour="grey")+
+#   ggtitle("Espace des variables de l'ACP avec les axes 1 et 3") +
+#   xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
+#   ylab(paste("Axe 2 :",round(resultat_ACP$eig[2,2],0),"%")) +
+#   geom_circle( aes(x0 = 0, y0 = 0, r = 1), inherit.aes = F) + 
+#   scale_x_continuous(limits = c(-1, 1)) +
+#   scale_y_continuous(limits = c(-1, 1)) +
+#   coord_fixed() +
+#   geom_segment(aes(x = 0, y = 0, xend = Dim.1, yend = Dim.2), arrow = arrow())
+# 
+# ggplot(data=dbind,aes(x=Dim.1,y=Dim.2))+
+#   ggtitle("Titre")+
+#   geom_point()+
+#   geom_text_repel(aes(label = c_abrv),size=3)+
+#   geom_hline(yintercept=0,linetype="dashed")+
+#   geom_vline(xintercept = 0,linetype="dashed")+
+#   theme(plot.title=element_text(hjust=0.5),legend.position=c(.95,.2),
+#         panel.background =element_rect(fill="white"),legend.title=element_blank())+
+#   xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
+#   ylab(paste("Axe 2 :",round(resultat_ACP$eig[2,2],0),"%"))
+# 
+# ggplot(data=dbind,aes(x=Dim.1,y=Dim.2))+
+#   ggtitle("Titre")+
+#   geom_point(aes(color=groupe))+
+#   geom_text_repel(aes(color=groupe,label=c_abrv),
+#                   size=3, max.overlaps = 20, max.iter = 1000)+
+#   geom_hline(yintercept=0,linetype="dashed")+
+#   geom_vline(xintercept = 0,linetype="dashed")+
+#   theme(plot.title=element_text(hjust=0.5),
+#         panel.background =element_rect(fill="white"))+
+#   xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
+#   ylab(paste("Axe 2 :",round(resultat_ACP$eig[2,2],0),"%"))+ 
+#   guides(color = F)
+# 
+# ggplot(data = carte_europe) +
+#   geom_sf(aes(fill = groupe)) + 
+#   guides(fill = F) +
+#   ggtitle("Figure VI - Carte des pays classifiés selon les opinions agrégées sur l'environnement") +
+#   coord_sf(datum = NA)
 
 
-````
+
+
+
+```

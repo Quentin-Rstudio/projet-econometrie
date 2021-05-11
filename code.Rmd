@@ -133,6 +133,8 @@ Dans un premier temps, on s'intéresse  aux trois variables qui ont permis de co
 - Entre la connaissance des problèmes environnementaux et le soutien aux politiques de protection de l'environnement : `r cor(base_complete$conn_env, base_complete$soutien_pol_env)`;
 - Entre la perception des problèmes environnementaux et le soutien aux mesures de protection de l'environnement : `r cor(base_complete$soutien_pol_env, base_complete$perc_env)`.
 
+On s'intéresse ensuite aux corrélations entre toutes les variables. Pour ce faire, nous dressons la matrice des corrélations entre les différentes variables (**Annexe 5**). Les visualisations graphiques de ces coefficients facilitent leur interprétation (**Annexe 6**).
+
 
 
 ## IV. Proposition et justification de différents modèles linéaires.

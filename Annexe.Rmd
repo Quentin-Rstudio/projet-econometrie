@@ -31,12 +31,15 @@ library(see)
 #setwd("C:/Users/quent/Desktop/ENS Paris-Saclay/1A/1S2/Econométrie/TDs/Bases de données/Documents")
 setwd("~/Documents/ENS/econometrie/projet_r")
 
+base_complete <- read.csv("base_complete.csv")
+  
+base_exploration <- base_complete %>%
+  select(-code2)
+
 base_complete <- read.csv("base_complete.csv") %>%
  select(-X) %>%
  mutate(code2 = as.character(code2))
 
-base_exploration <- base_complete %>%
-  select(-code2)
 ```
 
 ## Annexe 1 
@@ -134,7 +137,18 @@ print(graph5)
 
 ## Annexe 5
 
+```{r}
+resultats_cor <- correlation(base_exploration)
+
+resultats_cor <- summary(resultats_cor, redundant = TRUE)
+print(resultats_cor)
+
+```
+
 ## Annexe 6
+
+PARTIE QUI POSE PROBLÈME À INSÉRER
+
 
 ## Annexe 7
 
