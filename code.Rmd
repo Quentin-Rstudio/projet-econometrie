@@ -233,7 +233,27 @@ stargazer(reg3,reg4,reg3bis,reg4bis, header = F, title = "Modèles avec variable
 
 ```
 
-Ce tableau nous montre que c'est pas ouf. 
+Ce tableau nous montre que ces modèles sont assez peu significatifs : le $R^{2}$ ajusté max est égal à 0.15, et la seule variable significative individuellement est l'indice de performance individuelle, lorsque régressé avec le montant des dépenses pour l'environnement. On observe que le revenu médian, variable proxy utilisée pour mesurer le niveau de vie des pays, n'est pas du tout significatif, on peut donc abandonner cette variable, et refaire des modèles sans : 
+
+-   reg5, avec la formule "part_depenses_env = sensi_env + EPI.new + EDUC_SUP_2017 + GINI_2017", 
+-   reg6, avec la formule "part_depenses_env ~ conn_env + EPI.new + EDUC_SUP_2017 + GINI_2017",
+-   reg5bis, avec la formule "depenses_brutes_env ~ sensi_env + EPI.new + EDUC_SUP_2017 + GINI_2017", 
+-   reg6bis, avec la formule "depenses_brutes_env ~ conn_env + EPI.new + EDUC_SUP_2017 + GINI_2017". 
+
+
+```{r}
+reg5   <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + EPI.new +   EDUC_SUP_2017 + GINI_2017)
+reg5bis <- lm(data=base_complete, formula = depenses_brutes_env ~ sensi_env + EPI.new +   EDUC_SUP_2017 + GINI_2017)
+reg6   <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + EPI.new +   EDUC_SUP_2017 + GINI_2017)
+reg6bis <- lm(data=base_complete, formula = depenses_brutes_env ~ conn_env + EPI.new +   EDUC_SUP_2017 + GINI_2017)
+
+```
+ 
+```{r, results='asis'}
+
+stargazer(reg5,reg6,reg5bis,reg6bis, header = F, title = "Modèles avec variables de contrôle, sans educ.sup.", column.labels =  c("reg3", "reg4", "reg3bis", "reg4bis"))
+
+```
 
 Là j'pensais parler un peu des modèles reg3, reg4, reg3bis, reg4bis. Ensuite, rajouter des modèles avec R2 plus élevé qui ne sont pas mis, puis faire des graphiques avec compare_models et check_model pour les meilleurs modèles. 
 

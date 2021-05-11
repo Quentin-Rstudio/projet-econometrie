@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2021.5.10)  11 MAY 2021 21:13
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2021.5.10)  11 MAY 2021 21:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -433,6 +433,9 @@ LaTeX Warning: Label `' multiply defined.
 
 LaTeX Warning: Label `' multiply defined.
 
+
+LaTeX Warning: Label `' multiply defined.
+
 )
 \openout1 = `code.aux'.
 
@@ -835,23 +838,35 @@ Overfull \hbox (33.87506pt too wide) in paragraph at lines 385--419
  [][] 
  []
 
-[5] [6] [7]
-Underfull \hbox (badness 10000) in paragraph at lines 574--574
+[5]
+Underfull \hbox (badness 1048) in paragraph at lines 565--568
+[]\TU/lmr/m/n/10 reg5, avec la formule “part_depenses_env = sensi_env + EPI.new
+ + EDUC_SUP_2017 +
+ []
+
+
+Underfull \hbox (badness 1231) in paragraph at lines 568--571
+[]\TU/lmr/m/n/10 reg6, avec la formule “part_depenses_env ~ conn_env + EPI.new 
++ EDUC_SUP_2017 +
+ []
+
+[6] [7] [8] [9]
+Underfull \hbox (badness 10000) in paragraph at lines 638--638
 [][][][]$[][][][] [] [] [] [] [] [][][][] [] [][][] [] [][][][][][][][][] [] []
 [][][] [] [][][][][][] [] [][][][][][] [] [][][][][][][][][][][] [] [][][][][][
 ] [] [][][][] [] [][][][][] [] [][][][][][] [] [][][][][][][][][][][][][] [] []
 [][][][][][][] []
  []
 
-File: code_files/figure-latex/unnamed-chunk-7-1.pdf Graphic file (type pdf)
-<use code_files/figure-latex/unnamed-chunk-7-1.pdf>
+File: code_files/figure-latex/unnamed-chunk-9-1.pdf Graphic file (type pdf)
+<use code_files/figure-latex/unnamed-chunk-9-1.pdf>
 
-Underfull \hbox (badness 2334) in paragraph at lines 586--590
+Underfull \hbox (badness 2334) in paragraph at lines 650--654
 []\TU/lmr/m/n/10 Point d’analyse intéressant : une fois les paramètres économét
 riques estimés, on peut essayer
  []
 
-[8] (./code.aux)
+[10] (./code.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
@@ -861,10 +876,10 @@ Package rerunfilecheck Info: File `code.out' has not changed.
 Here is how much of TeX's memory you used:
  15423 strings out of 478774
  280488 string characters out of 5862712
- 752516 words of memory out of 5000000
+ 759503 words of memory out of 5000000
  35241 multiletter control sequences out of 15000+600000
  407385 words of font info for 66 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  85i,10n,121p,676b,462s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on code.pdf (8 pages).
+Output written on code.pdf (10 pages).
