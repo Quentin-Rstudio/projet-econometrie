@@ -107,36 +107,41 @@ dbind            <- dbind %>%
 
 ## Graphiques ----
 
-barplot(resultat_ACP$eig[,2],main="Figure I - Part expliquée par chaque axe dans la variance totale",
+graph_acp1 <- barplot(resultat_ACP$eig[,2],main="Figure I - Part expliquée par chaque axe dans la variance totale",
          names.arg=1:nrow(resultat_ACP$eig),col= rainbow (15))
-# 
-# ggplot(dbact,aes(x=Dim.1,y= Dim.2,label=names))+
-#   geom_point()+
-#   theme(legend.title=element_blank(),
-#         panel.background =element_rect(fill="white")) +
-#   geom_text(size=4,show.legend = FALSE)+
-#   geom_hline(yintercept=0,linetype="dashed",colour="grey")+
-#   geom_vline(xintercept = 0,linetype="dashed",colour="grey")+
-#   ggtitle("Espace des variables de l'ACP avec les axes 1 et 3") +
-#   xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
-#   ylab(paste("Axe 2 :",round(resultat_ACP$eig[2,2],0),"%")) +
-#   geom_circle( aes(x0 = 0, y0 = 0, r = 1), inherit.aes = F) + 
-#   scale_x_continuous(limits = c(-1, 1)) +
-#   scale_y_continuous(limits = c(-1, 1)) +
-#   coord_fixed() +
-#   geom_segment(aes(x = 0, y = 0, xend = Dim.1, yend = Dim.2), arrow = arrow())
-# 
-# ggplot(data=dbind,aes(x=Dim.1,y=Dim.2))+
-#   ggtitle("Titre")+
-#   geom_point()+
-#   geom_text_repel(aes(label = c_abrv),size=3)+
-#   geom_hline(yintercept=0,linetype="dashed")+
-#   geom_vline(xintercept = 0,linetype="dashed")+
-#   theme(plot.title=element_text(hjust=0.5),legend.position=c(.95,.2),
-#         panel.background =element_rect(fill="white"),legend.title=element_blank())+
-#   xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
-#   ylab(paste("Axe 2 :",round(resultat_ACP$eig[2,2],0),"%"))
-# 
+
+print(graph_acp1)
+ 
+graph_acp2 <- ggplot(dbact,aes(x=Dim.1,y= Dim.2,label=names))+
+  geom_point()+
+  theme(legend.title=element_blank(),
+        panel.background =element_rect(fill="white")) +
+  geom_text(size=4,show.legend = FALSE)+
+  geom_hline(yintercept=0,linetype="dashed",colour="grey")+
+  geom_vline(xintercept = 0,linetype="dashed",colour="grey")+
+  ggtitle("Espace des variables de l'ACP avec les axes 1 et 3") +
+  xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
+  ylab(paste("Axe 2 :",round(resultat_ACP$eig[2,2],0),"%")) +
+  geom_circle( aes(x0 = 0, y0 = 0, r = 1), inherit.aes = F) +  
+  scale_x_continuous(limits = c(-1, 1)) +
+  scale_y_continuous(limits = c(-1, 1)) +
+  coord_fixed() +
+  geom_segment(aes(x = 0, y = 0, xend = Dim.1, yend = Dim.2), arrow = arrow())
+
+print(graph_acp2)
+
+ 
+#ggplot(data=dbind,aes(x=Dim.1,y=Dim.2))+
+ # ggtitle("Titre")+
+#  geom_point()+
+#  geom_text_repel(aes(label = c_abrv),size=3)+
+#  geom_hline(yintercept=0,linetype="dashed")+
+#  geom_vline(xintercept = 0,linetype="dashed")+
+#  theme(plot.title=element_text(hjust=0.5),legend.position=c(.95,.2),
+#       panel.background =element_rect(fill="white"),legend.title=element_blank())+
+#  xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
+#  ylab(paste("Axe 2 :",round(resultat_ACP$eig[2,2],0),"%"))
+
 # ggplot(data=dbind,aes(x=Dim.1,y=Dim.2))+
 #   ggtitle("Titre")+
 #   geom_point(aes(color=groupe))+

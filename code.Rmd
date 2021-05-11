@@ -269,8 +269,8 @@ ggplot(data = carte_europe) +
 
 ## Graphiques ----
 
-# barplot(resultat_ACP$eig[,2],main="Figure I - Part expliquée par chaque axe dans la variance totale",
-#         names.arg=1:nrow(resultat_ACP$eig),col= rainbow (15))
+#graph_acp1 <- barplot(resultat_ACP$eig[,2],main="Figure I - Part expliquée par chaque axe dans la variance totale",
+ #       names.arg=1:nrow(resultat_ACP$eig),col= rainbow (15))
 # 
 # ggplot(dbact,aes(x=Dim.1,y= Dim.2,label=names))+
 #   geom_point()+
