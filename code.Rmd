@@ -160,19 +160,32 @@ Une représentation graphique de ces coefficients facilite leur interprétation 
 
 ## IV. Proposition et justification de différents modèles linéaires.
 
+### 4 premières régressions linéaires
+
+1ère démarche : tester des modèles linéraires simples en dépenses et en part du PIB avec l'indicateur de sensibilité 
+
 ```{r linear-regression}
 
-ggplot(data = base_complete, mapping = aes(x = sensi_env, y = part_depenses_env)) +
+
+
+
+```
+
+
+
+```{r linear-regression}
+
+graph_reg <- ggplot(data = base_complete, mapping = aes(x = sensi_env, y = part_depenses_env)) +
   theme_bw() +
   geom_point()+
   geom_smooth(method = lm) + 
   labs(x = "Sensibilité moyenne à l'écologie (sensi_env)", y = "Dépenses environnementales en part de PIB")
 
+print(graph_reg)
 
 # 1ère regression : juste sensi (2 définitions)
 
 reg1               <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env)
-
 summary(reg1)
 
 reg1bis <- lm(data=base_complete, formula = part_depenses_env ~ conn_env + perc_env + soutien_pol_env)
@@ -194,7 +207,7 @@ model_performance(reg1bis)
 
 compare_performance(reg1, reg1bis)
 
-plot(compare_performance(reg1,reg1bis,reg5)) #comparaison graphique des différents modèles
+plot(compare_performance(reg1,reg1bis,reg5), rank = TRUE) #comparaison graphique des différents modèles
 
 test_performance(reg1,reg1bis)
 
@@ -209,19 +222,36 @@ summary(reg3) # R2 adj : 0,06
 
 reg4 <- lm(data = base_complete, formula = depenses_brutes_env ~ sensi_env + GINI_2017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new)
 
-summary(reg4) 
+summary(reg4) # R2 adj : 0,28
 
 reg5 <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + GINI_2017 + EPI.new)
 
 summary(reg5) # R2 ajd : 0,25
+
+reg5bis <- lm(data = base_complete, formula = depenses_brutes_env ~ conn_env + soutien_pol_env + GINI_2017 + EPI.new)
+summary(reg5bis)
+
 check_model(reg5)
 
 reg6 <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + GINI_2017 +  EDUC_SUP_2017 + EPI.new)
 
 summary(reg6) #R 2 adj : 0,23
 
+reg6bis <- lm(data = base_complete, formula = depenses_brutes_env ~ conn_env + soutien_pol_env + GINI_2017 +  EDUC_SUP_2017 + EPI.new)
+
+summary(reg6bis)
+
+
 model_performance(reg5)
 print(test_performance(reg1,reg5))
+
+reg7             <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + perc_env + soutien_pol_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
+
+summary(reg7) # R2 adj : 0,11 
+
+reg8             <- lm(data = base_complete, formula = part_depenses_env ~ conn_env)
+
+summary(reg8) # R2 ah : 0,29
 
 # comparaison de modèles :
 anova(reg1,reg1bis)
