@@ -47,18 +47,18 @@ stargazer(base_exploration, type = 'html', title = "Principaux indicateurs des v
 
 ## Annexe 2
 
-```` {r}
+```{r}
 graph1 <- ggplot(data = base_exploration, 
                  mapping = aes(y=Nom_pays, 
-                               x = part_depenses_env,
-                               fill = part_depenses_env)) +
+                               x = depenses_brutes_env,
+                               fill = depenses_brutes_env)) +
   geom_col()
 
-graph1 <- graph1 + labs(title = "Les dépenses environnementales des pays Européens",
+graph1 <- graph1 + labs(title = "Les dépenses nationales pour la protection de l'environnement",
          y = "Pays", 
-         x = "Part des dépenses environnementales dans le PIB",
+         x = "NEEP brutes",
          fill = NULL,
-         subtitle= "en points de PIB")
+         subtitle= "des pays Européen en million d'euros")
 
 print(graph1)
 
@@ -66,25 +66,71 @@ print(graph1)
 
 ## Annexe 3
 
-```{r}
+```` {r}
 graph2 <- ggplot(data = base_exploration, 
                  mapping = aes(y=Nom_pays, 
-                               x = depenses_brutes_env,
-                               fill = depenses_brutes_env)) +
+                               x = part_depenses_env,
+                               fill = part_depenses_env)) +
   geom_col()
 
-graph2 <- graph2 + labs(title = "Les dépenses nationales pour la protection de l'environnement des pays Européens",
+graph2 <- graph2 + labs(title = "Les dépenses nationales pour la protection de l'environnement ",
          y = "Pays", 
-         x = "NEEP brutes",
+         x = "Part des dépenses environnementales dans le PIB",
          fill = NULL,
-         subtitle= "en million d'euros")
+         subtitle= "des pays Européens en points de PIB")
 
 print(graph2)
 
 ```
 
-
 ## Annexe 4
+
+```{r}
+graph3 <- ggplot(base_exploration, aes (x = conn_env, y = perc_env)) + 
+  geom_point(color = "darkgreen", size = 3, alpha = 0.3) +
+  geom_smooth (method = "lm", size = 1, lty = 1, se = 2  )
+
+graph3 <- graph3 + labs(title = "Lien entre la connaissance des problèmes environnementaux et leur perception",
+                        y = "Perception environnementale",
+                        x = "Connaissance environnementale",
+                        fill = NULL,
+                        subtitle = "D'après l'Europen Values Survey")
+
+print(graph3)
+
+```
+
+```{r}
+
+graph4 <- ggplot(base_exploration, aes (x = conn_env, y = soutien_pol_env)) + 
+  geom_point(color = "darkgreen", size = 3, alpha = 0.3) +
+  geom_smooth (method = "lm", size = 1, lty = 1, se = 2  )
+
+graph4 <- graph4 + labs(title = "Lien entre la connaissance des problèmes environnementaux et le soutien aux politiques environnementales",
+                        y = "Soutien aux mesures de protection de l'environnement",
+                        x = "Connaissance environnementale",
+                        fill = NULL,
+                        subtitle = "D'après l'Europen Values Survey")
+
+print(graph4)
+
+````
+
+```{r}
+graph5 <- ggplot(base_exploration, aes (x = perc_env, y = soutien_pol_env)) + 
+  geom_point(color = "darkgreen", size = 3, alpha = 0.3) +
+  geom_smooth (method = "lm", size = 1, lty = 1, se = 2  )
+
+graph5 <- graph5 + labs(title = "Lien entre le soutien aux politiques environnementales et la perception des problèmes environnementaux",
+                        y = "Soutien aux mesures de protection de l'environnement",
+                        x = "Perception environnementale",
+                        fill = NULL,
+                        subtitle = "D'après l'Europen Values Survey")
+print(graph5)
+
+```
+
+
 
 ## Annexe 5
 
@@ -95,6 +141,14 @@ print(graph2)
 ## Annexe 8
 
 ## Annexe 9
+
+## Annexe 10
+
+## Annexe 11
+
+## Annexe 12
+
+## Annexe 13
 
 
 

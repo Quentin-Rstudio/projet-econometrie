@@ -5,7 +5,7 @@ date: "13/04/2021"
 output:
   pdf_document:
     toc: yes
-    toc_depth : 3
+    toc_depth : 2
     latex_engine: xelatex
   html_document:
     toc: yes
@@ -54,7 +54,7 @@ base_complete <- read.csv("base_complete.csv") %>%
  mutate(code2 = as.character(code2))
 ```
 
-### I. Mise en perspective introductive dans le contexte économique et social.
+## I. Mise en perspective introductive dans le contexte économique et social.
 
 Le 9 mai dernier, des marches pour le climat eurent lieu dans toute la France, afin d'infléchir la loi « Climat et résilience » qui vient d'être vôtée par les députés.
 Ces mobilisations en faveur du climat ont-elles une influence sur la politique écologique et environnementale des gouvernements ?
@@ -68,7 +68,7 @@ Les auteurs y définissent trois conditions d'apparition d'un problème public :
 L'étape du *naming* conduit à une transformation de l'ordre symbolique, et impose une nouvelle manière de voir les choses : la sensibilité publique envers certaines questions participe à l'établissement de mise à l'agenda de problèmes publics.
 Ainsi, une sensibilité environnementale plus importante conduirait à un cadrage différent des problèmes environnementaux, et serait nécessaire aux autres conditions de l'émergence de l'action environnementale et écologique comme problème public.
 
-### II. Formulation d'un problème économétrique.
+## II. Formulation d'un problème économétrique.
 
 Le premier enjeu de notre démarche économétrique se situe dans le choix des variables expliquées et explicatives.
 Pour étudier l'effet de la sensibilité environnementale sur les dépenses de protection de l'environnement, la variable dépendante retenue est la *NEEP* (dépenses nationales pour la protection de l'environnement) dans l'UE et ses États membres.
@@ -100,7 +100,7 @@ Pour construire cette première variable explicative, nous avons croisé plusieu
 
 [^2]: <http://jultika.oulu.fi/files/nbnfioulu-201312142043.pdf>
 
-### III. Présentation des bases de données et exploration des données.
+## III. Présentation des bases de données et exploration des données.
 
 Ainsi, nous avons créé une base de données à partir de plusieurs sources différentes.
 Le processus complet de création de la base est disponible dans le fichier .R "création base de données".
@@ -118,17 +118,24 @@ Les deux variables expliquées potentielles (**part_depenses_env** et **depenses
 
 L'exploration des données préalablement à la réalisation de regréssions linéaires est primordiale. Pour ce faire, nous mobilisons à la fois des éléments de statistiques descriptives et l'analyse en composantes principales.
 
-## Analyse univariée 
+### Analyse univariée 
 
-Nous procédons à une première analyse des variables présentes dans notre jeu de données. Pour ce faire, il s'agit de dresser un tableau des principaux indicateurs présents (**Annexe1**). 
+Nous procédons à une première analyse des variables présentes dans notre jeu de données. Pour ce faire, il s'agit de dresser un tableau des principaux indicateurs statistiques (**Annexe1**).
 
+La visualisation des données grâce aux graphiques facilite grandement l'analyse. Les **annexes 2 et 3** retranscrivent les disparités importantes entre les pays européens en terme de dépenses pour la protection de l'environnement brutes, ces disparités semblant moins importantes une fois la NEEP rapportée en points de PIB. 
 
 
 ### Analyse bivariée et analyse en composantes principales
 
-Il s'agit désormais d'étudier les liens entre nos différentes variables explicatives.
+Il s'agit désormais d'étudier les liens entre nos différentes variables explicatives. 
+Dans un premier temps, on s'intéresse  aux trois variables qui ont permis de construire notre indicateur de sensibilité environnementale **sensi_env** : **conn_env**, **perc_env** et **soutien_pol_env**. Graphiquement, on visualise la relation de dépendance entre ces trois variables, deux-à-deux (**Annexe 4**). On observe ainsi une corrélation positive entre ces différentes variables, plus ou moins prononcée. En effet, les corrélations linéaires (méthode Pearson) entre ces variables sont :
+- Entre la connaissance et la perception des problèmes environnementaux :`r cor(base_complete$conn_env, base_complete$perc_env)`;
+- Entre la connaissance des problèmes environnementaux et le soutien aux politiques de protection de l'environnement : `r cor(base_complete$conn_env, base_complete$soutien_pol_env)`;
+- Entre la perception des problèmes environnementaux et le soutien aux mesures de protection de l'environnement : `r cor(base_complete$soutien_pol_env, base_complete$perc_env)`.
 
-### IV. Proposition et justification de différents modèles linéaires.
+
+
+## IV. Proposition et justification de différents modèles linéaires.
 
 ```{r linear-regression}
 
@@ -145,7 +152,7 @@ reg3               <- lm(data = base_complete, formula = part_depenses_env ~ sen
                            EDUC_SUP_2017 + GINI_2017)
 reg4               <- lm(data = base_complete, formula = part_depenses_env ~ perc_env + soutien_pol_env + conn_env)
 
-reg5 <- lm(data = base_exploration, formula = part_depenses_env ~ sensi_env + GINI_2017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new)
+reg5 <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + GINI_2017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new)
 
 check_model(reg1)
 check_model(reg5)
@@ -162,7 +169,7 @@ summary(reg3)
 residuals(reg1)
 predict(reg1)
 
-aov(data = base_exploration, formula = part_depenses_env ~ sensi_env + GINI_2017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new) %>%
+aov(data = base_complete, formula = part_depenses_env ~ sensi_env + GINI_2017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new) %>%
   report()
 
 r2(reg1)
@@ -182,9 +189,9 @@ stargazer(base_complete, header = FALSE)
 # info sur stargazer : https://www.jakeruss.com/cheatsheets/stargazer/ ou
 ```
 
-### V. Comparaison des coefficients et de la significativité des modèles.
+## V. Comparaison des coefficients et de la significativité des modèles.
 
-### VI. Interprétation et proposition de pistes de réflexion complémentaires (limites blabla).
+## VI. Interprétation et proposition de pistes de réflexion complémentaires (limites blabla).
 
 Limite : le questionnaire EVS ne propose pas beaucoup de questions relatives à l'environnement, et celles-ci sont formuléees de manière non neutre, ce qui peut induire un biais dans les questions.
 Parler de deux des problèmes (environnement v. emploi et "m'en balec") L'International Social Survey Programme conduit une enquête par questionnaire parmi les 42 pays membres du programme, sur le thème de l'environnement.
@@ -193,7 +200,7 @@ Au vu des questions posées par le questionnaire, introduire des variables qui e
 
 [^3]: <http://w.issp.org/fileadmin/user_upload/Module_development/Module_2020/Final_Source_Questionnaire/ISSP2020_final_sourcequestionnaire_corrected.pdf>
 
-### VII. Conclusion.
+## VII. Conclusion.
 
 ```{r}
 

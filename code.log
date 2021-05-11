@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021) (preloaded format=xelatex 2021.4.6)  10 MAY 2021 20:27
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021) (preloaded format=xelatex 2021.4.6)  11 MAY 2021 10:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -833,41 +833,99 @@ LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
 ] [2]
 File: code_files/figure-latex/linear-regression-1.pdf Graphic file (type pdf)
 <use code_files/figure-latex/linear-regression-1.pdf>
-[3] [4]
-Overfull \hbox (37.7851pt too wide) in paragraph at lines 352--369
+File: code_files/figure-latex/linear-regression-2.pdf Graphic file (type pdf)
+<use code_files/figure-latex/linear-regression-2.pdf>
+File: code_files/figure-latex/linear-regression-3.pdf Graphic file (type pdf)
+<use code_files/figure-latex/linear-regression-3.pdf>
+
+Underfull \hbox (badness 10000) in paragraph at lines 257--260
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 257--260
+[]
+ []
+
+[3]
+Overfull \vbox (25.86337pt too high) has occurred while \output is active []
+
+[4] [5] [6]
+Overfull \hbox (191.74498pt too wide) in paragraph at lines 378--378
+[]\TU/lmtt/m/n/10 ## The ANOVA (formula: part_depenses_env ~ sensi_env + GINI_2
+017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new) suggests that:[] 
+ []
+
+
+Overfull \hbox (322.99498pt too wide) in paragraph at lines 378--378
+[]\TU/lmtt/m/n/10 ##   - The main effect of sensi_env is statistically not sign
+ificant and large (F(1, 14) = 2.32, p = 0.150; Eta2 (partial) = 0.14, 90% CI [0
+.00, 0.42])[] 
+ []
+
+
+Overfull \hbox (322.99498pt too wide) in paragraph at lines 378--378
+[]\TU/lmtt/m/n/10 ##   - The main effect of GINI_2017 is statistically not sign
+ificant and large (F(1, 14) = 2.98, p = 0.106; Eta2 (partial) = 0.18, 90% CI [0
+.00, 0.46])[] 
+ []
+
+
+Overfull \hbox (391.24498pt too wide) in paragraph at lines 378--378
+[]\TU/lmtt/m/n/10 ##   - The main effect of EDUC_SUP_2017 is statistically not 
+significant and very small (F(1, 14) = 0.13, p = 0.725; Eta2 (partial) = 9.09e-
+03, 90% CI [0.00, 0.20])[] 
+ []
+
+
+Overfull \hbox (364.99498pt too wide) in paragraph at lines 378--378
+[]\TU/lmtt/m/n/10 ##   - The main effect of REV_MED_EURO_2017 is statistically 
+not significant and small (F(1, 14) = 0.30, p = 0.594; Eta2 (partial) = 0.02, 9
+0% CI [0.00, 0.25])[] 
+ []
+
+
+Overfull \hbox (312.49498pt too wide) in paragraph at lines 378--378
+[]\TU/lmtt/m/n/10 ##   - The main effect of EPI.new is statistically not signif
+icant and small (F(1, 14) = 0.65, p = 0.433; Eta2 (partial) = 0.04, 90% CI [0.0
+0, 0.30])[] 
+ []
+
+
+Overfull \hbox (37.7851pt too wide) in paragraph at lines 430--447
  [][] 
  []
 
-[5]
-Underfull \hbox (badness 10000) in paragraph at lines 387--387
+
+Underfull \hbox (badness 10000) in paragraph at lines 464--464
 [][][][]$[][][][] [] [] [] [] [] [][][][] [] [][][] [] [][][][][][][][][] [] []
 [][][] [] [][][][][][] [] [][][][][][] [] [][][][][][][][][][][] [] [][][][][][
 ] [] [][][][] [] [][][][][] [] [][][][][][] [] [][][][][][][][][][][][][] [] []
 [][][][][][][] []
  []
 
-File: code_files/figure-latex/unnamed-chunk-1-1.pdf Graphic file (type pdf)
-<use code_files/figure-latex/unnamed-chunk-1-1.pdf>
-[6]
-Underfull \hbox (badness 2334) in paragraph at lines 425--429
+File: code_files/figure-latex/unnamed-chunk-2-1.pdf Graphic file (type pdf)
+<use code_files/figure-latex/unnamed-chunk-2-1.pdf>
+[7] [8]
+Underfull \hbox (badness 2334) in paragraph at lines 476--480
 []\TU/lmr/m/n/10 Point d’analyse intéressant : une fois les paramètres économét
 riques estimés, on peut essayer
  []
 
-[7] (./code.aux)
+[9] (./code.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `code.out' has not changed.
-(rerunfilecheck)             Checksum: 40F52892C64B7EA2D14C2AEE1123A573;2858.
+(rerunfilecheck)             Checksum: E77689CC94EB3F7F73A2DF92C76E5222;2630.
  ) 
 Here is how much of TeX's memory you used:
- 15353 strings out of 478918
- 279216 string characters out of 5865692
- 747114 words of memory out of 5000000
- 35021 multiletter control sequences out of 15000+600000
- 407385 words of font info for 66 fonts, out of 8000000 for 9000
+ 15368 strings out of 478918
+ 279872 string characters out of 5865692
+ 755175 words of memory out of 5000000
+ 35033 multiletter control sequences out of 15000+600000
+ 407393 words of font info for 67 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  98i,10n,122p,569b,465s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on code.pdf (7 pages).
+Output written on code.pdf (9 pages).
