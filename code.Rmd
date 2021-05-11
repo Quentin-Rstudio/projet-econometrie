@@ -46,7 +46,7 @@ library(see)
 
 ## Données -----
 
-setwd("C:/Users/quent/Desktop/ENS Paris-Saclay/1A/1S2/Econométrie/TDs/Bases de données/Documents/projet-econometrie")
+# setwd("C:/Users/quent/Desktop/ENS Paris-Saclay/1A/1S2/Econométrie/TDs/Bases de données/Documents/projet-econometrie")
 # setwd("~/Documents/ENS/econometrie/projet_r")
 
 base_complete <- read_csv("base_complete.csv") %>%
@@ -75,12 +75,15 @@ Pour étudier l'effet de la sensibilité environnementale sur les dépenses de p
 Cette mesure, définie par Eurostat, permet d'apprécier les ressources que consacrent les unités résidents à la protection de l'environnement naturel au cours d'une période donnée.
 Elles sont calculées comme étant la somme des dépenses courantes consacrées aux activités de protection de l'environnement et des investissements destinés aux activités de protection de l'environnement, y compris les transferts nets vers le reste du monde.
 
-Il s'agit ensuite de définir ce qu'est la sensibilité environnementale afin de construire un jeu de variables à même de la refléter. Dès lors, on retiendra l'acception suivante : la sensibilité environnementale correspond à l'importance attachée aux problèmes environnementaux et aux enjeux écologiques.
+Il s'agit ensuite de définir ce qu'est la sensibilité environnementale afin de construire un jeu de variables à même de la refléter.
+Dès lors, on retiendra l'acception suivante : la sensibilité environnementale correspond à l'importance attachée aux problèmes environnementaux et aux enjeux écologiques.
 
-
-Elle comprend donc la perception de la gravité des problèmes environnementaux, le degré de connaissance des problèmes environnementaux, et le soutien aux dépenses gouvernementales pour la protection de l'environnement [Thiery-Seror, 1996][^1] La difficulté réside alors en la traduction de ces éléments en une variable économétrique. Pour construire cette première variable explicative, nous avons croisé plusieurs bases de données : l'Environmental Awareness Index (EAI)[^2] et l'European Values Study (EVS) de 2017. L'*Environmental Awareness Index* est en effet une variable permettant d'apprécier la sensibilisation des citoyens aux questions écologiques, que l'on peut assimiler au degré de connaissance des problèmes environnementaux, et que l'on appelera **conn_env**. L'EVS permet elle de couvrir les deux autres dimensions de la sensibilité environnementale. La variable **perc_env** rend compte de la perception des problèmes environnementaux des personnes sondées, tandis que la variable **soutien_pol_env** témoigne du soutien aux mesures gouvernementales pour la défense de l'environnement. Afin de construire une variable explicative agrégée pour la sensibilité environnementale (*sensi_env*), on pondère les variables des ces trois facteurs par 1/3.
-
-Les autres variables explicatives, que l'on pourra appeler variables de contrôle, sont au nombre de 4. Il paraît raisonnable de penser que les dépenses environnementales d'un pays sont liées à son niveau de développement économique, conformément à la thèse avancée par R. Inglehart dans **La Révolution silencieuse** (1977), qui considère qu'à partir d'un certain niveau de développement économique, des valeurs post-matérialistes (et notamment écologiques) ont plus de chance de se diffuser au sein de la société. Pour exprimer l'influence du niveau de développement économique d'un pays sur sa NEEP, nous avons retenu le revenu médian (*rev_med*) établi par Eurostat dans l'enquête EU-SILC. Il est aussi possible de considérer que les inégalités intra-pays influencent ces dépenses. D'une part, une inégalité, lorsqu'elle est rendue publique, réduit la contribution à un bien public de tous les participants [Anderson et al., 2008]. Puisqu'il est possible de considérer l'environnement comme un bien public (non-rival et non-exclusif), il apparaît pertinent de prendre en compte les inégalités dans notre modèle économétrique. De plus, les sociétés inégalitaires auraient plus de mal à mener les réformes nécessaires pour surmonter un choc externe [Rodrik, 1999]. Nous avons donc retenu le coefficient de Gini du revenu en euros par ménage (indicateur synthétique de mesure des inégalités et de la redistribution très utilisé au niveau international) comme variable explicative. Les deux dernières variables de contrôle sont l'Environmental Performance Index (*EPI*) qui permet d'évaluer de manière synthétique la performance environnementale d'un pays ainsi que le pourcentage de personnes de 15 à 64 ans disposant d'un diplôme d'enseignement supérieur pour rendre compte du niveau d'éducation.
+Elle comprend donc la perception de la gravité des problèmes environnementaux, le degré de connaissance des problèmes environnementaux, et le soutien aux dépenses gouvernementales pour la protection de l'environnement [Thiery-Seror, 1996][^1] La difficulté réside alors en la traduction de ces éléments en une variable économétrique.
+Pour construire cette première variable explicative, nous avons croisé plusieurs bases de données : l'Environmental Awareness Index (EAI)[^2] et l'European Values Study (EVS) de 2017
+. L'*Environmental Awareness Index* est en effet une variable permettant d'apprécier la sensibilisation des citoyens aux questions écologiques, que l'on peut assimiler au degré de connaissance des problèmes environnementaux, et que l'on appelera **conn_env**. L'EVS permet elle de couvrir les deux autres dimensions de la sensibilité environnementale
+. La variable **perc_env** rend compte de la perception des problèmes environnementaux des personnes sondées, tandis que la variable **soutien_pol_env** témoigne du soutien aux mesures gouvernementales pour la défense de l'environnement
+. Afin de construire une variable explicative agrégée pour la sensibilité environnementale (*sensi_env*), on pondère les variables des ces trois facteurs par 1/3
+.
 
 [^1]: Thiery-Seror, P. (1996).
     La solidarité à travers les produits: l'achat-geste écologique.
@@ -88,53 +91,76 @@ Les autres variables explicatives, que l'on pourra appeler variables de contrôl
 
 [^2]: <http://jultika.oulu.fi/files/nbnfioulu-201312142043.pdf>
 
+Les autres variables explicatives, que l'on pourra appeler variables de contrôle, sont au nombre de 4.
+Il paraît raisonnable de penser que les dépenses environnementales d'un pays sont liées à son niveau de développement économique, conformément à la thèse avancée par R.
+Inglehart dans **La Révolution silencieuse** (1977), qui considère qu'à partir d'un certain niveau de développement économique, des valeurs post-matérialistes (et notamment écologiques) ont plus de chance de se diffuser au sein de la société.
+Pour exprimer l'influence du niveau de développement économique d'un pays sur sa NEEP, nous avons retenu le revenu médian (*rev_med*) établi par Eurostat dans l'enquête EU-SILC.
+Il est aussi possible de considérer que les inégalités intra-pays influencent ces dépenses.
+D'une part, une inégalité, lorsqu'elle est rendue publique, réduit la contribution à un bien public de tous les participants [Anderson et al., 2008].
+Puisqu'il est possible de considérer l'environnement comme un bien public (non-rival et non-exclusif), il apparaît pertinent de prendre en compte les inégalités dans notre modèle économétrique.
+De plus, les sociétés inégalitaires auraient plus de mal à mener les réformes nécessaires pour surmonter un choc externe [Rodrik, 1999].
+Nous avons donc retenu le coefficient de Gini du revenu en euros par ménage (indicateur synthétique de mesure des inégalités et de la redistribution très utilisé au niveau international) comme variable explicative.
+Les deux dernières variables de contrôle sont l'Environmental Performance Index (*EPI*) qui permet d'évaluer de manière synthétique la performance environnementale d'un pays ainsi que le pourcentage de personnes de 15 à 64 ans disposant d'un diplôme d'enseignement supérieur pour rendre compte du niveau d'éducation.
+
 ## III. Présentation des bases de données et exploration des données.
 
-Nous avons ainsi créé une base de données à partir de plusieurs sources différentes. Le processus complet de création de la base est disponible dans le fichier .R "création base de données".
+Nous avons ainsi créé une base de données à partir de plusieurs sources différentes.
+Le processus complet de création de la base est disponible dans le fichier .R "création base de données".
 
 Pour l'indicateur de sensibilité environnementale, les données viennent de l'*European Values Survey*, un sondage mené à l'échelle européenne, pour avoir un état des lieux des valeurs des européens.
-Nous avons extrait de ces données 6 variables sur 56491 observations, et que nous avons résumé en moyenne par pays. Nous avons pris pour la variable **perc_env** la moyenne des indicateurs associés aux questions suivantes : 
-+ Je donnerais une partie de mes revenus si j'étais sûr que l'argent soit utilisé pour éviter la pollution de l'environnement.
-+ C'est juste trop difficile pour les gens comme moi de vraiment pour l'environnement.
-+ Il y a plus important à faire dans la vie que de protéger l'environnement.
-+ Ca ne sert à rien de faire ce que je peux pour l'environnement si les autres ne font pas la même chose.
-+ Beaucoup des affirmations sur les menaces environnementales sont exagérées.
+Nous avons extrait de ces données 6 variables sur 56491 observations, et que nous avons résumé en moyenne par pays.
+Nous avons pris pour la variable **perc_env** la moyenne des indicateurs associés aux questions suivantes :
+
+-   Je donnerais une partie de mes revenus si j'étais sûr que l'argent soit utilisé pour éviter la pollution de l'environnement.
+
+-   C'est juste trop difficile pour les gens comme moi de vraiment pour l'environnement.
+
+-    Il y a plus important à faire dans la vie que de protéger l'environnement.
+
+-   Ca ne sert à rien de faire ce que je peux pour l'environnement si les autres ne font pas la même chose.
+
+-   Beaucoup des affirmations sur les menaces environnementales sont exagérées.
 
 La première des questions allant dans un sens opposé aux suivantes, nous avons inversé l'indicateur pour celle-ci par rapport aux autres.
 
-Pour la variable **soutien_pol_env**, nous avons pris la moyenne par pays de la réponse 
-> "On devrait donner la priorité à la protection de l'environnement, même si cela ralentit la croissance économique et si certains perdent leur emploi" 
+Pour la variable **soutien_pol_env**, nous avons pris la moyenne par pays de la réponse
 
-donnée plutôt que 
+> "On devrait donner la priorité à la protection de l'environnement, même si cela ralentit la croissance économique et si certains perdent leur emploi"
+
+donnée plutôt que
+
 > "On devrait donner la priorité à la croissance économique et à la création d'emplois, même si l'environnement en souffre d'une manière ou d'une autre".
 
-Pour la variable **conn_env**, nous avons pris l'indicateur de conscience environnementale développé par Eevi Kokkinen dans son mémoire de master, "Measuring environmental awareness in the world". Celui-ci est construit à partir de questionnaires, afin d'estimer la connaissance et les compétences en matière environnementale et écologique des personnées sondées.
+Pour la variable **conn_env**, nous avons pris l'indicateur de conscience environnementale développé par Eevi Kokkinen dans son mémoire de master, "Measuring environmental awareness in the world".
+Celui-ci est construit à partir de questionnaires, afin d'estimer la connaissance et les compétences en matière environnementale et écologique des personnées sondées.
 
-Les deux potentielles variables dépendantes (**part_depenses_env** et **depenses_brutes_env**) proviennent de bases de données établies par Eurostat. Les variables de contrôle **EDUC_SUP_2017** et *REV_MED_EURO_2017** proviennent elles aussi d'Eurostat, et sont issues de la base de données EU-SILC (European Union Statistics and Living Conditions). 
+Les deux potentielles variables dépendantes (**part_depenses_env** et **depenses_brutes_env**) proviennent de bases de données établies par Eurostat.
+Les variables de contrôle **EDUC_SUP_2017** et **REV_MED_EURO_2017** proviennent elles aussi d'Eurostat, et sont issues de la base de données EU-SILC (European Union Statistics and Living Conditions).
 
-L'exploration des données préalablement à la réalisation de regréssions linéaires est primordiale. Pour ce faire, nous mobilisons à la fois des éléments de statistiques descriptives et l'analyse en composantes principales.
+L'exploration des données préalablement à la réalisation de regréssions linéaires est primordiale.
+Pour ce faire, nous mobilisons à la fois des éléments de statistiques descriptives et l'analyse en composantes principales.
 
-### Analyse univariée 
+### Analyse univariée
 
-Nous procédons à une première analyse des variables présentes dans notre jeu de données. Pour ce faire, il s'agit de dresser un tableau des principaux indicateurs statistiques (**Annexe1**).
+Nous procédons à une première analyse des variables présentes dans notre jeu de données.
+Pour ce faire, il s'agit de dresser un tableau des principaux indicateurs statistiques (**Annexe1**).
 
-La visualisation des données grâce aux graphiques facilite grandement l'analyse. Les **annexes 2 et 3** retranscrivent les disparités importantes entre les pays européens en terme de dépenses pour la protection de l'environnement brutes, ces disparités semblant moins importantes une fois la NEEP rapportée en points de PIB. 
-
+La visualisation des données grâce aux graphiques facilite grandement l'analyse.
+Les **annexes 2 et 3** retranscrivent les disparités importantes entre les pays européens en terme de dépenses pour la protection de l'environnement brutes, ces disparités semblant moins importantes une fois la NEEP rapportée en points de PIB.
 
 ### Analyse bivariée.
 
-Il s'agit désormais d'étudier les liens entre nos différentes variables explicatives. 
-Dans un premier temps, on s'intéresse  aux trois variables qui ont permis de construire notre indicateur de sensibilité environnementale **sensi_env** : **conn_env**, **perc_env** et **soutien_pol_env**. Graphiquement, on visualise la relation de dépendance entre ces trois variables, deux-à-deux (**Annexe 4**). On observe ainsi une corrélation positive entre ces différentes variables, plus ou moins prononcée. En effet, les corrélations linéaires (méthode Pearson) entre ces variables sont :
-- Entre la connaissance et la perception des problèmes environnementaux :`r cor(base_complete$conn_env, base_complete$perc_env)`;
-- Entre la connaissance des problèmes environnementaux et le soutien aux politiques de protection de l'environnement : `r cor(base_complete$conn_env, base_complete$soutien_pol_env)`;
-- Entre la perception des problèmes environnementaux et le soutien aux mesures de protection de l'environnement : `r cor(base_complete$soutien_pol_env, base_complete$perc_env)`.
+Il s'agit désormais d'étudier les liens entre nos différentes variables explicatives.
+Dans un premier temps, on s'intéresse aux trois variables qui ont permis de construire notre indicateur de sensibilité environnementale **sensi_env** : **conn_env**, **perc_env** et **soutien_pol_env**.
+Graphiquement, on visualise la relation de dépendance entre ces trois variables, deux-à-deux (**Annexe 4**).
+On observe ainsi une corrélation positive entre ces différentes variables, plus ou moins prononcée.
+En effet, les corrélations linéaires (méthode Pearson) entre ces variables sont : - Entre la connaissance et la perception des problèmes environnementaux :`r cor(base_complete$conn_env, base_complete$perc_env)`; - Entre la connaissance des problèmes environnementaux et le soutien aux politiques de protection de l'environnement : `r cor(base_complete$conn_env, base_complete$soutien_pol_env)`; - Entre la perception des problèmes environnementaux et le soutien aux mesures de protection de l'environnement : `r cor(base_complete$soutien_pol_env, base_complete$perc_env)`.
 
-On s'intéresse ensuite aux corrélations entre toutes les variables. Pour ce faire, nous dressons la matrice des corrélations entre les différentes variables (**Annexe 5**). Une représentation graphique de ces coefficients facilite leur interprétation (**Annexe 6**).
+On s'intéresse ensuite aux corrélations entre toutes les variables.
+Pour ce faire, nous dressons la matrice des corrélations entre les différentes variables (**Annexe 5**).
+Une représentation graphique de ces coefficients facilite leur interprétation (**Annexe 6**).
 
 ### Analyse en composantes principales (ACP).
-
-
-
 
 ## IV. Proposition et justification de différents modèles linéaires.
 
