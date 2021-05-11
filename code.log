@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021) (preloaded format=xelatex 2021.4.6)  11 MAY 2021 14:53
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021) (preloaded format=xelatex 2021.4.6)  11 MAY 2021 14:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -838,12 +838,12 @@ File: code_files/figure-latex/linear-regression-2.pdf Graphic file (type pdf)
 File: code_files/figure-latex/linear-regression-3.pdf Graphic file (type pdf)
 <use code_files/figure-latex/linear-regression-3.pdf>
 
-Underfull \hbox (badness 10000) in paragraph at lines 303--306
+Underfull \hbox (badness 10000) in paragraph at lines 283--286
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 303--306
+Underfull \hbox (badness 10000) in paragraph at lines 283--286
 []
  []
 
@@ -851,48 +851,48 @@ Underfull \hbox (badness 10000) in paragraph at lines 303--306
 Overfull \vbox (25.86337pt too high) has occurred while \output is active []
 
 [5] [6] [7]
-Overfull \hbox (191.74498pt too wide) in paragraph at lines 424--424
+Overfull \hbox (191.74498pt too wide) in paragraph at lines 404--404
 []\TU/lmtt/m/n/10 ## The ANOVA (formula: part_depenses_env ~ sensi_env + GINI_2
 017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new) suggests that:[] 
  []
 
 
-Overfull \hbox (322.99498pt too wide) in paragraph at lines 424--424
+Overfull \hbox (322.99498pt too wide) in paragraph at lines 404--404
 []\TU/lmtt/m/n/10 ##   - The main effect of sensi_env is statistically not sign
 ificant and large (F(1, 14) = 2.32, p = 0.150; Eta2 (partial) = 0.14, 90% CI [0
 .00, 0.42])[] 
  []
 
 
-Overfull \hbox (322.99498pt too wide) in paragraph at lines 424--424
+Overfull \hbox (322.99498pt too wide) in paragraph at lines 404--404
 []\TU/lmtt/m/n/10 ##   - The main effect of GINI_2017 is statistically not sign
 ificant and large (F(1, 14) = 2.98, p = 0.106; Eta2 (partial) = 0.18, 90% CI [0
 .00, 0.46])[] 
  []
 
 
-Overfull \hbox (391.24498pt too wide) in paragraph at lines 424--424
+Overfull \hbox (391.24498pt too wide) in paragraph at lines 404--404
 []\TU/lmtt/m/n/10 ##   - The main effect of EDUC_SUP_2017 is statistically not 
 significant and very small (F(1, 14) = 0.13, p = 0.725; Eta2 (partial) = 9.09e-
 03, 90% CI [0.00, 0.20])[] 
  []
 
 
-Overfull \hbox (364.99498pt too wide) in paragraph at lines 424--424
+Overfull \hbox (364.99498pt too wide) in paragraph at lines 404--404
 []\TU/lmtt/m/n/10 ##   - The main effect of REV_MED_EURO_2017 is statistically 
 not significant and small (F(1, 14) = 0.30, p = 0.594; Eta2 (partial) = 0.02, 9
 0% CI [0.00, 0.25])[] 
  []
 
 
-Overfull \hbox (312.49498pt too wide) in paragraph at lines 424--424
+Overfull \hbox (312.49498pt too wide) in paragraph at lines 404--404
 []\TU/lmtt/m/n/10 ##   - The main effect of EPI.new is statistically not signif
 icant and small (F(1, 14) = 0.65, p = 0.433; Eta2 (partial) = 0.04, 90% CI [0.0
 0, 0.30])[] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 500--500
+Underfull \hbox (badness 10000) in paragraph at lines 480--480
 [][][][]$[][][][] [] [] [] [] [] [][][][] [] [][][] [] [][][][][][][][][] [] []
 [][][] [] [][][][][][] [] [][][][][][] [] [][][][][][][][][][][] [] [][][][][][
 ] [] [][][][] [] [][][][][] [] [][][][][][] [] [][][][][][][][][][][][][] [] []
@@ -902,7 +902,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 500--500
 File: code_files/figure-latex/unnamed-chunk-1-1.pdf Graphic file (type pdf)
 <use code_files/figure-latex/unnamed-chunk-1-1.pdf>
 [8] [9]
-Underfull \hbox (badness 2334) in paragraph at lines 512--516
+Underfull \hbox (badness 2334) in paragraph at lines 492--496
 []\TU/lmr/m/n/10 Point d’analyse intéressant : une fois les paramètres économét
 riques estimés, on peut essayer
  []

@@ -112,13 +112,9 @@ Nous avons extrait de ces données 6 variables sur 56491 observations, et que no
 Nous avons pris pour la variable **perc_env** la moyenne des indicateurs associés aux questions suivantes :
 
 -   Je donnerais une partie de mes revenus si j'étais sûr que l'argent soit utilisé pour éviter la pollution de l'environnement.
-
 -   C'est juste trop difficile pour les gens comme moi de vraiment pour l'environnement.
-
 -    Il y a plus important à faire dans la vie que de protéger l'environnement.
-
 -   Ca ne sert à rien de faire ce que je peux pour l'environnement si les autres ne font pas la même chose.
-
 -   Beaucoup des affirmations sur les menaces environnementales sont exagérées.
 
 La première des questions allant dans un sens opposé aux suivantes, nous avons inversé l'indicateur pour celle-ci par rapport aux autres.
@@ -173,13 +169,39 @@ ggplot(data = base_complete, mapping = aes(x = sensi_env, y = part_depenses_env)
   labs(x = "Sensibilité moyenne à l'écologie (sensi_env)", y = "Dépenses environnementales en part de PIB")
 
 
+# 1ère regression : juste sensi (2 définitions)
+
 reg1               <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env)
+
+summary(reg1)
+
+reg1bis <- lm(data=base_complete, formula = part_depenses_env ~ conn_env + perc_env + soutien_pol_env)
+
+summary(reg1bis) # R2 adj : 0,26 + conn_env : p-value < 0.01
+confint(reg1bis) # permet d'afficher l'intervalle de confiance
+
+resid_reg1bis <- resid(reg1bis)
+
 reg2               <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + REV_MED_EURO_2017 + EPI.new)
+
+summary(reg2) #R2 adj : 0,05
+
 reg3               <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + EPI.new + REV_MED_EURO_2017 +
                            EDUC_SUP_2017 + GINI_2017)
-reg4               <- lm(data = base_complete, formula = part_depenses_env ~ perc_env + soutien_pol_env + conn_env)
 
-reg5 <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + GINI_2017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new)
+summary(reg3) # R2 adj : 0,06
+
+reg4 <- lm(data = base_complete, formula = depenses_brutes_env ~ sensi_env + GINI_2017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new)
+
+summary(reg4) 
+
+reg5 <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + GINI_2017 + EPI.new)
+
+summary(reg5) # R2 ajd : 0,25
+
+reg6 <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + GINI_2017 +  EDUC_SUP_2017 + EPI.new)
+
+summary(reg6) #R 2 adj : 0,23
 
 check_model(reg1)
 check_model(reg5)
