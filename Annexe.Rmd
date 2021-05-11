@@ -14,8 +14,17 @@ library(sf)
 library(haven)
 library(FactoMineR)
 library(ggrepel)
-library(readxl)
 library(stargazer)
+library(questionr)
+#install.packages("remotes")
+#remotes::install_github("easystats/easystats")
+#install.packages("qqplotr")
+library(qqplotr)
+library("easystats")
+#install.packages("ggraph")
+library(ggraph)
+library(dplyr)
+library(see)
 
 ## Données -----
 
@@ -23,7 +32,8 @@ library(stargazer)
 setwd("~/Documents/ENS/econometrie/projet_r")
 
 base_complete <- read.csv("base_complete.csv") %>%
- select(-X)
+ select(-X) %>%
+ mutate(code2 = as.character(code2))
 
 base_exploration <- base_complete %>%
   select(-code2)
@@ -34,6 +44,59 @@ base_exploration <- base_complete %>%
 ```` {r, results = "asis" }
 stargazer(base_exploration, type = 'html', title = "Principaux indicateurs des variables" )
 ```
+
+## Annexe 2
+
+```` {r}
+graph1 <- ggplot(data = base_exploration, 
+                 mapping = aes(y=Nom_pays, 
+                               x = part_depenses_env,
+                               fill = part_depenses_env)) +
+  geom_col()
+
+graph1 <- graph1 + labs(title = "Les dépenses environnementales des pays Européens",
+         y = "Pays", 
+         x = "Part des dépenses environnementales dans le PIB",
+         fill = NULL,
+         subtitle= "en points de PIB")
+
+print(graph1)
+
+```
+
+## Annexe 3
+
+```{r}
+graph2 <- ggplot(data = base_exploration, 
+                 mapping = aes(y=Nom_pays, 
+                               x = depenses_brutes_env,
+                               fill = depenses_brutes_env)) +
+  geom_col()
+
+graph2 <- graph2 + labs(title = "Les dépenses nationales pour la protection de l'environnement des pays Européens",
+         y = "Pays", 
+         x = "NEEP brutes",
+         fill = NULL,
+         subtitle= "en million d'euros")
+
+print(graph2)
+
+```
+
+
+## Annexe 4
+
+## Annexe 5
+
+## Annexe 6
+
+## Annexe 7
+
+## Annexe 8
+
+## Annexe 9
+
+
 
 ## Including Plots
 

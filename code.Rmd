@@ -9,15 +9,17 @@ output:
     latex_engine: xelatex
   html_document:
     toc: yes
+editor_options: 
+  markdown: 
+    wrap: sentence
 ---
 
+```{=html}
 <style>
 body {
 text-align: justify}
 </style>
-
-
-
+```
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 options(encoding = "UTF-8")
@@ -52,37 +54,81 @@ base_complete <- read.csv("base_complete.csv") %>%
  mutate(code2 = as.character(code2))
 ```
 
-### I.	Mise en perspective introductive dans le contexte économique et social. 
+### I. Mise en perspective introductive dans le contexte économique et social.
 
-Le 9 mai dernier, des marches pour le climat eurent lieu dans toute la France, afin d’infléchir la loi « Climat et résilience » qui vient d’être vôtée par les députés. Ces mobilisations en faveur du climat ont-elles une influence sur la politique écologique et environnementale des gouvernements ?
+Le 9 mai dernier, des marches pour le climat eurent lieu dans toute la France, afin d'infléchir la loi « Climat et résilience » qui vient d'être vôtée par les députés.
+Ces mobilisations en faveur du climat ont-elles une influence sur la politique écologique et environnementale des gouvernements ?
 
-Notre sujet de recherche vise à contribuer à cette vaste question, en se focalisant sur le lien entre ce que l’on a appelé sensibilité environnementale et les dépenses publiques de protection de l’environnement. Les difficultés de mesure statistique concernant les mobilisations environnementales nous ont en effet poussé à choisir comme proxy la sensibilité environnementale.
+Notre sujet de recherche vise à contribuer à cette vaste question, en se focalisant sur le lien entre ce que l'on a appelé sensibilité environnementale et les dépenses publiques de protection de l'environnement.
+Les difficultés de mesure statistique concernant les mobilisations environnementales nous ont en effet poussé à choisir comme proxy la sensibilité environnementale.
 
-Cette contribution s’inscrit dans lignée de la sociologie de l’action publique. En particulier, l’article fondateur de Felstiner & alli (1981) sur l’émergence des problèmes publics peut servir de cadre analytique. Les auteurs y définissent trois conditions d’apparition d’un problème public : *naming, blaming, claiming*. L’étape du *naming* conduit à une transformation de l’ordre symbolique, et impose une nouvelle manière de voir les choses : la sensibilité publique envers certaines questions participe à l’établissement de mise à l’agenda de problèmes publics. Ainsi, une sensibilité environnementale plus importante conduirait à un cadrage différent des problèmes environnementaux, et serait nécessaire aux autres conditions de l’émergence de l’action environnementale et écologique comme problème public. 
+Cette contribution s'inscrit dans lignée de la sociologie de l'action publique.
+En particulier, l'article fondateur de Felstiner & alli (1981) sur l'émergence des problèmes publics peut servir de cadre analytique.
+Les auteurs y définissent trois conditions d'apparition d'un problème public : *naming, blaming, claiming*.
+L'étape du *naming* conduit à une transformation de l'ordre symbolique, et impose une nouvelle manière de voir les choses : la sensibilité publique envers certaines questions participe à l'établissement de mise à l'agenda de problèmes publics.
+Ainsi, une sensibilité environnementale plus importante conduirait à un cadrage différent des problèmes environnementaux, et serait nécessaire aux autres conditions de l'émergence de l'action environnementale et écologique comme problème public.
+
+### II. Formulation d'un problème économétrique.
+
+Le premier enjeu de notre démarche économétrique se situe dans le choix des variables expliquées et explicatives.
+Pour étudier l'effet de la sensibilité environnementale sur les dépenses de protection de l'environnement, la variable dépendante retenue est la *NEEP* (dépenses nationales pour la protection de l'environnement) dans l'UE et ses États membres.
+Cette mesure, définie par Eurostat, permet d'apprécier les ressources que consacrent les unités résidents à la protection de l'environnement naturel au cours d'une période donnée.
+Elles sont calculées comme étant la somme des dépenses courantes consacrées aux activités de protection de l'environnement et des investissements destinés aux activités de protection de l'environnement, y compris les transferts nets vers le reste du monde.
+
+Il s'agit ensuite de définir ce qu'est la sensibilité environnementale afin de construire un jeu de variables à même de la refléter.
+Dès lors, on retiendra l'acception suivante : la sensibilité environnementale correspond à l'importance attachée aux problèmes environnementaux et aux enjeux écologiques.
+Dès lors, elle comprend la perception de la gravité des problèmes environnementaux, le degré de connaissance des problèmes environnementaux, et le soutien aux dépenses gouvernementales pour la protection de l'environnement [Thiery-Seror, 1996][^1] La difficulté réside alors en la traduction de ces éléments en une variable économétrique.
+Pour construire cette première variable explicative, nous avons croisé plusieurs bases de données : l'Environmental Awareness Index (EAI)[^2] et l'European Values Study (EVS) de 2017
+. L'*Environmental Awareness Index* est en effet une variable permettant d'apprécier la sensibilisation des citoyens aux questions écologiques, que l'on peut assimiler au degré de connaissance des problèmes environnementaux, et que l'on appelera **conn_env** . L'EVS permet elle de couvrir les deux autres dimensions de la sensibilité environnementale
+. La variable **perc_env** rend compte de la perception des problèmes environnementaux des personnes sondées, tandis que la variable **soutien_pol_env** témoigne du soutien aux mesures gouvernementales pour la défense de l'environnement
+. Afin de construire une variable explicative agrégée pour la sensibilité environnementale (*sensi_env*), on pondère les variables des ces trois facteurs par 1/3
+. Les autres variables explicatives, que l'on pourra appeler variables de contrôle, sont au nombre de 4
+. Il paraît raisonnable de penser que les dépenses environnementales d'un pays sont liées à son niveau de développement économique, conformément à la thèse avancée par R
+. Inglehart dans **La Révolution silencieuse** (1977), qui considère qu'à partir d'un certain niveau de développement économique, des valeurs post-matérialistes (et notamment écologiques) ont plus de chance de se diffuser au sein de la société
+. Pour exprimer l'influence du niveau de développement économique d'un pays sur sa NEEP, nous avons retenu le revenu médian (*rev_med*) établi par Eurostat dans l'enquête EU-SILC
+. Il est aussi possible de considérer que les inégalités intra-pays influencent ces dépenses
+. D'une part, une inégalité, lorsqu'elle est rendue publique, réduit la contribution à un bien public de tous les participants [Anderson et al., 2008]
+. Puisqu'il est possible de considérer l'environnement comme un bien public (non-rival et non-exclusif), il apparaît pertinent de prendre en compte les inégalités dans notre modèle économétrique
+. De plus, les sociétés inégalitaires auraient plus de mal à mener les réformes nécessaires pour surmonter un choc externe [Rodrik, 1999]
+. Nous avons donc retenu le coefficient de Gini du revenu en euros par ménage (indicateur synthétique de mesure des inégalités et de la redistribution très utilisé au niveau international) comme variable explicative
+. Les deux dernières variables de contrôle sont l'Environmental Performance Index (*EPI*) qui permet d'évaluer de manière synthétique la performance environnementale d'un pays ainsi que le pourcentage de personnes de 15 à 64 disposant d'un diplôme d'enseignement supérieur pour rendre compte du niveau d'éducation
+.
+
+[^1]: Thiery-Seror, P. (1996).
+    La solidarité à travers les produits: l'achat-geste écologique.
+    Actes du XIIème Congrès de l'AFM, Poitiers, 22-23 mai.
+
+[^2]: <http://jultika.oulu.fi/files/nbnfioulu-201312142043.pdf>
+
+### III. Présentation des bases de données et exploration des données.
+
+Ainsi, nous avons créé une base de données à partir de plusieurs sources différentes.
+Le processus complet de création de la base est disponible dans le fichier .R "création base de données".
+Pour l'indicateur de sensibilité environnementale, les données viennent de l'*European Values Survey*, un sondage mené à l'échelle européenne, pour avoir un état des lieux des valeurs des européens.
+Nous avons extrait de ces données 6 variables sur 56491 observations, et que nous avons résumé en moyenne par pays.
+Nous avons pris pour la variable **perc_env** la moyenne des indicateurs associés aux questions suivantes : - Je donnerais une partie de mes revenus si j'étais sûr que l'argent soit utilisé pour éviter la pollution de l'environnement.
+- C'est juste trop difficile pour les gens comme moi de vraiment pour l'environnement.
+- Ca ne sert à rien de faire ce que je peux pour l'environnement si les autres ne font pas la même chose.
+- Beaucoup des affirmations sur les menaces environnementales sont exagérées.
+La première des questions allant dans un sens opposé aux suivantes, nous avons inversé l'indicateur pour celle-ci, par rapport aux autres.
+Pour la variable **soutien_pol_env**, nous avons pris la moyenne par pays de la réponse "On devrait donner la priorité à la protection de l'environnement, même si cela ralentit la croissance économique et si certains perdent leur emploi" donnée plutôt que "On devrait donner la priorité à la croissance économique et à la création d'emplois, même si l'environnement en souffre d'une manière ou d'une autre".
+Pour la variable **conn_env**, nous avons pris l'indicateur de conscience environnementale développé par Eevi Kokkinen dans son mémoire de master, "Measuring environmental awareness in the world".
+Celui-ci est construit à partir de questionnaires, afin d'estimer la connaissance et les compétences en matière environnementale et écologique des personnées sondées.
+Les deux variables expliquées potentielles (**part_depenses_env** et **depenses_brutes_env**) proviennent de bases de données établies par Eurostat.Les variables de contrôle **EDUC_SUP_2017** et *REV_MED_EURO_2017** proviennent elles aussi d'Eurostat, et sont issues de la base de données EU-SILC (European Union Statistics and Living Conditions). 
+
+L'exploration des données préalablement à la réalisation de regréssions linéaires est primordiale. Pour ce faire, nous mobilisons à la fois des éléments de statistiques descriptives et l'analyse en composantes principales.
+
+## Analyse univariée 
+
+Nous procédons à une première analyse des variables présentes dans notre jeu de données. Pour ce faire, il s'agit de dresser un tableau des principaux indicateurs présents (**Annexe1**). 
 
 
-### II.	Formulation d’un problème économétrique. 
 
-Le premier enjeu de notre démarche économétrique se situe dans le choix des variables expliquées et explicatives. Pour étudier l’effet de la sensibilité environnementale sur les dépenses de protection de l’environnement, la variable dépendante retenue est la *NEEP* (dépenses nationales pour la protection de l’environnement) dans l’UE et ses États membres. Cette mesure, définie par Eurostat, permet d’apprécier les ressources que consacrent les unités résidents à la protection de l’environnement naturel au cours d’une période donnée. Elles sont calculées comme étant la somme des dépenses courantes consacrées aux activités de protection de l’environnement et des investissements destinés aux activités de protection de l’environnement, y compris les transferts nets vers le reste du monde.
+### Analyse bivariée et analyse en composantes principales
 
-Il s’agit ensuite de définir ce qu’est la sensibilité environnementale afin de construire un jeu de variables à même de la refléter. Dès lors, on retiendra l’acception suivante : la sensibilité environnementale correspond à l’importance attachée aux problèmes environnementaux et aux enjeux écologiques. Dès lors, elle comprend la perception de la gravité des problèmes environnementaux, le degré de connaissance des problèmes environnementaux, et le soutien aux dépenses gouvernementales pour la protection de l'environnement [Thiery-Seror, 1996]^[Thiery-Seror, P. (1996). La solidarité à travers les produits: l’achat-geste écologique. Actes du XIIème Congrès de l’AFM, Poitiers, 22-23 mai. ] La difficulté réside alors en la traduction de ces éléments en une variable économétrique. Pour construire cette première variable explicative, nous avons croisé plusieurs bases de données :  l’Environmental Awareness Index (EAI)^[http://jultika.oulu.fi/files/nbnfioulu-201312142043.pdf] et l’European Values Study (EVS) de 2017. L’*Environmental Awareness Index* est en effet une variable permettant d’apprécier la sensibilisation des citoyens aux questions écologiques, que l’on peut assimiler au degré de connaissance des problèmes environnementaux, et que l'on appelera **conn_env** . L’EVS permet elle de couvrir les deux autres dimensions de la sensibilité environnementale. La variable **perc_env** rend compte de la perception des problèmes environnementaux des personnes sondées, tandis que la variable **soutien_pol_env** témoigne du soutien aux mesures gouvernementales pour la défense de l’environnement. Afin de construire une variable explicative agrégée pour la sensibilité environnementale (*sensi_env*), on pondère les variables des ces trois facteurs par 1/3.
-Les autres variables explicatives, que l’on pourra appeler variables de contrôle, sont au nombre de 4. Il paraît raisonnable de penser que les dépenses environnementales d’un pays sont liées à son niveau de développement économique, conformément à la thèse avancée par R. Inglehart dans **La Révolution silencieuse** (1977), qui considère qu'à partir d'un certain niveau de développement économique, des valeurs post-matérialistes (et notamment écologiques) ont plus de chance de se diffuser au sein de la société. Pour exprimer l’influence du niveau de développement économique d’un pays sur sa NEEP, nous avons retenu le revenu médian (*rev_med*) établi par Eurostat dans l’enquête EU-SILC. 
-Il est aussi possible de considérer que les inégalités intra-pays influencent ces dépenses. D’une part, une inégalité, lorsqu’elle est rendue publique, réduit la contribution à un bien public de tous les participants [Anderson et al., 2008]. Puisqu’il est possible de considérer l’environnement comme un bien public (non-rival et non-exclusif), il apparaît pertinent de prendre en compte les inégalités dans notre modèle économétrique. De plus, les sociétés inégalitaires auraient plus de mal à mener les réformes nécessaires pour surmonter un choc externe [Rodrik, 1999]. Nous avons donc retenu le coefficient de Gini du revenu en euros par ménage (indicateur synthétique de mesure des inégalités et de la redistribution très utilisé au niveau international) comme variable explicative.
-Les deux dernières variables de contrôle sont l’Environmental Performance Index (*EPI*) qui permet d’évaluer de manière synthétique la performance environnementale d’un pays ainsi que le pourcentage de personnes de 15 à 64 disposant d’un diplôme d’enseignement supérieur pour rendre compte du niveau d’éducation. 
+Il s'agit désormais d'étudier les liens entre nos différentes variables explicatives.
 
-### III.	Présentation des bases de données et statistiques descriptives. 
-
-Ainsi, nous avons créé une base de données à partir de plusieurs sources différentes. Le processus complet de création de la base est disponible dans le fichier .R "création base de données". 
-Pour l'indicateur de sensibilité environnementale, les données viennent de l'*European Values Survey*, un sondage mené à l'échelle européenne, pour avoir un état des lieux des valeurs des européens. Nous avons extrait de ces données 6 variables sur 56491 observations, et que nous avons résumé en moyenne par pays. Nous avons pris pour la variable **perc_env** la moyenne des indicateurs associés aux questions suivantes : 
-- Je donnerais une partie de mes revenus si j'étais sûr que l'argent soit utilisé pour éviter la pollution de l'environnement. 
-- C'est juste trop difficile pour les gens comme moi de vraiment pour l'environnement. 
-- Ca ne sert à rien de faire ce que je peux pour l'environnement si les autres ne font pas la même chose. 
-- Beaucoup des affirmations sur les menaces environnementales sont exagérées. 
-La première des questions allant dans un sens opposé aux suivantes, nous avons inversé l'indicateur pour celle-ci, par rapport aux autres. 
-Pour la variable **soutien_pol_env**, nous avons pris la moyenne par pays de la réponse "On devrait donner la priorité à la protection de l'environnement, même si cela ralentit la croissance économique et si certains perdent leur emploi" donnée plutôt que "On devrait donner la priorité à la croissance économique et à la création d'emplois, même si l'environnement en souffre d'une manière ou d'une autre". 
-Pour la variable **conn_env**, nous avons pris l'indicateur de conscience environnementale développé par Eevi Kokkinen dans son mémoire de master, "Measuring environmental awareness in the world". Celui-ci est construit à partir de questionnaires, afin d'estimer la connaissance et les compétences en matière environnementale et écologique des personnées sondées. 
-
-### IV.	Proposition et justification de différents modèles linéaires. 
+### IV. Proposition et justification de différents modèles linéaires.
 
 ```{r linear-regression}
 
@@ -127,7 +173,6 @@ r2(reg1)
 
 ```
 
-
 ```{r tables, results='asis'}
 
 stargazer(reg1, reg2, reg3, header = FALSE)
@@ -137,20 +182,18 @@ stargazer(base_complete, header = FALSE)
 # info sur stargazer : https://www.jakeruss.com/cheatsheets/stargazer/ ou
 ```
 
+### V. Comparaison des coefficients et de la significativité des modèles.
 
-### V.	Comparaison des coefficients et de la significativité des modèles. 
+### VI. Interprétation et proposition de pistes de réflexion complémentaires (limites blabla).
 
-### VI.	Interprétation et proposition de pistes de réflexion complémentaires (limites blabla).
+Limite : le questionnaire EVS ne propose pas beaucoup de questions relatives à l'environnement, et celles-ci sont formuléees de manière non neutre, ce qui peut induire un biais dans les questions.
+Parler de deux des problèmes (environnement v. emploi et "m'en balec") L'International Social Survey Programme conduit une enquête par questionnaire parmi les 42 pays membres du programme, sur le thème de l'environnement.
+Le questionnaire final est disponible ici[^3] mais les résultats ne sont pas encore publiés.
+Au vu des questions posées par le questionnaire, introduire des variables qui en proviennent permettrait de limiter les biais relatifs à la formulation des questions (cf. la question 6 : how concerned are you about environmental issues?) et d'affiner l'analyse.
 
-Limite : le questionnaire EVS ne propose pas beaucoup de questions relatives à l’environnement, et celles-ci sont formuléees de manière non neutre, ce qui peut induire un biais dans les questions. Parler de deux des problèmes (environnement v. emploi et “m’en balec”)
-L’International Social Survey Programme conduit une enquête par questionnaire parmi les 42 pays membres du programme, sur le thème de l’environnement. Le questionnaire final est disponible ici^[http://w.issp.org/fileadmin/user_upload/Module_development/Module_2020/Final_Source_Questionnaire/ISSP2020_final_sourcequestionnaire_corrected.pdf] mais les résultats ne sont pas encore publiés. Au vu des questions posées par le questionnaire, introduire des variables qui en proviennent permettrait de limiter les biais relatifs à la formulation des questions (cf. la question 6 : how concerned are you about environmental issues?) et d’affiner l’analyse. 
+[^3]: <http://w.issp.org/fileadmin/user_upload/Module_development/Module_2020/Final_Source_Questionnaire/ISSP2020_final_sourcequestionnaire_corrected.pdf>
 
-
-### VII.	Conclusion. 
-
-
-
-
+### VII. Conclusion.
 
 ```{r}
 
@@ -179,12 +222,6 @@ ggplot(data = carte_europe) +
 
 
 ```
-
-
-
-
-
-
 
 ```{r ACP-classification}
 
@@ -278,9 +315,6 @@ ggplot(data = carte_europe) +
 
 ```
 
-Point d'analyse intéressant : 
-une fois les paramètres économétriques estimés, on peut essayer d'expliquer/interpréter les situations contrefactuelles, c'est-à-dire celles qui s'éloignent le plus de l'estimation. 
+Point d'analyse intéressant : une fois les paramètres économétriques estimés, on peut essayer d'expliquer/interpréter les situations contrefactuelles, c'est-à-dire celles qui s'éloignent le plus de l'estimation.
 
-Mayda et Rodrik (2005) font une étude économétrique à partir de la WVS, voir p'tet leur méthode. 
-
-
+Mayda et Rodrik (2005) font une étude économétrique à partir de la WVS, voir p'tet leur méthode.

@@ -46,6 +46,35 @@ Nous procédons à une première analyse des variables présentes dans notre jeu
 
 stargazer(base_exploration, type = 'html', title = "Principaux indicateurs des variables" )
 
+graph1 <- ggplot(data = base_exploration, 
+                 mapping = aes(y=Nom_pays, 
+                               x = part_depenses_env,
+                               fill = part_depenses_env)) +
+  geom_col()
+
+graph1 <- graph1 + labs(title = "Les dépenses nationales pour la protection de l'environnement des pays Européens",
+         y = "Pays", 
+         x = "Part des NEEP dans le PIB",
+         fill = NULL,
+         subtitle= "en points de PIB")
+
+print(graph1)
+
+graph2 <- ggplot(data = base_exploration, 
+                 mapping = aes(y=Nom_pays, 
+                               x = depenses_brutes_env,
+                               fill = depenses_brutes_env)) +
+  geom_col()
+
+graph2 <- graph2 + labs(title = "Les dépenses nationales pour la protection de l'environnement des pays Européens",
+         y = "Pays", 
+         x = "NEEP brutes",
+         fill = NULL,
+         subtitle= "en million d'euros")
+
+print(graph2)
+  
+
 ````
 
 ### Analyse bivariée et analyse en composantes principales
