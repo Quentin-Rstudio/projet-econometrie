@@ -179,8 +179,24 @@ reg1bis <- lm(data=base_complete, formula = part_depenses_env ~ conn_env + perc_
 
 summary(reg1bis) # R2 adj : 0,26 + conn_env : p-value < 0.01
 confint(reg1bis) # permet d'afficher l'intervalle de confiance
+summary.aov(reg1bis) #table des variances (test d'analyse sur la variance)
+
+check_model(reg1bis) #Visual check of model various assumptions (normality of residuals, normality of random effects, linear relationship, homogeneity of variance, multicollinearity).
+plot(reg1bis) #a peu pres comme check model mais en moche -> choisir entre les deux
+
+check_heteroscedasticity(reg1bis) # problème d'hétéroscédasticité -> on ne peut plus appliquer les tests statistiques post-estimation (matrice des variances - covariances est biaisée)
+
 
 resid_reg1bis <- resid(reg1bis)
+plot(resid_reg1bis)
+
+model_performance(reg1bis)
+
+compare_performance(reg1, reg1bis)
+
+plot(compare_performance(reg1,reg1bis,reg5)) #comparaison graphique des différents modèles
+
+test_performance(reg1,reg1bis)
 
 reg2               <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + REV_MED_EURO_2017 + EPI.new)
 
@@ -198,30 +214,35 @@ summary(reg4)
 reg5 <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + GINI_2017 + EPI.new)
 
 summary(reg5) # R2 ajd : 0,25
+check_model(reg5)
 
 reg6 <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + GINI_2017 +  EDUC_SUP_2017 + EPI.new)
 
 summary(reg6) #R 2 adj : 0,23
 
-check_model(reg1)
-check_model(reg5)
-check_heteroscedasticity(reg5) # problème d'hétéroscédasticité -> on ne peut plus appliquer les tests statistiques post-estimation (matrice des variances - covariances est biaisée)
 model_performance(reg5)
 print(test_performance(reg1,reg5))
 
-anova(reg1)
 # comparaison de modèles :
-anova(reg1,reg2)
+anova(reg1,reg1bis)
 
 summary(reg4)
 summary(reg3)
 residuals(reg1)
 predict(reg1)
 
+# analysis of variance model 
 aov(data = base_complete, formula = part_depenses_env ~ sensi_env + GINI_2017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new) %>%
   report()
 
+
+
 r2(reg1)
+
+#Le modèle suppose que la régression est linéaire, les termes d’erreurs ont même variance, ils sont indépendants et issus d’une loi normale.
+#Avant d’interpréter les résultats il est indispensable de vérifier ces hypotheses.
+
+
 
 # comment interpréter les résultats d'une régression avec lm : http://www.learnbymarketing.com/tutorials/linear-regression-in-r/
 

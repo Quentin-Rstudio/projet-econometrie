@@ -166,3 +166,12 @@ print(graph_acp2)
 
 
 ```
+
+
+```{r}
+# Analyse bivariée des variables de contrôle
+
+
+
+
+```
