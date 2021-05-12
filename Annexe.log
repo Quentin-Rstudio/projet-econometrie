@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2021.5.10)  12 MAY 2021 01:43
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2021.5.10)  12 MAY 2021 12:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -590,6 +590,24 @@ Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
 
 LaTeX Warning: Label `tab:unnamed-chunk-7' multiply defined.
 
+
+LaTeX Warning: Label `' multiply defined.
+
+
+LaTeX Warning: Label `' multiply defined.
+
+
+LaTeX Warning: Label `' multiply defined.
+
+
+LaTeX Warning: Label `' multiply defined.
+
+
+LaTeX Warning: Label `' multiply defined.
+
+
+LaTeX Warning: Label `' multiply defined.
+
 )
 \openout1 = `Annexe.aux'.
 
@@ -1016,20 +1034,41 @@ File: Annexe_files/figure-latex/unnamed-chunk-9-4.pdf Graphic file (type pdf)
 [8]
 File: Annexe_files/figure-latex/unnamed-chunk-9-5.pdf Graphic file (type pdf)
 <use Annexe_files/figure-latex/unnamed-chunk-9-5.pdf>
-[9] [10] (./Annexe.aux)
+
+Overfull \hbox (33.87498pt too wide) in paragraph at lines 259--293
+ [][] 
+ []
+
+[9] [10]
+Overfull \hbox (26.37498pt too wide) in paragraph at lines 382--419
+ [][] 
+ []
+
+File: Annexe_files/figure-latex/unnamed-chunk-20-1.pdf Graphic file (type pdf)
+<use Annexe_files/figure-latex/unnamed-chunk-20-1.pdf>
+[11] [12] [13] [14] [15]
+File: Annexe_files/figure-latex/unnamed-chunk-21-1.pdf Graphic file (type pdf)
+<use Annexe_files/figure-latex/unnamed-chunk-21-1.pdf>
+[16]
+File: Annexe_files/figure-latex/unnamed-chunk-22-1.pdf Graphic file (type pdf)
+<use Annexe_files/figure-latex/unnamed-chunk-22-1.pdf>
+[17]
+File: Annexe_files/figure-latex/unnamed-chunk-23-1.pdf Graphic file (type pdf)
+<use Annexe_files/figure-latex/unnamed-chunk-23-1.pdf>
+[18] [19] (./Annexe.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `Annexe.out' has not changed.
-(rerunfilecheck)             Checksum: 5B392C706499FB649D00394CF8B7D7B1;1160.
+(rerunfilecheck)             Checksum: ACA79BE395F8A40763344576A6FE8875;1536.
  ) 
 Here is how much of TeX's memory you used:
- 17080 strings out of 478774
- 308108 string characters out of 5862712
- 769706 words of memory out of 5000000
- 36831 multiletter control sequences out of 15000+600000
- 407459 words of font info for 63 fonts, out of 8000000 for 9000
+ 17127 strings out of 478774
+ 310274 string characters out of 5862712
+ 796824 words of memory out of 5000000
+ 36872 multiletter control sequences out of 15000+600000
+ 407467 words of font info for 64 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 85i,9n,121p,300b,400s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 85i,11n,121p,300b,402s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on Annexe.pdf (10 pages).
+Output written on Annexe.pdf (19 pages).

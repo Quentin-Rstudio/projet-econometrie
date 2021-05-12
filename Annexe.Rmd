@@ -262,18 +262,130 @@ ggplot(data=dbind,aes(x=Dim.1,y=Dim.3, color = sensi_env, size = part_depenses_e
 
 ```
 
-
-
 ## Annexe 8
+
+```{r}
+reg1    <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env)
+reg1bis <- lm(data=base_complete, formula = part_depenses_env ~ conn_env + perc_env + soutien_pol_env)
+reg1ter <- lm(data = base_complete, formula = depenses_brutes_env ~ sensi_env)
+reg1quater <- lm(data = base_complete, formula = depenses_brutes_env ~ conn_env + perc_env + soutien_pol_env)
+
+```
+ 
+```{r, results='asis'}
+stargazer(reg1, reg1bis, reg1ter, reg1quater, title = "Modèles simples sans variables de contrôle.", header = F, column.labels =  c("reg1", "reg1bis", "reg1ter", "reg1quater"))
+
+```
 
 ## Annexe 9
 
+```{r}
+reg2    <- lm(data = base_complete, formula = part_depenses_env ~ conn_env)
+reg2bis <- lm(data=base_complete, formula = depenses_brutes_env ~ conn_env)
+
+```
+ 
+```{r, results='asis'}
+stargazer(reg2, reg2bis, title = "Modèles sans variables de contrôle, avec une variable repérée comme significative.", header = F, column.labels = c("reg2", "reg2bis"))
+```
+
 ## Annexe 10
+
+```{r}
+reg3   <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
+reg3bis <- lm(data=base_complete, formula = depenses_brutes_env ~ sensi_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
+reg4   <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
+reg4bis <- lm(data=base_complete, formula = depenses_brutes_env ~ conn_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
+
+```
+ 
+```{r, results='asis'}
+
+stargazer(reg3,reg4,reg3bis,reg4bis, header = F, title = "Modèles avec variables de contrôle, pour sensi.env et conn.env.", column.labels =  c("reg3", "reg4", "reg3bis", "reg4bis"))
+
+```
 
 ## Annexe 11
 
+```{r}
+reg5   <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + EPI.new + EDUC_SUP_2017 + GINI_2017)
+reg5bis <- lm(data=base_complete, formula = depenses_brutes_env ~ sensi_env + EPI.new +  EDUC_SUP_2017)
+reg6   <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + EPI.new + EDUC_SUP_2017 + GINI_2017)
+reg6bis <- lm(data=base_complete, formula = depenses_brutes_env ~ conn_env + EPI.new + EDUC_SUP_2017 + GINI_2017)
+
+```
+ 
+```{r, results='asis'}
+
+stargazer(reg5,reg6,reg5bis,reg6bis, header = F, title = "Modèles avec variables de contrôle, sans educ.sup.", column.labels =  c("reg5", "reg6", "reg5bis", "reg6bis"))
+
+```
+
 ## Annexe 12
 
+```{r, results='asis'}
+
+# mieux d'avoir un tableau comme pour les autres modèles en termes d'homogénéité.
+
+reg7   <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + EPI.new + GINI_2017)
+
+stargazer(reg7, header = F, title = "Modèles avec variables de contrôle, sans educ.sup ni rev.med.", column.labels =  c("reg7"))
+
+```
+
+
 ## Annexe 13
+
+```{r, results='asis'}
+
+reg7   <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + EPI.new + GINI_2017)
+
+stargazer(reg2,reg7, reg5bis, header = F, title = "Modèles retenus.", column.labels =  c("reg2", "reg7", "reg5bis"))
+
+```
+
+## Annexe 14
+
+```{r}
+plot(compare_performance(reg2,reg7, reg5bis), rank = TRUE)
+```
+
+## Annexe 15
+
+
+```{r}
+
+check_model(reg2, panel = T) 
+
+```
+
+## Annexe 16
+
+```{r}
+
+check_model(reg5bis, panel = T)
+```
+
+## Annexe 17
+
+```{r}
+
+check_model(reg7, panel = T)
+
+```
+
+<!-- ## Annexe 18 -->
+
+<!-- ## Annexe 19 -->
+
+<!-- ## Annexe 20 -->
+
+
+
+
+
+
+
+
 
 

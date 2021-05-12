@@ -147,7 +147,6 @@ Le graphique des individus représente les pays sur l'espace des variables, ains
 Ainsi, plus de la moitié des variables sont corrélées positivement entre elles, et s'opposent à l'indice gini, tandis que le montant des dépenses environnementales se distingue, et que la part des dépenses environnementales dans le PIB et le revenu médian sont corrélées positivement, mais faiblement. 
 
 
-
 ### 2. Analyse univariée.
 
 Nous procédons à une première analyse des variables présentes dans notre jeu de données.
@@ -181,37 +180,14 @@ Nous comparons pour cela plusieurs régressions linéaires :
 -   reg1ter, dont la formule est "depenses_brutes_env ~ sensi_env", pour voir quelle mesure des dépenses environnementales semble la plus appropriée,  
 - reg1quater, dont la formule est "depenses_brutes_env ~ conn_env + perc_env + soutien_pol_env". 
 
-```{r}
-reg1    <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env)
-reg1bis <- lm(data=base_complete, formula = part_depenses_env ~ conn_env + perc_env + soutien_pol_env)
-reg1ter <- lm(data = base_complete, formula = depenses_brutes_env ~ sensi_env)
-reg1quater <- lm(data = base_complete, formula = depenses_brutes_env ~ conn_env + perc_env + soutien_pol_env)
-
-```
- 
-```{r, results='asis'}
-stargazer(reg1, reg1bis, reg1ter, reg1quater, title = "Modèles simples sans variables de contrôle.", header = F, column.labels =  c("reg1", "reg1bis", "reg1ter", "reg1quater"))
-
-```
-
-On observe ainsi dans le tableau résumant ces quatre modèles que seul le modèle (2) (reg1bis) possède un tant soit peu de significativité. D'une part, c'est le seul à posséder une significativité totale correcte, puisque le $R^{2}$ correspondant est égal à 0.381, c'est-à-dire que les variables expliquent 38.1% de la variance totale de la variable dépendante, ici, la part du PIB des dépenses environnementales. Les autres modèles ont un $R^{2}$ au mieux trois fois plus faible, une différence encore plus flagrante si l'on considère le $R^{2}$ ajusté, qui prend en compte le nombre de variables, permettrant donc de comparer les modèles alors qu'ils ont un nombre différent de variables. 
+On observe ainsi dans le tableau résumant ces quatre modèles (**Annexe 8**) que seul le modèle (2) (reg1bis) possède un tant soit peu de significativité. D'une part, c'est le seul à posséder une significativité totale correcte, puisque le $R^{2}$ correspondant est égal à 0.381, c'est-à-dire que les variables expliquent 38.1% de la variance totale de la variable dépendante, ici, la part du PIB des dépenses environnementales. Les autres modèles ont un $R^{2}$ au mieux trois fois plus faible, une différence encore plus flagrante si l'on considère le $R^{2}$ ajusté, qui prend en compte le nombre de variables, permettrant donc de comparer les modèles alors qu'ils ont un nombre différent de variables. 
 
 En approfondissant l'analyse des résultats obtenus, on observe que seule une variable au sein du modèle (2) est significative : **conn_env**, avec une *p-value* inférieure à 0.01. On se propose donc de se focaliser en partie sur cette variable, en l'isolant dans des modèles différents : 
 
 -   reg2, dont la formule est "part_depenses_env ~ conn_env", 
 -   reg2bis, dont la formule est "depenses_brutes_env ~ conn_env". 
 
-```{r}
-reg2    <- lm(data = base_complete, formula = part_depenses_env ~ conn_env)
-reg2bis <- lm(data=base_complete, formula = depenses_brutes_env ~ conn_env)
-
-```
- 
-```{r, results='asis'}
-stargazer(reg2, reg2bis, title = "Modèles sans variables de contrôle, avec une variable repérée comme significative.", header = F, column.labels = c("reg2", "reg2bis"))
-```
-
-Pour le modèle reg2, la significativité globale augmente (le $R^{2}$ ajusté est plus élevé), ce qui est logique puisque nous venons de ponctionner le modèle de variables non significatives (perc_env et soutien_pol_env). On peut donc partir de ce modèle simple et ajouter des variables de contrôle. Etant donné le faible nombre d'observations, et la valeur de l'exercice, nous proposons aussi un certain nombre de modèles reposant sur **sensi_env**, afin d'analyser les modèles linéaires obtenus. N'ayant pas à l'esprit de variable de contrôle ayant *a priori* une influence plus grande que les autres, nous décidons de tester les modèles suivants, intégrant toutes les variables de contrôle : 
+On voit dans l'**annexe 9** que pour le modèle reg2, la significativité globale augmente (le $R^{2}$ ajusté est plus élevé), ce qui est logique puisque nous venons de ponctionner le modèle de variables non significatives (perc_env et soutien_pol_env). On peut donc partir de ce modèle simple et ajouter des variables de contrôle. Etant donné le faible nombre d'observations, et la valeur de l'exercice, nous proposons aussi un certain nombre de modèles reposant sur **sensi_env**, afin d'analyser les modèles linéaires obtenus. N'ayant pas à l'esprit de variable de contrôle ayant *a priori* une influence plus grande que les autres, nous décidons de tester les modèles suivants, intégrant toutes les variables de contrôle : 
 
 -   reg3, avec la formule "part_depenses_env = sensi_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017", 
 -   reg4, avec la formule "part_depenses_env ~ conn_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017",
@@ -219,21 +195,7 @@ Pour le modèle reg2, la significativité globale augmente (le $R^{2}$ ajusté e
 -   reg4bis, avec la formule "depenses_brutes_env ~ conn_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017". 
 
 
-```{r}
-reg3   <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
-reg3bis <- lm(data=base_complete, formula = depenses_brutes_env ~ sensi_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
-reg4   <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
-reg4bis <- lm(data=base_complete, formula = depenses_brutes_env ~ conn_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
-
-```
- 
-```{r, results='asis'}
-
-stargazer(reg3,reg4,reg3bis,reg4bis, header = F, title = "Modèles avec variables de contrôle, pour sensi.env et conn.env.", column.labels =  c("reg3", "reg4", "reg3bis", "reg4bis"))
-
-```
-
-Ce tableau nous montre que ces modèles sont assez peu significatifs : le $R^{2}$ ajusté max est égal à 0.15, et la seule variable significative individuellement est l'indice de performance individuelle, lorsque régressé avec le montant des dépenses pour l'environnement. On observe que le revenu médian, variable proxy utilisée pour mesurer le niveau de vie des pays, n'est pas du tout significatif, on peut donc abandonner cette variable, et refaire des modèles sans : 
+Ce tableau (**annexe 10**) nous montre que ces modèles sont assez peu significatifs : le $R^{2}$ ajusté max est égal à 0.15, et la seule variable significative individuellement est l'indice de performance individuelle, lorsque régressé avec le montant des dépenses pour l'environnement. On observe que le revenu médian, variable proxy utilisée pour mesurer le niveau de vie des pays, n'est pas du tout significatif, on peut donc abandonner cette variable, et refaire des modèles sans : 
 
 -   reg5, avec la formule "part_depenses_env = sensi_env + EPI.new + EDUC_SUP_2017 + GINI_2017", 
 -   reg6, avec la formule "part_depenses_env ~ conn_env + EPI.new + EDUC_SUP_2017 + GINI_2017",
@@ -241,33 +203,9 @@ Ce tableau nous montre que ces modèles sont assez peu significatifs : le $R^{2}
 -   reg6bis, avec la formule "depenses_brutes_env ~ conn_env + EPI.new + EDUC_SUP_2017 + GINI_2017". 
 
 
-```{r}
-reg5   <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + EPI.new + EDUC_SUP_2017 + GINI_2017)
-reg5bis <- lm(data=base_complete, formula = depenses_brutes_env ~ sensi_env + EPI.new +  EDUC_SUP_2017)
-reg6   <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + EPI.new + EDUC_SUP_2017 + GINI_2017)
-reg6bis <- lm(data=base_complete, formula = depenses_brutes_env ~ conn_env + EPI.new + EDUC_SUP_2017 + GINI_2017)
+Ainsi, comme le montre l'**annexe 11**, le modèle reg5bis semble intéressant, et à retravailler. En explorant un peu plus les modèles, on trouve que le modèle suivant a un $R^{2}$ ajusté correct, c'est-à-dire au-dessus de 0.2 : 
 
-```
- 
-```{r, results='asis'}
-
-stargazer(reg5,reg6,reg5bis,reg6bis, header = F, title = "Modèles avec variables de contrôle, sans educ.sup.", column.labels =  c("reg5", "reg6", "reg5bis", "reg6bis"))
-
-```
-
-Ainsi, le modèle reg5bis semble intéressant, et à retravailler. En explorant un peu plus les modèles, on trouve que le modèle suivant a un $R^{2}$ ajusté correct, c'est-à-dire au-dessus de 0.2 : 
-
-- reg7, avec la formule "part_depenses_env ~ conn_env + soutien_pol_env + GINI_2017 + EPI.new", avec un $R^{2}$ ajusté de 0.25, 
-
-```{r, results='asis'}
-
-# mieux d'avoir un tableau comme pour les autres modèles en termes d'homogénéité.
-
-reg7   <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + EPI.new + GINI_2017)
-
-stargazer(reg7, header = F, title = "Modèles avec variables de contrôle, sans educ.sup ni rev_med.", column.labels =  c("reg7"))
-
-```
+- reg7, avec la formule "part_depenses_env ~ conn_env + soutien_pol_env + GINI_2017 + EPI.new", avec un $R^{2}$ ajusté de 0.25, comme le montre l'**annexe 12**.  
 
 On peut donc retenir pour une analyse approfondie les modèles reg2, reg5bis, reg7, et reg7bis :
 
@@ -275,50 +213,34 @@ On peut donc retenir pour une analyse approfondie les modèles reg2, reg5bis, re
 - reg5bis, avec la formule "depenses_brutes_env ~ sensi_env + EPI.new + EDUC_SUP_2017 + GINI_2017", 
 - reg7, avec la formule "part_depenses_env ~ conn_env + soutien_pol_env + GINI_2017 + EPI.new", 
 
-\newpage
-
 ## V. Interprétation des modèles retenus et proposition de pistes de réflexion complémentaires.
 
-On peut donc reprendre un tableau récapitulatif des modèles retenus. 
+On peut donc reprendre un tableau récapitulatif des modèles retenus, en **annexe 13**.  Ainsi, on observe que les différents modèles ont un $R^{2}$ ajusté assez bon, il est plus de 0.2 pour 3 des modèles, et que 2 des tests ont une variable significative à 1 ou 5%. 
+On observe ensuite différents indicateurs permettant de rendre compte de la robustesse et de la significativité de nos modèles au sein d'un graphique ( **annexe 14**). L'indicateur AIC (Akaike Information Criterion) permet par exemple de compléter l'évaluation du $R^{2}$ ajusté par une autre méthode statistique, celle du maximum de vraisemblance. On observeque la plupart des indicateurs sont semblables pour les modèles reg2 et reg7, en dehors du $R^{2}$ et du $R^{2}$ ajusté. Cela s'explique par le fait que les deux modèles ont pour point de départ de l'analyse la variable **conn_env** mais que le modèle reg7 comporte d'autres variables de contrôle. Son $R^{2}$ ajusté est donc inférieur à celui du modèle reg2 car sa significativité gloabale est en partie liée au grand nombre de variables explicatives.
 
-```{r, results='asis'}
-
-reg7   <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + EPI.new + GINI_2017)
-
-stargazer(reg2,reg7, reg5bis, header = F, title = "Modèles retenus.", column.labels =  c("reg2", "reg7", "reg5bis"))
-
-```
-
-Ainsi, on observe que les différents modèles ont un $R^{2}$ ajusté assez bon, il est plus de 0.2 pour 3 des modèles, et que 2 des tests ont une variable significative à 1 ou 5%. 
-On observe ensuite différents indicateurs permettant de rendre compte de la robustesse et de la significativité de nos modèles au sein d'un graphique ( **Annexe X**). L'indicateur AIC (Akaike Information Criterion) permet par exemple de compléter l'évaluation du $R^{2}$ ajusté par une autre méthode statistique, celle du maximum de vraisemblance. On observeque la plupart des indicateurs sont semblables pour les modèles reg2 et reg7, en dehors du $R^{2}$ et du $R^{2}$ ajusté. Cela s'explique par le fait que les deux modèles ont pour point de départ de l'analyse la variable **conn_env** mais que le modèle reg7 comporte d'autres variables de contrôle. Son $R^{2}$ ajusté est donc inférieur à celui du modèle reg2 car sa significativité gloabale est en partie liée au grand nombre de variables explicatives.
-
-```{r}
-plot(compare_performance(reg2,reg7, reg5bis), rank = TRUE)
-```
-
-Avant de s'intéresser plus particulièrement aux coefficients, il convient de vérifier les hypothèses de Gauss-Markov. Pour cela, une représentation graphique s'avère particulièrement pertinente.  
-
-```{r}
-
-# est-ce que c'est fait expres que tu aies mis le 7 avant le 5 ? Comme on ne peut pas ajouter de titre à "check_model" je trouve que ca ajoute de la confusion. Peut-être les séparer en 3 chunks dans l'annexe pour mettre des titres ?
-
-check_model(reg2, panel = T) 
-check_model(reg7, panel = T)
-check_model(reg5bis, panel = T)
-```
+Avant de s'intéresser plus particulièrement aux coefficients, il convient de vérifier les hypothèses de Gauss-Markov. Pour cela, une représentation graphique s'avère particulièrement pertinente, en **annexe 15, 16 et 17** pour respectivement reg2, reg5bis et reg7. 
 
 Ainsi, on voit que les deux modèles linéaires multiples ont des variables explicatives non parfaitement colinéaires, et que les modèles respectent l'hypothèse de normalité des résidus. De plus, on observe que les modèles ne sont pas déformés par des observations influentes. 
 En revanche, seul le modèle reg7 semble respecter l'hypothèse d'homoscédasticité.
-En raison d'une hypothèse d'homoscédasticité non respectée sur les modèles reg2 et reg5bis, il ne semble pas approprié d'avoir recours aux intervalles de confiance apprises en cours, afin d'éviter des extrapolations.
+En raison d'une hypothèse d'homoscédasticité non respectée sur les modèles reg2 et reg5bis, il ne semble pas approprié d'avoir recours aux intervalles de confiance appris en cours, afin d'éviter des extrapolations.
 
-```{r}
-check_heteroscedasticity(reg2)
-check_heteroscedasticity(reg5bis)
-check_heteroscedasticity(reg7)
+```{r, results='asis'}
+reg2    <- lm(data = base_complete, formula = part_depenses_env ~ conn_env)
+reg5bis <- lm(data=base_complete, formula = depenses_brutes_env ~ sensi_env + EPI.new +  EDUC_SUP_2017)
+reg7   <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + EPI.new + GINI_2017)
 
+cat(check_heteroscedasticity(reg2))
 ```
 
-Il s'agit ensuite de passer à l'nterprétation des coefficients des différents modèles, en analysant à la fois le signe et la valeur des coefficients. 
+|  Model|  test|
+|--:|--:|
+|  reg2|  `r cat(check_heteroscedasticity(reg2))`|
+|  reg5bis| `r check_heteroscedasticity(reg5bis)`|
+|  reg7|  `r check_heteroscedasticity(reg7)`|
+
+**Tableau à changer.**
+
+Il s'agit ensuite de passer à l'interprétation des coefficients des différents modèles, en analysant à la fois le signe et la valeur des coefficients. 
 
 Dans le premier modèle, le modèle linéaire simple, le coefficient associé à **conn_env** est significatif, positif, et égal à 0.026. Ainsi, lorsque l'indice de connaissance environnementale augmente de 10 points (sur un maximum théorique de 100 points), le pourcentage du PIB dédié aux dépenses environnementales augmente de 0.26 point de pourcentage. D'un point de vue théorique, il paraît logique que l'indice de connaissance environnementale fasse augmenter les dépenses d'environnement : il s'agit d'une relation similaire à celle que nous voulions montrer. Cependant, il faut rester prudent sur l'analyse de cette corrélation : une part du PIB plus élevée dédiée aux dépenses d'environnement peut conduire à une plus grande connaissance environnementale de la population, en finançant des infrastructures ou programmes dédiées à la découverte de l'environnement. Il faudrait donc disposer d'outils statistiques et économétriques plus précis pour tester si cette corrélation est une causalité, et dans quel sens elle agit, peut-être à partir d'une variable instrumentale, causée par la variable explicative, et non causée par la variable expliquée. De plus, la constante est égale à 0.373, mais n'est pas significative. On peut toutefois penser que son signe est fiable : y compris avec un indice de connaissance environnementale égal à 0, on aurait 0.37 point de PIB dédié aux dépenses environnementales.\newline
 
@@ -343,16 +265,17 @@ De plus, il semble que les indicateurs permettant de discriminer les pays selon 
 
 Toutefois, la limite principale de nos analyses est le nombre trop faible d'observations, qui vient du fait que les données proviennent de bases de données différentes ne comptant pas toutes exactement les mêmes pays : nous avions des données pour toutes les variables sélectionnées concernant uniquement 20 pays, notamment en raison de la difficulté à obtenir des variables concernant les dépenses dédiées à l'environenment (disponibles sur eurostat.eu, donc pour les pays européens uniquement). De plus, la fragmentation territoriale des pays européens, notamment d'Europe de l'Est, qui provient des guerres successives (guerres mondiales, guerre de Yougoslavie) contribue à un décalage entre des pays de taille relativement importante et des pays de taille très réduite, ce qui fausse la comparaison des variables absolues, mais aussi relatives, puisque pour une taille plus faible, il est plus probable d'obtenir des statistiques plus élevées. Par exemple, le niveau d'éducation supérieure se calcule comme un ratio de la population diplômée sur la population totale, pour une tranche d'âge précise, ce qui souligne le rôle de la taille totale dans la mesure de statistiques relatives. Dans un approfondissement de notre sujet de recherche, il serait possible de tenter d'incorporer des coefficients à nos différentes observations afin de leur procurer une pondération liée à leur population totale. Cela pourrait en partie permettre de pallier ce biais lié aux différences de facteurs géographiques et démographiques.\newline 
 
-Enfin, les donnéees issues de l'enquête EVS ne sont pas très solides, puisque le questionnaire EVS ne propose pas beaucoup de questions relatives à l'environnement, et celles-ci sont formuléees de manière non neutre, ce qui peut induire un biais dans les questions.
+Enfin, les donnéees issues de l'enquête EVS ne sont pas très solides, puisque le questionnaire EVS ne propose pas beaucoup de questions relatives à l'environnement, et celles-ci sont formuléees de manière non neutre, ce qui peut induire un biais dans les questions. 
 A fignoler : Parler de deux des problèmes (environnement v. emploi et "m'en balec") L'International Social Survey Programme conduit une enquête par questionnaire parmi les 42 pays membres du programme, sur le thème de l'environnement.
 Le questionnaire final est disponible ici[^3] mais les résultats ne sont pas encore publiés.
 Au vu des questions posées par le questionnaire, introduire des variables qui en proviennent permettrait de limiter les biais relatifs à la formulation des questions (cf. la question 6 : how concerned are you about environmental issues?) et d'affiner l'analyse.
 
 [^3]: <http://w.issp.org/fileadmin/user_upload/Module_development/Module_2020/Final_Source_Questionnaire/ISSP2020_final_sourcequestionnaire_corrected.pdf>
 
-
-
 ## VII. Conclusion.
+
+Notre sujet de recherche portait sur une question complexe, tant par son actualité brulante que par les difficultés éprouvées à définir exhaustivement les différentes variables et indicateurs étudiés. Les principaux écueils rencontrés au cours de notre démarche économétrique ont ainsi grandement portés sur la construction des variables et des bases de données. Le faible nombre d’observations disponibles, ainsi que la versatilité intrinsèque aux variables d’ordre comportamental et psychologique expliquent en grande partie la faible significativité globale de nos modèles. Toutefois, certains résultats sont plus qu’encourageants, notamment ceux concernant la connaissance des problèmes environnementaux. Il serait ainsi particulièrement intéressant de reproduire ces analyses avec des données plus précises et comportant moins de biais au moment de leur récolte. Par exemple, l’International Social Survey Programme conduit en ce moment une enquête par questionnaire parmi les 42 pays membres du programme, sur le thème de l'environnement. Le questionnaire final est disponible ici[^3] mais les résultats ne sont pas encore publiés.
+Au vu des questions posées par le questionnaire, introduire des variables qui en proviennent permettrait de limiter les biais relatifs à la formulation des questions (cf. la question 6 : how concerned are you about environmental issues?) et d'affiner l'analyse.
 
 ```{r}
 # 
