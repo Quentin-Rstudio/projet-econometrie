@@ -1,0 +1,13 @@
+\contentsline {subsection}{Annexe 1 - Principaux indicateurs des variables.}{2}{section*.2}%
+\contentsline {subsection}{Annexe 2 - Dépenses nationales pour la protection de l'environnement selon les pays.}{2}{section*.3}%
+\contentsline {subsection}{Annexe 3 - Carte des pays européens selon leur sensibilité environnementale.}{3}{section*.4}%
+\contentsline {subsection}{Annexe 4 - Résultats de l'ACP}{4}{section*.5}%
+\contentsline {subsection}{Annexe 5 - Relations linéaires simples entre variables explicatives.}{6}{section*.6}%
+\contentsline {subsection}{Annexe 6 - Matrice des corrélations.}{8}{section*.7}%
+\contentsline {subsection}{Annexe 7 - Représentation graphique des corrélations.}{9}{section*.8}%
+\contentsline {subsection}{Annexe 13 - Comparaison des performances des modèles retenus.}{14}{section*.9}%
+\contentsline {subsection}{Annexe 14 - Vérification graphique des hypothèses du modèle reg2.}{15}{section*.10}%
+\contentsline {subsection}{Annexe 15 - Vérification graphique des hypothèses du modèle reg5bis.}{16}{section*.11}%
+\contentsline {subsection}{Annexe 16 - Vérification graphique des hypothèses du modèle reg7.}{17}{section*.12}%
+\contentsline {subsection}{Annexe 18 - Tests d'homoscédasticité des modèles retenus.}{17}{section*.13}%
+\contentsline {subsection}{Annexe 19 - Tableau synthétique de tous les modèles présentés.}{18}{section*.14}%

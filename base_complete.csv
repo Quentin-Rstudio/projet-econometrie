@@ -1,4 +1,4 @@
-Pays,code,code2,Nom_pays,sensi_env,perc_env,soutien_pol_env,conn_env,depenses_brutes_env,part_depenses_env,GINI_2017,EDUC_SUP_2017,REV_MED_EURO_2017,EPI.new
+Pays,code,code2,Nom_pays,sensi_env,perc_env,soutien_pol_env,conn_env,depenses_env,part_depenses_env,ind_gini,educ_sup,rev_median,epi
 AT,AUT,40,Austria,66.35605555895425,61.32017273288094,64.64799394398183,73.1,11320.5,3.2,29.7,29.7,24752,79.6
 BG,BGR,100,Bulgaria,58.257963746708946,77.17466945024356,58.59922178988327,39,681.9,1.4,40.4,24.5,3588,57
 CH,CHE,756,Switzerland,74.12876207635153,80.10220376876397,76.88408246029064,65.4,11317.2,1.9,32.7,36.8,43663,81.5

@@ -41,6 +41,7 @@ library(dplyr)
 library(see)
  # install.packages("ggcorrplot")                      # Install corrplot package
 library(ggcorrplot)
+library(lmtest)
 
 ## Données -----
 
@@ -53,7 +54,7 @@ base_complete <- read_csv("base_complete.csv") %>%
 ```
 \newpage
 
-## Annexe 1 
+## Annexe 1 - Principaux indicateurs des variables. 
 
 ```` {r, results = "asis" }
 
@@ -61,12 +62,12 @@ stargazer(as.data.frame(base_complete), title = "Principaux indicateurs des vari
 
 ```
 
-## Annexe 2
+## Annexe 2 - Dépenses nationales pour la protection de l'environnement selon les pays.
 ```{r}
 graph1 <- ggplot(data = base_complete, 
-                 mapping = aes(y= reorder(Nom_pays, depenses_brutes_env), 
-                               x = depenses_brutes_env,
-                               fill = depenses_brutes_env)) +
+                 mapping = aes(y= reorder(Nom_pays, depenses_env), 
+                               x = depenses_env,
+                               fill = depenses_env)) +
           geom_col()
 
 graph1 <- graph1 + labs(title = "Les dépenses nationales pour la protection de l'environnement",
@@ -94,7 +95,7 @@ print(graph2)
 
 ```
 
-## Annexe 3
+## Annexe 3 - Carte des pays européens selon leur sensibilité environnementale. 
 ```` {r}
 
 europe             <- st_read("Europe/europe.shp", quiet = T)
@@ -119,10 +120,8 @@ ggplot(data = carte_europe) +
   scale_fill_gradientn(colours = c("white", "darkolivegreen1", "yellowgreen","forestgreen", "darkgreen"))
 
 ```
-
-## Annexe 4
-
-
+\newpage
+## Annexe 4 - Résultats de l'ACP
 ```{r}
 
 
@@ -144,35 +143,6 @@ barplot(resultat_ACP$eig[,2],main="Figure I - Part expliquée par chaque axe dan
       names.arg=1:nrow(resultat_ACP$eig),col= rainbow (15))
 
 kable(resultat_ACP$eig, caption = "Tableau des valeurs propres et \nvariances des composantes principales")
-
-
-ggplot(dbact,aes(x=Dim.1,y= Dim.2,label=names))+
-  geom_point()+
-  theme(legend.title=element_blank(),
-        panel.background =element_rect(fill="white")) +
-  geom_text_repel(size=4,show.legend = FALSE)+
-  geom_hline(yintercept=0,linetype="dashed",colour="grey")+
-  geom_vline(xintercept = 0,linetype="dashed",colour="grey")+
-  ggtitle("Espace des variables de l'ACP avec les axes 1 et 2") +
-  xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
-  ylab(paste("Axe 2 :",round(resultat_ACP$eig[2,2],0),"%")) +
-  geom_circle( aes(x0 = 0, y0 = 0, r = 1), inherit.aes = F) +
-  scale_x_continuous(limits = c(-1, 1)) +
-  scale_y_continuous(limits = c(-1, 1)) +
-  coord_fixed() +
-  geom_segment(aes(x = 0, y = 0, xend = Dim.1, yend = Dim.2), arrow = arrow())
-
-ggplot(data=dbind,aes(x=Dim.1,y=Dim.2, color = sensi_env, size = part_depenses_env))+
-  ggtitle("Espace des pays dans l'ACP des variables")+
-  geom_point()+
-  geom_text_repel(aes(label = code),size=3)+
-  geom_hline(yintercept=0,linetype="dashed")+
-  geom_vline(xintercept = 0,linetype="dashed")+
-  theme(plot.title=element_text(hjust=0.5),legend.position=c(0.1,.8),
-        panel.background =element_rect(fill="white"),legend.title=element_blank())+
-  labs(caption = "Plus un pays est en bleu clair, plus il est sensibilisé à l'environnement, \nplus le cercle est gros, plus ses dépenses pour l'environnement en points de PIB sont élevées.") +
-  xlab(paste("Axe 1 :",round(resultat_ACP$eig[1,2],0),"%"))+
-  ylab(paste("Axe 2 :",round(resultat_ACP$eig[2,2],0),"%"))
 
 ggplot(dbact,aes(x=Dim.1,y= Dim.3,label=names))+
   geom_point()+
@@ -205,9 +175,7 @@ ggplot(data=dbind,aes(x=Dim.1,y=Dim.3, color = sensi_env, size = part_depenses_e
 
 ```
 
-## Annexe 5.
-
-
+## Annexe 5 - Relations linéaires simples entre variables explicatives. 
 ```{r}
 graph3 <- ggplot(base_complete, aes (x = conn_env, y = perc_env)) + 
   geom_point(color = "darkgreen", size = 3 ) +
@@ -252,20 +220,14 @@ graph5 <- graph5 + labs(title = "Lien entre le soutien aux politiques environnem
 print(graph5)
 
 ```
+\newpage
 
-
-## Annexe 6
-
+## Annexe 6 - Matrice des corrélations. 
 ```{r}
 correlation.matrix <- cor(base_complete[, 5:14]) 
 
 correlation.matrix <- as.data.frame(correlation.matrix)
 
-names(correlation.matrix)[names(correlation.matrix)=="REV_MED_EURO_2017"] <- "rev_median" 
-names(correlation.matrix)[names(correlation.matrix)=="GINI_2017"] <- "ind_gini" 
-names(correlation.matrix)[names(correlation.matrix)=="EDUC_SUP_2017"] <- "educ_sup"
-names(correlation.matrix)[names(correlation.matrix)=="EPI.new"] <- "epi" 
-names(correlation.matrix)[names(correlation.matrix)=="depenses_brutes_env"] <- "depenses_env" 
 
 kbl(correlation.matrix[,1:5], caption = "Matrice des corrélations", digits = 3) %>%
   kable_classic()
@@ -275,8 +237,7 @@ kbl(correlation.matrix[,6:10], caption = "Matrice des corrélations (suite)", di
 
 ```
 
-## Annexe 7
-
+## Annexe 7 - Représentation graphique des corrélations. 
 ```{r}
 
 ggcorrplot(cor(base_complete[,5:14]), title = "Représentation graphique \nde la matrice des corrélations", legend.title= "Corrélation", lab = T, lab_col = "black", lab_size = 2.5, colors = c("gray8", "white", "forestgreen"), tl.cex = 5)
@@ -287,96 +248,66 @@ ggcorrplot(cor(base_complete[,5:14]), title = "Représentation graphique \nde la
 ```
 
 
-## Annexe 8
+```{r, results='asis'}
 
-```{r}
 reg1    <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env)
 reg1bis <- lm(data=base_complete, formula = part_depenses_env ~ conn_env + perc_env + soutien_pol_env)
-reg1ter <- lm(data = base_complete, formula = depenses_brutes_env ~ sensi_env)
-reg1quater <- lm(data = base_complete, formula = depenses_brutes_env ~ conn_env + perc_env + soutien_pol_env)
+reg1ter <- lm(data = base_complete, formula = depenses_env ~ sensi_env)
+reg1quater <- lm(data = base_complete, formula = depenses_env ~ conn_env + perc_env + soutien_pol_env)
+
+stargazer(reg1, reg1bis, reg1ter, reg1quater, title = "Annexe 8 - Présentation des quatre premiers modèles simples.", header = F, column.labels =  c("reg1", "reg1bis", "reg1ter", "reg1quater"))
 
 ```
- 
+
+
 ```{r, results='asis'}
-stargazer(reg1, reg1bis, reg1ter, reg1quater, title = "Modèles simples sans variables de contrôle.", header = F, column.labels =  c("reg1", "reg1bis", "reg1ter", "reg1quater"))
 
-```
-
-## Annexe 9
-
-```{r}
 reg2    <- lm(data = base_complete, formula = part_depenses_env ~ conn_env)
-reg2bis <- lm(data=base_complete, formula = depenses_brutes_env ~ conn_env)
+reg2bis <- lm(data=base_complete, formula = depenses_env ~ conn_env)
 
-```
- 
-```{r, results='asis'}
-stargazer(reg2, reg2bis, title = "Modèles sans variables de contrôle, avec une variable repérée comme significative.", header = F, column.labels = c("reg2", "reg2bis"))
+stargazer(reg2, reg2bis, title = "Annexe 9 - Présentation de deux modèles avec conn.env.", header = F, column.labels = c("reg2", "reg2bis"))
 ```
 
-## Annexe 10
-
-```{r}
-reg3   <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
-reg3bis <- lm(data=base_complete, formula = depenses_brutes_env ~ sensi_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
-reg4   <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
-reg4bis <- lm(data=base_complete, formula = depenses_brutes_env ~ conn_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
-
-```
- 
-```{r, results='asis'}
-
-stargazer(reg3,reg4,reg3bis,reg4bis, header = F, title = "Modèles avec variables de contrôle, pour sensi.env et conn.env.", column.labels =  c("reg3", "reg4", "reg3bis", "reg4bis"))
-
-```
-
-## Annexe 11
-
-```{r}
-reg5   <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + EPI.new + EDUC_SUP_2017 + GINI_2017)
-reg5bis <- lm(data=base_complete, formula = depenses_brutes_env ~ sensi_env + EPI.new +  EDUC_SUP_2017)
-reg6   <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + EPI.new + EDUC_SUP_2017 + GINI_2017)
-reg6bis <- lm(data=base_complete, formula = depenses_brutes_env ~ conn_env + EPI.new + EDUC_SUP_2017 + GINI_2017)
-
-```
- 
-```{r, results='asis'}
-
-stargazer(reg5,reg6,reg5bis,reg6bis, header = F, title = "Modèles avec variables de contrôle, sans educ.sup.", column.labels =  c("reg5", "reg6", "reg5bis", "reg6bis"))
-
-```
-
-## Annexe 12
 
 ```{r, results='asis'}
 
-# mieux d'avoir un tableau comme pour les autres modèles en termes d'homogénéité.
+reg3   <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + epi + rev_median + educ_sup + ind_gini)
+reg3bis <- lm(data=base_complete, formula = depenses_env ~ sensi_env + epi + rev_median + educ_sup + ind_gini)
+reg4   <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + epi + rev_median + educ_sup + ind_gini)
+reg4bis <- lm(data=base_complete, formula = depenses_env ~ conn_env + epi + rev_median + educ_sup + ind_gini)
 
-reg7   <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + EPI.new + GINI_2017)
 
-stargazer(reg7, header = F, title = "Modèles avec variables de contrôle, sans educ.sup ni rev.med.", column.labels =  c("reg7"))
+stargazer(reg3,reg4,reg3bis,reg4bis, header = F, title = "Annexe 10 - Présentation de quatre modèles avec variables de contrôle.", column.labels =  c("reg3", "reg4", "reg3bis", "reg4bis"))
 
 ```
-
-
-## Annexe 13
 
 ```{r, results='asis'}
 
-reg7   <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + EPI.new + GINI_2017)
+reg5   <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + epi + educ_sup + ind_gini)
+reg5bis <- lm(data=base_complete, formula = depenses_env ~ sensi_env + epi +  educ_sup)
+reg6   <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + epi + educ_sup + ind_gini)
+reg6bis <- lm(data=base_complete, formula = depenses_env ~ conn_env + epi + educ_sup + ind_gini)
 
-stargazer(reg2,reg7, reg5bis, header = F, title = "Modèles retenus.", column.labels =  c("reg2", "reg7", "reg5bis"))
+stargazer(reg5,reg6,reg5bis,reg6bis, header = F, title = "Annexe 11 - Présentation de quatre autres modèles avec variables de contrôle.", column.labels =  c("reg5", "reg6", "reg5bis", "reg6bis"))
 
 ```
 
-## Annexe 14
+
+```{r, results='asis'}
+
+reg7   <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + epi + ind_gini)
+
+stargazer(reg7, header = F, title = "Annexe 12 - Présentation d'un autre modèle, globalement significatif.", column.labels =  c("reg7"))
+
+```
+
+## Annexe 13 - Comparaison des performances des modèles retenus. 
 
 ```{r}
 plot(compare_performance(reg2,reg7, reg5bis), rank = TRUE)
 ```
 
-## Annexe 15
-
+## Annexe 14 - Vérification graphique des hypothèses du modèle reg2.
 
 ```{r}
 
@@ -384,14 +315,14 @@ check_model(reg2, panel = T)
 
 ```
 
-## Annexe 16
+## Annexe 15 - Vérification graphique des hypothèses du modèle reg5bis.
 
 ```{r}
 
 check_model(reg5bis, panel = T)
 ```
 
-## Annexe 17
+## Annexe 16 - Vérification graphique des hypothèses du modèle reg7. 
 
 ```{r}
 
@@ -399,18 +330,33 @@ check_model(reg7, panel = T)
 
 ```
 
-<!-- ## Annexe 18 -->
+## Annexe 18 - Tests d'homoscédasticité des modèles retenus. 
 
-<!-- ## Annexe 19 -->
+| Modèle  | Test d'homoscédasticité |
+|---------|-------------------------|
+| reg2    | `r bptest(reg2)`        |
+| reg5bis | `r bptest(reg5bis)`     |
+| reg7    | `r bptest(reg7)`        |
 
-<!-- ## Annexe 20 -->
+\newpage
 
-
-
-
-
-
-
-
+## Annexe 19 - Tableau synthétique de tous les modèles présentés. 
 
 
+| Modèle économétrique | Formule                                                                    | $R^{2}$ | $R^{2}$ ajusté |
+|----------------------|----------------------------------------------------------------------------|---------|----------------|
+| reg1                 | part_depenses_env ~ sensi_env                                              | 0.114   | 0.065          |
+| reg1bis              | part_depenses_env ~ conn_env + perc_env + soutien_pol_env                  | 0.381   | 0.266          |
+| reg1ter              | depenses_env ~ sensi_env                                                   | 0.023   | -0.032         |
+| reg1quater           | depenses_env ~ part_depenses_env ~ conn_env + perc_env + soutien_pol_env   | 0.033   | -0.149         |
+| reg2                 | part_depenses_env ~ conn_env                                               | 0.334   | 0.297          |
+| reg2bis              | depenses_env ~ conn_env                                                    | 0.032   | -0.022         |
+| reg3                 | part_depenses_env ~ sensi_env + epi + rev_median + educ_sup + ind_gini     | 0.313   | 0.068          |
+| reg4                 | part_depenes_env ~ conn_env + rev_median + educ_sup + ind_gini             | 0.377   | 0.154          |
+| reg3bis              | depenses_env ~ sensi_env + epi + rev_median + educ_sup + ind_gini          | 0.332   | 0.094          |
+| reg4bis              | depenses_env ~ conn_env + epi + rev_median + educ_sup + ind_gini           | 0.322   | 0.080          |
+| reg5                 | part_depenses_env ~ sensi_env + epi + educ_sup + ind_gini                  | 0.311   | 0.127          |
+| reg6                 | part_depenses_env ~ conn_env + epi + educ_sup + ind_gini                   | 0.370   | 0.202          |
+| reg5bis              | depenses_env ~ sensi_env + epi + educ_sup + ind_gini                       | 0.308   | 0.178          |
+| reg6bis              | depenses_env ~ conn_env + epi + educ_sup + ind_gini                        | 0.317   | 0.134          |
+| reg7                 | part_depenses_env ~ conn_env + soutien_pol_env + epi + educ_sup + ind_gini | 0.416   | 0.260          |

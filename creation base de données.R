@@ -1,6 +1,6 @@
 library(tidyverse)
 library(readxl)
-
+library(haven)
 
 setwd("C:/Users/quent/Desktop/ENS Paris-Saclay/1A/1S2/Econométrie/TDs/Bases de données/Documents/projet-econometrie")
 # setwd("~/Documents/ENS/econometrie/projet_r")
@@ -85,5 +85,13 @@ base_complete <- gini_et_plus %>%
   left_join(epi2020results, by = c("code2" = "code")) %>%
   mutate(code2 = as.character(code2)) %>%
   select(Pays, code, code2, everything())
+
+names(base_complete)[names(base_complete)=="REV_MED_EURO_2017"] <- "rev_median" 
+names(base_complete)[names(base_complete)=="GINI_2017"] <- "ind_gini" 
+names(base_complete)[names(base_complete)=="EDUC_SUP_2017"] <- "educ_sup"
+names(base_complete)[names(base_complete)=="EPI.new"] <- "epi" 
+names(base_complete)[names(base_complete)=="depenses_brutes_env"] <- "depenses_env" 
+
+
 
 write_csv(base_complete, "base_complete.csv")
