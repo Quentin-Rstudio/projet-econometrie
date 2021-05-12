@@ -77,10 +77,6 @@ graph1 <- graph1 + labs(title = "Les dépenses nationales pour la protection de 
 
 print(graph1)
 
-```
-
-## Annexe 3
-```` {r}
 graph2 <- ggplot(data = base_complete, 
                  mapping = aes(y=reorder(Nom_pays, part_depenses_env), 
                                x = part_depenses_env,
@@ -95,90 +91,37 @@ graph2 <- graph2 + labs(title = "Les dépenses nationales pour la protection de 
 
 print(graph2)
 
+
+```
+
+## Annexe 3
+```` {r}
+
+europe             <- st_read("Europe/europe.shp", quiet = T)
+
+codes              <- read.csv("all.csv") %>%
+  filter(region == "Europe")%>%
+  select(name, alpha.2) %>%
+  mutate (NAME = name,
+          c_abrv = alpha.2)
+
+carte_europe       <- europe %>%
+  full_join(codes, by = "NAME")
+
+carte_europe       <- carte_europe %>%
+  full_join(base_complete, by = c("c_abrv"= "Pays"))
+  # filter(sensi_env != "NA")
+
+ggplot(data = carte_europe) +
+  geom_sf(aes(fill = sensi_env)) +
+  ggtitle("Figure VI - Sensibilité environnementale en Europe") +
+  coord_sf(datum = NA) +
+  scale_fill_gradientn(colours = c("white", "darkolivegreen1", "yellowgreen","forestgreen", "darkgreen"))
+
 ```
 
 ## Annexe 4
-```{r}
-graph3 <- ggplot(base_complete, aes (x = conn_env, y = perc_env)) + 
-  geom_point(color = "darkgreen", size = 3 ) +
-  geom_smooth (method = "lm", size = 1, lty = 1, se = 2, color = "black")
 
-graph3 <- graph3 + labs(title = "Lien entre la connaissance des problèmes environnementaux et leur perception",
-                        y = "Perception environnementale",
-                        x = "Connaissance environnementale",
-                        fill = NULL,
-                        subtitle = "D'après l'Europen Values Survey")
-
-print(graph3)
-
-```
-
-```{r}
-
-graph4 <- ggplot(base_complete, aes (x = conn_env, y = soutien_pol_env)) + 
-  geom_point(color = "darkgreen", size = 3 ) +
-  geom_smooth (method = "lm", size = 1, lty = 1, se = 2, color = "black")
-
-graph4 <- graph4 + labs(title = "Lien entre la connaissance des problèmes environnementaux et le soutien aux politiques environnementales",
-                        y = "Soutien aux mesures de protection de l'environnement",
-                        x = "Connaissance environnementale",
-                        fill = NULL,
-                        subtitle = "D'après l'Europen Values Survey")
-
-print(graph4)
-
-```
-
-```{r}
-graph5 <- ggplot(base_complete, aes (x = perc_env, y = soutien_pol_env)) + 
-  geom_point(color = "darkgreen", size = 3 ) +
-  geom_smooth (method = "lm", size = 1, lty = 1, se = 2, color = "black")
-
-graph5 <- graph5 + labs(title = "Lien entre le soutien aux politiques environnementales et la perception des problèmes environnementaux",
-                        y = "Soutien aux mesures de protection de l'environnement",
-                        x = "Perception environnementale",
-                        fill = NULL,
-                        subtitle = "D'après l'Europen Values Survey")
-print(graph5)
-
-```
-
-
-## Annexe 5
-
-```{r}
-correlation.matrix <- cor(base_complete[, 5:14]) 
-
-correlation.matrix <- as.data.frame(correlation.matrix)
-
-names(correlation.matrix)[names(correlation.matrix)=="REV_MED_EURO_2017"] <- "rev_median" 
-names(correlation.matrix)[names(correlation.matrix)=="GINI_2017"] <- "ind_gini" 
-names(correlation.matrix)[names(correlation.matrix)=="EDUC_SUP_2017"] <- "educ_sup"
-names(correlation.matrix)[names(correlation.matrix)=="EPI.new"] <- "epi" 
-names(correlation.matrix)[names(correlation.matrix)=="depenses_brutes_env"] <- "depenses_env" 
-
-kbl(correlation.matrix[,1:5], caption = "Matrice des corrélations", digits = 3) %>%
-  kable_classic()
-
-kbl(correlation.matrix[,6:10], caption = "Matrice des corrélations (suite)", digits = 3) %>%
-  kable_classic()
-
-```
-
-## Annexe 6
-
-```{r}
-
-ggcorrplot(cor(base_complete[,5:14]), title = "Représentation graphique \nde la matrice des corrélations", legend.title= "Corrélation", lab = T, lab_col = "black", lab_size = 2.5, colors = c("gray8", "white", "forestgreen"), tl.cex = 5)
-
-
-
-
-```
-
-
-
-## Annexe 7
 
 ```{r}
 
@@ -261,6 +204,88 @@ ggplot(data=dbind,aes(x=Dim.1,y=Dim.3, color = sensi_env, size = part_depenses_e
 
 
 ```
+
+## Annexe 5.
+
+
+```{r}
+graph3 <- ggplot(base_complete, aes (x = conn_env, y = perc_env)) + 
+  geom_point(color = "darkgreen", size = 3 ) +
+  geom_smooth (method = "lm", size = 1, lty = 1, se = 2, color = "black")
+
+graph3 <- graph3 + labs(title = "Lien entre la connaissance des problèmes environnementaux et leur perception",
+                        y = "Perception environnementale",
+                        x = "Connaissance environnementale",
+                        fill = NULL,
+                        subtitle = "D'après l'Europen Values Survey")
+
+print(graph3)
+
+```
+
+```{r}
+
+graph4 <- ggplot(base_complete, aes (x = conn_env, y = soutien_pol_env)) + 
+  geom_point(color = "darkgreen", size = 3 ) +
+  geom_smooth (method = "lm", size = 1, lty = 1, se = 2, color = "black")
+
+graph4 <- graph4 + labs(title = "Lien entre la connaissance des problèmes environnementaux et le soutien aux politiques environnementales",
+                        y = "Soutien aux mesures de protection de l'environnement",
+                        x = "Connaissance environnementale",
+                        fill = NULL,
+                        subtitle = "D'après l'Europen Values Survey")
+
+print(graph4)
+
+```
+
+```{r}
+graph5 <- ggplot(base_complete, aes (x = perc_env, y = soutien_pol_env)) + 
+  geom_point(color = "darkgreen", size = 3 ) +
+  geom_smooth (method = "lm", size = 1, lty = 1, se = 2, color = "black")
+
+graph5 <- graph5 + labs(title = "Lien entre le soutien aux politiques environnementales et la perception des problèmes environnementaux",
+                        y = "Soutien aux mesures de protection de l'environnement",
+                        x = "Perception environnementale",
+                        fill = NULL,
+                        subtitle = "D'après l'Europen Values Survey")
+print(graph5)
+
+```
+
+
+## Annexe 6
+
+```{r}
+correlation.matrix <- cor(base_complete[, 5:14]) 
+
+correlation.matrix <- as.data.frame(correlation.matrix)
+
+names(correlation.matrix)[names(correlation.matrix)=="REV_MED_EURO_2017"] <- "rev_median" 
+names(correlation.matrix)[names(correlation.matrix)=="GINI_2017"] <- "ind_gini" 
+names(correlation.matrix)[names(correlation.matrix)=="EDUC_SUP_2017"] <- "educ_sup"
+names(correlation.matrix)[names(correlation.matrix)=="EPI.new"] <- "epi" 
+names(correlation.matrix)[names(correlation.matrix)=="depenses_brutes_env"] <- "depenses_env" 
+
+kbl(correlation.matrix[,1:5], caption = "Matrice des corrélations", digits = 3) %>%
+  kable_classic()
+
+kbl(correlation.matrix[,6:10], caption = "Matrice des corrélations (suite)", digits = 3) %>%
+  kable_classic()
+
+```
+
+## Annexe 7
+
+```{r}
+
+ggcorrplot(cor(base_complete[,5:14]), title = "Représentation graphique \nde la matrice des corrélations", legend.title= "Corrélation", lab = T, lab_col = "black", lab_size = 2.5, colors = c("gray8", "white", "forestgreen"), tl.cex = 5)
+
+
+
+
+```
+
 
 ## Annexe 8
 

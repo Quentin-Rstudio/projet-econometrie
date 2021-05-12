@@ -132,9 +132,19 @@ Les variables de contrôle **EDUC_SUP_2017** et **REV_MED_EURO_2017** proviennen
 L'exploration des données préalablement à la réalisation de regréssions linéaires est primordiale.
 Pour ce faire, nous mobilisons à la fois des éléments de statistiques descriptives et l'analyse en composantes principales.
 
-### 1. Analyse en composantes principales (ACP).
+### 1. Analyse univariée.
 
-Afin d'observer les relations entre variables de manière synthétique, on peut réaliser une ACP, dont les résultats sont disponibles en **annexe 7**.
+Nous procédons à une première analyse des variables présentes dans notre jeu de données.
+Pour ce faire, il s'agit de dresser un tableau des principaux indicateurs statistiques (**Annexe1**).
+
+La visualisation des données grâce aux graphiques facilite grandement l'analyse.
+L'**annexe 2** retranscrivent les disparités importantes entre les pays européens en terme de dépenses pour la protection de l'environnement brutes, ces disparités semblant moins importantes une fois la NEEP rapportée en points de PIB.
+L'**annexe 3** représente quant à elle la disparité de l'indice de sensibilité environnementale sur une carte des pays européens, permettant de visualiser des effets régionaux, soulignant que les pays scandinaves et germaniques ont un indice de sensibilité environnementale plus élevé que l'Europe de l'Ouest/Sud-Ouest et l'Europe de l'Est. 
+
+
+### 2. Analyse en composantes principales (ACP).
+
+Afin d'observer les relations entre variables de manière synthétique, on peut réaliser une ACP, dont les résultats sont disponibles en **annexe 4**.
 
 Le premier graphique représente la contribution des différents axes à la variance totale, et on voit que le premier axe contribue à la moitié de la variance totale, soulignant qu'il existe des facteurs à l'oeuvre rendant le nuage de points non aléatoire. Les deuxièmes et troisièmes axes ont une valeur propre supérieure à 1, sachant que l'analyse est normée. En comparant les cercles de variables pour les espaces des axes 1 et 2, et 1 et 3, le cercle des axes 1 et 3 semble plus intéressant, puisque trois directions se distinguent clairement : 
 
@@ -146,26 +156,17 @@ Le graphique des individus représente les pays sur l'espace des variables, ains
 
 Ainsi, plus de la moitié des variables sont corrélées positivement entre elles, et s'opposent à l'indice gini, tandis que le montant des dépenses environnementales se distingue, et que la part des dépenses environnementales dans le PIB et le revenu médian sont corrélées positivement, mais faiblement. 
 
-
-### 2. Analyse univariée.
-
-Nous procédons à une première analyse des variables présentes dans notre jeu de données.
-Pour ce faire, il s'agit de dresser un tableau des principaux indicateurs statistiques (**Annexe1**).
-
-La visualisation des données grâce aux graphiques facilite grandement l'analyse.
-Les **annexes 2 et 3** retranscrivent les disparités importantes entre les pays européens en terme de dépenses pour la protection de l'environnement brutes, ces disparités semblant moins importantes une fois la NEEP rapportée en points de PIB.
-
 ### 3. Analyse bivariée.
 
-Il s'agit désormais d'étudier les liens entre nos différentes variables explicatives.
+Il s'agit désormais d'étudier les liens entre nos différentes variables explicatives de manière plus détaillée. 
 Dans un premier temps, on s'intéresse aux trois variables qui ont permis de construire notre indicateur de sensibilité environnementale **sensi_env** : **conn_env**, **perc_env** et **soutien_pol_env**.
-Graphiquement, on visualise la relation de dépendance entre ces trois variables, deux-à-deux (**Annexe 4**).
+Graphiquement, on visualise la relation de dépendance entre ces trois variables, deux-à-deux (**Annexe 5**).
 On observe ainsi une corrélation positive entre ces différentes variables, plus ou moins prononcée.
 En effet, les corrélations linéaires (méthode Pearson) entre ces variables sont : - Entre la connaissance et la perception des problèmes environnementaux :`r cor(base_complete$conn_env, base_complete$perc_env)`; - Entre la connaissance des problèmes environnementaux et le soutien aux politiques de protection de l'environnement : `r cor(base_complete$conn_env, base_complete$soutien_pol_env)`; - Entre la perception des problèmes environnementaux et le soutien aux mesures de protection de l'environnement : `r cor(base_complete$soutien_pol_env, base_complete$perc_env)`.
 
 On s'intéresse ensuite aux corrélations entre toutes les variables.
-Pour ce faire, nous dressons la matrice des corrélations entre les différentes variables (**Annexe 5**).
-Une représentation graphique de ces coefficients facilite leur interprétation (**Annexe 6**).
+Pour ce faire, nous dressons la matrice des corrélations entre les différentes variables (**Annexe 6**).
+Une représentation graphique de ces coefficients facilite leur interprétation (**Annexe 7**).
 
 
 ## IV. Proposition et justification de différents modèles linéaires.
@@ -265,47 +266,15 @@ De plus, il semble que les indicateurs permettant de discriminer les pays selon 
 
 Toutefois, la limite principale de nos analyses est le nombre trop faible d'observations, qui vient du fait que les données proviennent de bases de données différentes ne comptant pas toutes exactement les mêmes pays : nous avions des données pour toutes les variables sélectionnées concernant uniquement 20 pays, notamment en raison de la difficulté à obtenir des variables concernant les dépenses dédiées à l'environenment (disponibles sur eurostat.eu, donc pour les pays européens uniquement). De plus, la fragmentation territoriale des pays européens, notamment d'Europe de l'Est, qui provient des guerres successives (guerres mondiales, guerre de Yougoslavie) contribue à un décalage entre des pays de taille relativement importante et des pays de taille très réduite, ce qui fausse la comparaison des variables absolues, mais aussi relatives, puisque pour une taille plus faible, il est plus probable d'obtenir des statistiques plus élevées. Par exemple, le niveau d'éducation supérieure se calcule comme un ratio de la population diplômée sur la population totale, pour une tranche d'âge précise, ce qui souligne le rôle de la taille totale dans la mesure de statistiques relatives. Dans un approfondissement de notre sujet de recherche, il serait possible de tenter d'incorporer des coefficients à nos différentes observations afin de leur procurer une pondération liée à leur population totale. Cela pourrait en partie permettre de pallier ce biais lié aux différences de facteurs géographiques et démographiques.\newline 
 
-Enfin, les donnéees issues de l'enquête EVS ne sont pas très solides, puisque le questionnaire EVS ne propose pas beaucoup de questions relatives à l'environnement, et celles-ci sont formuléees de manière non neutre, ce qui peut induire un biais dans les questions. 
-A fignoler : Parler de deux des problèmes (environnement v. emploi et "m'en balec") L'International Social Survey Programme conduit une enquête par questionnaire parmi les 42 pays membres du programme, sur le thème de l'environnement.
-Le questionnaire final est disponible ici[^3] mais les résultats ne sont pas encore publiés.
-Au vu des questions posées par le questionnaire, introduire des variables qui en proviennent permettrait de limiter les biais relatifs à la formulation des questions (cf. la question 6 : how concerned are you about environmental issues?) et d'affiner l'analyse.
+Enfin, les donnéees issues de l'enquête EVS ne sont pas très solides, puisque le questionnaire EVS ne propose pas beaucoup de questions relatives à l'environnement, et celles-ci sont formuléees de manière non neutre, ce qui peut induire un biais dans les questions. Par exemple, la variable **soutien_pol_env** repose sur une seule question, qui oppose l'environnement à la croissance et l'emploi, dans un dilemme assez discutable. 
 
-[^3]: <http://w.issp.org/fileadmin/user_upload/Module_development/Module_2020/Final_Source_Questionnaire/ISSP2020_final_sourcequestionnaire_corrected.pdf>
 
 ## VII. Conclusion.
 
-Notre sujet de recherche portait sur une question complexe, tant par son actualité brulante que par les difficultés éprouvées à définir exhaustivement les différentes variables et indicateurs étudiés. Les principaux écueils rencontrés au cours de notre démarche économétrique ont ainsi grandement portés sur la construction des variables et des bases de données. Le faible nombre d’observations disponibles, ainsi que la versatilité intrinsèque aux variables d’ordre comportamental et psychologique expliquent en grande partie la faible significativité globale de nos modèles. Toutefois, certains résultats sont plus qu’encourageants, notamment ceux concernant la connaissance des problèmes environnementaux. Il serait ainsi particulièrement intéressant de reproduire ces analyses avec des données plus précises et comportant moins de biais au moment de leur récolte. Par exemple, l’International Social Survey Programme conduit en ce moment une enquête par questionnaire parmi les 42 pays membres du programme, sur le thème de l'environnement. Le questionnaire final est disponible ici[^3] mais les résultats ne sont pas encore publiés.
-Au vu des questions posées par le questionnaire, introduire des variables qui en proviennent permettrait de limiter les biais relatifs à la formulation des questions (cf. la question 6 : how concerned are you about environmental issues?) et d'affiner l'analyse.
-
-```{r}
-# 
-
-# En annexe ? 
+Notre sujet de recherche portait sur une question complexe, tant par son actualité brûlante que par les difficultés éprouvées à définir exhaustivement les différentes variables et indicateurs étudiés. Les principaux écueils rencontrés au cours de notre démarche économétrique ont ainsi grandement portés sur la construction des variables et des bases de données. Le faible nombre d’observations disponibles, ainsi que la versatilité intrinsèque aux variables d’ordre comportamental et psychologique expliquent en grande partie la faible significativité globale de nos modèles. Toutefois, certains résultats sont plus qu’encourageants, notamment ceux concernant la connaissance des problèmes environnementaux. Il serait ainsi particulièrement intéressant de reproduire ces analyses avec des données plus précises et comportant moins de biais au moment de leur récolte. Par exemple, l’International Social Survey Programme conduit en ce moment une enquête par questionnaire parmi les 42 pays membres du programme, sur le thème de l'environnement. Le questionnaire final est disponible ici[^3] mais les résultats ne sont pas encore publiés. Au vu des questions posées par le questionnaire, introduire des variables qui en proviennent permettrait de limiter les biais relatifs à la formulation des questions (cf. la question 6 : how concerned are you about environmental issues?) et d'affiner l'analyse.
 
 
-# europe             <- st_read("Europe/europe.shp", quiet = T)
-# 
-# codes              <- read.csv("all.csv") %>%
-#   filter(region == "Europe")%>%
-#   select(name, alpha.2) %>%
-#   mutate (NAME = name,
-#           c_abrv = alpha.2)
-# 
-# carte_europe       <- europe %>%
-#   full_join(codes, by = "NAME")
-# 
-# carte_europe       <- carte_europe %>%
-#   full_join(base_complete, by = c("c_abrv"= "Pays"))
-#   # filter(sensi_env != "NA")
-# 
-# ggplot(data = carte_europe) +
-#   geom_sf(aes(fill = sensi_env)) +
-#   ggtitle("Figure VI - Sensibilité environnementale en Europe") +
-#   coord_sf(datum = NA) + 
-#   scale_fill_gradientn(colours = c("white", "darkolivegreen1", "yellowgreen","forestgreen", "darkgreen"))
-# 
+[^3]: <http://w.issp.org/fileadmin/user_upload/Module_development/Module_2020/Final_Source_Questionnaire/ISSP2020_final_sourcequestionnaire_corrected.pdf>
 
 
-
-```
 
