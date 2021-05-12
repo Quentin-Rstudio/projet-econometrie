@@ -242,140 +242,118 @@ Ce tableau nous montre que ces modèles sont assez peu significatifs : le $R^{2}
 
 
 ```{r}
-reg5   <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + EPI.new +   EDUC_SUP_2017 + GINI_2017)
-reg5bis <- lm(data=base_complete, formula = depenses_brutes_env ~ sensi_env + EPI.new +   EDUC_SUP_2017 + GINI_2017)
-reg6   <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + EPI.new +   EDUC_SUP_2017 + GINI_2017)
-reg6bis <- lm(data=base_complete, formula = depenses_brutes_env ~ conn_env + EPI.new +   EDUC_SUP_2017 + GINI_2017)
+reg5   <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + EPI.new + EDUC_SUP_2017 + GINI_2017)
+reg5bis <- lm(data=base_complete, formula = depenses_brutes_env ~ sensi_env + EPI.new +  EDUC_SUP_2017)
+reg6   <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + EPI.new + EDUC_SUP_2017 + GINI_2017)
+reg6bis <- lm(data=base_complete, formula = depenses_brutes_env ~ conn_env + EPI.new + EDUC_SUP_2017 + GINI_2017)
 
 ```
  
 ```{r, results='asis'}
 
-stargazer(reg5,reg6,reg5bis,reg6bis, header = F, title = "Modèles avec variables de contrôle, sans educ.sup.", column.labels =  c("reg3", "reg4", "reg3bis", "reg4bis"))
+stargazer(reg5,reg6,reg5bis,reg6bis, header = F, title = "Modèles avec variables de contrôle, sans educ.sup.", column.labels =  c("reg5", "reg6", "reg5bis", "reg6bis"))
 
 ```
 
-Là j'pensais parler un peu des modèles reg3, reg4, reg3bis, reg4bis. Ensuite, rajouter des modèles avec R2 plus élevé qui ne sont pas mis, puis faire des graphiques avec compare_models et check_model pour les meilleurs modèles. 
+Ainsi, le modèle reg5bis semble intéressant, et à retravailler. En explorant un peu plus les modèles, on trouve que le modèle suivant ont un $R^{2}$ ajusté correct, c'est-à-dire au-dessus de 0.2 : 
 
-```{r linear-regression}
+- reg7, avec la formule "part_depenses_env ~ conn_env + soutien_pol_env + GINI_2017 + EPI.new", avec un $R^{2}$ ajusté de 0.25, 
 
-# confint(reg1bis) # permet d'afficher l'intervalle de confiance
-# summary.aov(reg1bis) #table des variances (test d'analyse sur la variance)
-# 
-# check_model(reg1bis) #Visual check of model various assumptions (normality of residuals, normality of random effects, linear relationship, homogeneity of variance, multicollinearity).
-# 
-# check_heteroscedasticity(reg1bis) # problème d'hétéroscédasticité -> on ne peut plus appliquer les tests statistiques post-estimation (matrice des variances - covariances est biaisée)
-# 
-# compare_performance(reg1, reg1bis)
-# 
-# plot(compare_performance(reg1,reg1bis,reg5), rank = TRUE) #comparaison graphique des différents modèles
-# 
-# # test_performance(reg1,reg1bis)    # pas compris ce que c'était.
-# 
-# reg3               <- lm(data = base_complete, formula = part_depenses_env ~ sensi_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
-# 
-# summary(reg3) # R2 adj : 0,06
-# 
-# reg4 <- lm(data = base_complete, formula = depenses_brutes_env ~ sensi_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
-# 
-# summary(reg4) # R2 adj : 0,28
-# 
-# reg5 <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + GINI_2017 + EPI.new)
-# 
-# summary(reg5) # R2 ajd : 0,25
-# 
-# reg5bis <- lm(data = base_complete, formula = depenses_brutes_env ~ conn_env + soutien_pol_env + GINI_2017 + EPI.new)
-# summary(reg5bis)
-# 
-# check_model(reg5)
-# 
-# reg6 <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + GINI_2017 +  EDUC_SUP_2017 + EPI.new)
-# 
-# summary(reg6) #R 2 adj : 0,23
-# 
-# reg6bis <- lm(data = base_complete, formula = depenses_brutes_env ~ conn_env + soutien_pol_env + GINI_2017 +  EDUC_SUP_2017 + EPI.new)
-# 
-# summary(reg6bis)
-# 
-# 
-# model_performance(reg5)
-# print(test_performance(reg1,reg5))
-# 
-# reg7             <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + perc_env + soutien_pol_env + EPI.new + REV_MED_EURO_2017 + EDUC_SUP_2017 + GINI_2017)
-# 
-# summary(reg7) # R2 adj : 0,11 
-# 
-# 
-# # comparaison de modèles :
-# anova(reg1,reg1bis)
-# 
-# summary(reg4)
-# summary(reg3)
-# residuals(reg1)
-# predict(reg1)
-# 
-# # analysis of variance model 
-# aov(data = base_complete, formula = part_depenses_env ~ sensi_env + GINI_2017 + EDUC_SUP_2017 + REV_MED_EURO_2017 + EPI.new) %>%
-#   report()
-# 
-# 
-# 
-# r2(reg1)
-# 
-# #Le modèle suppose que la régression est linéaire, les termes d’erreurs ont même variance, ils sont indépendants et issus d’une loi normale.
-# #Avant d’interpréter les résultats il est indispensable de vérifier ces hypotheses.
-# 
-# 
-# 
-# # comment interpréter les résultats d'une régression avec lm : http://www.learnbymarketing.com/tutorials/linear-regression-in-r/
+On peut donc retenir pour une analyse approfondie les modèles reg2, reg5bis, reg7, et reg7bis :
 
-
-
-```
+- reg2, dont la formule est "part_depenses_env ~ conn_env", 
+- reg5bis, avec la formule "depenses_brutes_env ~ sensi_env + EPI.new + EDUC_SUP_2017 + GINI_2017", 
+- reg7, avec la formule "part_depenses_env ~ conn_env + soutien_pol_env + GINI_2017 + EPI.new", 
 
 \newpage
 
 ## V. Interprétation des modèles retenus et proposition de pistes de réflexion complémentaires (limites blabla).
 
-Limite : le questionnaire EVS ne propose pas beaucoup de questions relatives à l'environnement, et celles-ci sont formuléees de manière non neutre, ce qui peut induire un biais dans les questions.
-Parler de deux des problèmes (environnement v. emploi et "m'en balec") L'International Social Survey Programme conduit une enquête par questionnaire parmi les 42 pays membres du programme, sur le thème de l'environnement.
+On peut donc reprendre un tableau récapitulatif des modèles retenus. 
+
+```{r, results='asis'}
+
+reg7   <- lm(data = base_complete, formula = part_depenses_env ~ conn_env + soutien_pol_env + EPI.new + GINI_2017)
+
+stargazer(reg2,reg7, reg5bis, header = F, title = "Modèles retenus.", column.labels =  c("reg2", "reg7", "reg5bis"))
+
+```
+
+Ainsi, on observe que les différents modèles ont un $R^{2}$ ajusté assez bon, il est plus de 0.2 pour 3 des modèles, et que 2 des tests ont une variable significative à 1 ou 5%. On peut comparer différentes statistiques de significativité dans un graphique. On observe ainsi que je n'y connais pas grand chose à ces indicateurs. 
+
+```{r}
+plot(compare_performance(reg2,reg7, reg5bis), rank = TRUE)
+```
+
+Avant d'interpréter les coefficients, il convient de vérifier les hypothèses de Gauss-Markov. Pour cela, une représentation graphique s'avère utile. 
+
+```{r}
+check_model(reg2, panel = T) 
+check_model(reg7, panel = T)
+check_model(reg5bis, panel = T)
+```
+
+Ainsi, on voit que les deux modèles linéaires multiples ont des variables explicatives non parfaitement colinéaires, et que les modèles respectent les hypothèses d'homoscédasticité et de normalité des résidus. De plus, on observe que les modèles ne sont pas déformés par des observations influentes. 
+
+On peut donc passer à l'interprétation des coefficients des différents modèles, en analysant à la fois le signe et la valeur des coefficients. 
+
+Dans le premier modèle, le modèle linéaire simple, le coefficient associé à **conn_env** est significatif, positif, et égal à 0.026. Ainsi, lorsque l'indice de connaissance environnementale augmente de 10 points (sur un maximum théorique de 100 points), le pourcentage du PIB dédié aux dépenses environnementales augmente de 0.26 point de pourcentage. D'un point de vue théorique, il paraît logique que l'indice de connaissance environnementale fasse augmenter les dépenses d'environnement : il s'agit d'une relation similaire à celle que nous voulions montrer. Cependant, il faut rester prudent sur l'analyse de cette corrélation : une part du PIB plus élevée dédiée aux dépenses d'environnement peut conduire à une plus grande connaissance environnementale de la population, en finançant des infrastructures ou programmes dédiées à la découverte de l'environnement. Il faudrait donc disposer d'outils statistiques et économétriques plus précis pour tester si cette corrélation est une causalité, et dans quel sens elle agit, peut-être à partir d'une variable instrumentale, causée par la variable explicative, et non causée par la variable expliquée. De plus, la constante est égale à 0.373, mais n'est pas significative. On peut toutefois penser que son signe est fiable : y compris avec un indice de connaissance environnementale égal à 0, on aurait 0.37 point de PIB dédié aux dépenses environnementales. 
+\newline
+Dans le deuxième modèle, le modèle linéaire multiple vise à expliquer la part du PIB des dépenses environnementales à partir des indices de connaissance environnementale, de soutien aux politiques environnementales, de performance individuelle, et de gini. Aucun coefficient n'est significatif, et la plupart sont assez faibles, même si **conn_env** est associé à un coefficient proche de celui dans le premier modèle. Le deuxième coefficient, associé à **soutien_pol_env**, n'est pas significatif, mais il est de signe négatif, ce qui peut être interprété comme le signe qu'il s'agit d'une variable redondante par rapport à **conn_env**. Ce signe négatif pourrait aussi venir du fait que dans les pays où une part plus importante du PIB est allouée aux dépenses pour l'environnement, les populations connaissent les conséquences, peut-être négatives, sur leur vie quotidienne de dépenses pour l'environnement. L'indice de performance environnementale possède un coefficient proche de 0 pour ce modèle, ce qui tendrait à montrer que cet indice, construit à 40% à partir de la santé de l'environnement (qualité de l'air, qualité de l'eau, risques sanitaires) et à 60% à partir de la vitalité des écosystèmes (ressources en eau, forêt, poissons, biodiversité, etc. ), n'a aucune influence sur la part du PIB dédiée aux dépenses pour l'environnement. Le coefficient associé à l'indice de Gini est lui négatif, et non nul, même s'il n'est pas statistiquement significatif. Ainsi, une augmentation des inégalités réduirait la part du PIB dédiée à l'environnement, ce qui va dans le sens de notre analyse *a priori*, décrite en partie 2. La constante associée à ce modèle linéaire est plus élevée que dans le premier modèle, ce qui vient potentiellement de l'introduction de deux variables avec un coefficient négatif. 
+\newline
+Dans le dernier modèle, le modèle linéaire teste une relation entre le montant des dépenses pour l'environnement et la somme de notre indice composit de sensibilité environnementale, de l'indice de performance environnementale, et du niveau d'éducation supérieure. La constante et les coefficients sont négatifs, à l'exception du seul coefficient statistiquement significatif : l'indice de performance environnementale. La comparaison avec le modèle précédent n'est pas aisée, compte tendu de variables dépendante, explicative et de contrôle différentes, mais il est toutefois frappant de voir que cet indice devient significatif alors qu'il était presque nul dans l'autre modèle. 
+\newline
+On peut souligner qu'il est plus logique que le degré de performance environnementale, une mesure d'états de faits physiques, soit corrélée avec le montant des dépenses pour l'environnement, qui quantifie l'investissement matériel réalisé en faveur de l'environnement. Au contraire, la part du PIB dédié à l'environnement est un indicateur relatif, qui mesure plutôt l'importance accordée à l'environnement, et donc le pourcentage du total des ressources monétaires qu'on lui alloue, et il semble donc plus plausible de le relier à des indicateurs de mesure des préférences et points de vue subjectifs des populations.  
+\newline Le signe négatif des coefficients associés aux variables **sensi_env** et **educ_sup** est cependant plus difficile à interpréter, puisque cela va à l'encontre d'hypothèses de travail *a priori* : on pourrait penser que la sensibilité à l'environnement et le niveau d'éducation supérieure conduise à un niveau plus élevé de dépenses pour l'environnement. Toutefois, on peut penser que ces variables sont plus négativement corrélées avec le montant du PIB total, qu'avec le montant des dépenses pour l'environnement. En effet, au vu de la variation du montant des dépenses comparée à celle des dépenses en points de PIB, on peut penser que le montant des dépenses pour l'environnement est positivement corrélé avec le montant du PIB, qui est lui même négativement corrélé avec l'indice de sensibilité environnementale. Mais c'est totalement incongru et difficile à expliquer que je ne sais pas pourquoi j'ai dit ça. 
+
+Il faut ensuite aborder les pistes de réflexion complémentaires. 
+\newline Tout d'abord, la distinction entre variable de mesure physique, et variable de mesure psychologique d'importance, semble bien s'appliquer à celle entre respectivement le montant des dépenses pour l'environnement, et la part du PIB qui leur est dédiée. 
+\newline De plus, il semble que les indicateurs permettant de discriminer les pays selon leur niveau de richesse/développement (ici, le revenu médian, et le niveau d'éducation supérieure) ne semblent pas jouer leur rôle, et devraient peut-être être remplacés par un autre indicateur, comme le PIB. Nous avions décidé de pas intégrer le PIB dans nos analyses pour éviter une endogénéité (est-ce bien ça le terme pour parler de l'influence de la variable expliquée **sur** la variable explicative) de la valeur expliquée, mais il pourrait être intéressant de néanmoins en tester le rôle. 
+\newline La construction de l'indicateur de sensibilité environnementale gagnerait à être approfondie et précisée, afin de mieux comprendre le rôle des différentes composantes dans sa construction. 
+
+
+Toutefois, la limite principale de nos analyses est le nombre trop faible d'observations, qui vient du fait que les données proviennent de bases de données différentes ne comptant pas toutes exactement les mêmes pays : nous avions des données pour toutes les variables sélectionnées concernant uniquement 20 pays, notamment en raison de la difficulté à obtenir des variables concernant les dépenses dédiées à l'environenment (disponibles sur eurostat.eu, donc pour les pays européens uniquement). De plus, la fragmentation territoriale des pays européens, notamment d'Europe de l'Est, qui provient des guerres successives (guerres mondiales, guerre de Yougoslavie) contribue à un décalage entre des pays de taille relativement importante et des pays de taille très réduite, ce qui fausse la comparaison des variables absolues, mais aussi relatives, puisque pour une taille plus faible, il est plus probable d'obtenir des statistiques plus élevées. Par exemple, le niveau d'éducation supérieure se calcule comme un ratio de la population diplômée sur la population totale, pour une tranche d'âge précise, ce qui souligne le rôle de la taille totale dans la mesure de statistiques relatives. 
+\newline 
+Enfin, les donnéees issues de l'enquête EVS ne sont pas très solides, puisque le questionnaire EVS ne propose pas beaucoup de questions relatives à l'environnement, et celles-ci sont formuléees de manière non neutre, ce qui peut induire un biais dans les questions.
+A fignoler : Parler de deux des problèmes (environnement v. emploi et "m'en balec") L'International Social Survey Programme conduit une enquête par questionnaire parmi les 42 pays membres du programme, sur le thème de l'environnement.
 Le questionnaire final est disponible ici[^3] mais les résultats ne sont pas encore publiés.
 Au vu des questions posées par le questionnaire, introduire des variables qui en proviennent permettrait de limiter les biais relatifs à la formulation des questions (cf. la question 6 : how concerned are you about environmental issues?) et d'affiner l'analyse.
 
 [^3]: <http://w.issp.org/fileadmin/user_upload/Module_development/Module_2020/Final_Source_Questionnaire/ISSP2020_final_sourcequestionnaire_corrected.pdf>
 
+
+
 ## VII. Conclusion.
 
 ```{r}
+# 
 
-europe             <- st_read("Europe/europe.shp", quiet = T)
+# En annexe ? 
 
-codes              <- read.csv("all.csv") %>%
-  filter(region == "Europe")%>%
-  select(name, alpha.2) %>%
-  mutate (NAME = name,
-          c_abrv = alpha.2)
 
-carte_europe       <- europe %>%
-  full_join(codes, by = "NAME")
-
-carte_europe       <- carte_europe %>%
-  full_join(base_complete, by = c("c_abrv"= "Pays"))
-  # filter(sensi_env != "NA")
-
-ggplot(data = carte_europe) +
-  geom_sf(aes(fill = sensi_env)) +
-  ggtitle("Figure VI - Sensibilité environnementale en Europe") +
-  coord_sf(datum = NA) + 
-  scale_fill_gradientn(colours = c("white", "darkolivegreen1", "yellowgreen","forestgreen", "darkgreen"))
-
+# europe             <- st_read("Europe/europe.shp", quiet = T)
+# 
+# codes              <- read.csv("all.csv") %>%
+#   filter(region == "Europe")%>%
+#   select(name, alpha.2) %>%
+#   mutate (NAME = name,
+#           c_abrv = alpha.2)
+# 
+# carte_europe       <- europe %>%
+#   full_join(codes, by = "NAME")
+# 
+# carte_europe       <- carte_europe %>%
+#   full_join(base_complete, by = c("c_abrv"= "Pays"))
+#   # filter(sensi_env != "NA")
+# 
+# ggplot(data = carte_europe) +
+#   geom_sf(aes(fill = sensi_env)) +
+#   ggtitle("Figure VI - Sensibilité environnementale en Europe") +
+#   coord_sf(datum = NA) + 
+#   scale_fill_gradientn(colours = c("white", "darkolivegreen1", "yellowgreen","forestgreen", "darkgreen"))
+# 
 
 
 
 ```
 
-
-
-Point d'analyse intéressant : une fois les paramètres économétriques estimés, on peut essayer d'expliquer/interpréter les situations contrefactuelles, c'est-à-dire celles qui s'éloignent le plus de l'estimation.
-
-Mayda et Rodrik (2005) font une étude économétrique à partir de la WVS, voir p'tet leur méthode.

@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2021.5.10)  11 MAY 2021 21:49
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2021.5.10)  12 MAY 2021 02:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -436,6 +436,9 @@ LaTeX Warning: Label `' multiply defined.
 
 LaTeX Warning: Label `' multiply defined.
 
+
+LaTeX Warning: Label `' multiply defined.
+
 )
 \openout1 = `code.aux'.
 
@@ -850,23 +853,57 @@ Underfull \hbox (badness 1231) in paragraph at lines 568--571
 + EDUC_SUP_2017 +
  []
 
+
+Overfull \hbox (26.37506pt too wide) in paragraph at lines 581--618
+ [][] 
+ []
+
 [6] [7] [8] [9]
-Underfull \hbox (badness 10000) in paragraph at lines 638--638
+File: code_files/figure-latex/unnamed-chunk-10-1.pdf Graphic file (type pdf)
+<use code_files/figure-latex/unnamed-chunk-10-1.pdf>
+[10]
+File: code_files/figure-latex/unnamed-chunk-11-1.pdf Graphic file (type pdf)
+<use code_files/figure-latex/unnamed-chunk-11-1.pdf>
+File: code_files/figure-latex/unnamed-chunk-11-2.pdf Graphic file (type pdf)
+<use code_files/figure-latex/unnamed-chunk-11-2.pdf>
+File: code_files/figure-latex/unnamed-chunk-11-3.pdf Graphic file (type pdf)
+<use code_files/figure-latex/unnamed-chunk-11-3.pdf>
+
+Underfull \hbox (badness 10000) in paragraph at lines 714--717
+[][]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 714--717
+[]
+ []
+
+[11] [12] [13]
+Underfull \hbox (badness 10000) in paragraph at lines 727--808
+
+ []
+
+[14]
+Underfull \hbox (badness 1226) in paragraph at lines 809--826
+\TU/lmr/m/n/10 d’importance, semble bien s’appliquer à celle entre respectiveme
+nt le montant des dépenses pour
+ []
+
+
+Underfull \hbox (badness 1540) in paragraph at lines 809--826
+\TU/lmr/m/n/10 De plus, il semble que les indicateurs permettant de discriminer
+ les pays selon leur niveau de
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 851--851
 [][][][]$[][][][] [] [] [] [] [] [][][][] [] [][][] [] [][][][][][][][][] [] []
 [][][] [] [][][][][][] [] [][][][][][] [] [][][][][][][][][][][] [] [][][][][][
 ] [] [][][][] [] [][][][][] [] [][][][][][] [] [][][][][][][][][][][][][] [] []
 [][][][][][][] []
  []
 
-File: code_files/figure-latex/unnamed-chunk-9-1.pdf Graphic file (type pdf)
-<use code_files/figure-latex/unnamed-chunk-9-1.pdf>
-
-Underfull \hbox (badness 2334) in paragraph at lines 650--654
-[]\TU/lmr/m/n/10 Point d’analyse intéressant : une fois les paramètres économét
-riques estimés, on peut essayer
- []
-
-[10] (./code.aux)
+[15] [16] (./code.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
@@ -874,12 +911,12 @@ Package rerunfilecheck Info: File `code.out' has not changed.
 (rerunfilecheck)             Checksum: ABEB2567CAF4E3828C4C06C13A54E823;2941.
  ) 
 Here is how much of TeX's memory you used:
- 15423 strings out of 478774
- 280488 string characters out of 5862712
- 759503 words of memory out of 5000000
- 35241 multiletter control sequences out of 15000+600000
+ 15447 strings out of 478774
+ 281681 string characters out of 5862712
+ 760472 words of memory out of 5000000
+ 35262 multiletter control sequences out of 15000+600000
  407385 words of font info for 66 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  85i,10n,121p,676b,462s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on code.pdf (10 pages).
+Output written on code.pdf (16 pages).
